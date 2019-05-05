@@ -7,7 +7,7 @@ project(smk
   VERSION 0.1.0
 )
 
-add_library(smk
+add_library(smk STATIC
   include/smk/Audio.hpp
   include/smk/BlendMode.hpp
   include/smk/Color.hpp
