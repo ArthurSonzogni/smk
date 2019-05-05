@@ -3,6 +3,9 @@
 // the LICENSE file.
 
 #include <smk/Sound.hpp>
+
+#include <AL/al.h>
+#include <AL/alc.h>
 #include <iostream>
 
 namespace smk {

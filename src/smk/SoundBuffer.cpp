@@ -2,9 +2,12 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <libnyquist/Decoders.h>
-#include <iostream>
 #include <smk/SoundBuffer.hpp>
+
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <iostream>
+#include <libnyquist/Decoders.h>
 #include <vector>
 
 namespace smk {

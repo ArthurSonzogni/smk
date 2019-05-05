@@ -5,8 +5,6 @@
 #ifndef SMK_SOUND_BUFFER_HPP
 #define SMK_SOUND_BUFFER_HPP
 
-#include <AL/al.h>
-#include <AL/alc.h>
 #include <smk/Audio.hpp>
 #include <string>
 
@@ -28,7 +26,7 @@ class SoundBuffer : public Audio {
   void operator=(const SoundBuffer&) = delete;
   // ---------------------------------------------------------------------------
 
-  ALuint buffer = 0;
+  unsigned int buffer = 0;
 };
 }  // namespace smk
 

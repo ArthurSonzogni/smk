@@ -33,7 +33,7 @@ class Sound : public Audio {
 
  private:
   const SoundBuffer* buffer_ = nullptr;
-  ALuint source_ = 0;
+  unsigned int source_ = 0;
   bool is_playing_ = false;
 };
 
