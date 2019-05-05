@@ -10,6 +10,7 @@
 #include <map>
 #include <smk/OpenGL.hpp>
 #include <string>
+#include <vector>
 
 namespace smk {
 
@@ -19,8 +20,9 @@ class ShaderProgram;
 // Loads a shader from a file into OpenGL.
 class Shader {
  public:
-  Shader(); // Invalid shader.
-  Shader(const std::string& filename, GLenum type);
+  Shader();  // Invalid shader.
+  static Shader FromFile(const std::string& filename, GLenum type);
+  static Shader FromString(const std::string& content, GLenum type);
 
   // provide opengl shader identifiant.
   GLuint getHandle() const;
@@ -35,6 +37,7 @@ class Shader {
   // ---------------------------------------------------------------------------
 
  private:
+  Shader(std::vector<char> content, GLenum type);
   // opengl program identifiant
   GLuint handle_ = 0;
 

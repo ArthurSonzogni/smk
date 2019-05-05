@@ -4,11 +4,13 @@
 
 #include <smk/Shader.hpp>
 
+#include <string>
 #include <cstdlib>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <stdexcept>
+#include <streambuf>
 #include <vector>
 
 namespace smk {
@@ -25,34 +27,27 @@ const std::string shader_header =
     "#version 330\n";
 #endif
 
-// file reading
-bool getFileContents(const char* filename, std::vector<char>& buffer) {
-  std::ifstream file(filename, std::ios_base::binary);
-  if (file) {
-    // Load shader header.
-    for (const auto& c : shader_header)
-      buffer.push_back(c);
+// static
+Shader Shader::FromFile(const std::string& filename, GLenum type) {
+  std::ifstream file(filename);
+  return Shader::FromString(std::string(std::istreambuf_iterator<char>(file),
+                                        std::istreambuf_iterator<char>()),
+                            type);
+}
 
-    file.seekg(0, std::ios_base::end);
-    std::streamsize size = file.tellg();
-    if (size > 0) {
-      file.seekg(0, std::ios_base::beg);
-      buffer.resize(static_cast<size_t>(size + shader_header.size()));
-      file.read(&buffer[shader_header.size()], size);
-    }
-    buffer.push_back('\0');
-    return true;
-  } else {
-    std::cerr << "Cannot load " << filename << std::endl;
-    return false;
-  }
+// static
+Shader Shader::FromString(const std::string &content, GLenum type) {
+  std::vector<char> buffer;
+  for (const auto &c : shader_header)
+    buffer.push_back(c);
+  for (const auto &c : content)
+    buffer.push_back(c);
+  buffer.push_back('\0');
+  return Shader(std::move(buffer), type);
 }
 
 Shader::Shader() = default;
-Shader::Shader(const std::string& filename, GLenum type) {
-  // file loading
-  std::vector<char> fileContent;
-  getFileContents(filename.c_str(), fileContent);
+Shader::Shader(std::vector<char> content, GLenum type) {
 
   // creation
   handle_ = glCreateShader(type);
@@ -62,7 +57,7 @@ Shader::Shader(const std::string& filename, GLenum type) {
   }
 
   // code source assignation
-  const char* shaderText(&fileContent[0]);
+  const char* shaderText(&content[0]);
   glShaderSource(handle_, 1, (const GLchar**)&shaderText, NULL);
 
   // compilation
@@ -78,13 +73,10 @@ Shader::Shader(const std::string& filename, GLenum type) {
     char* log = new char[logsize + 1];
     glGetShaderInfoLog(handle_, logsize, &logsize, log);
 
-    std::cout << "[Error] compilation error: " << filename << std::endl;
+    std::cout << "[Error] compilation error: " << std::endl;
     std::cout << log << std::endl;
 
     exit(EXIT_FAILURE);
-  } else {
-    std::cout << "[Info] Shader " << filename << " compiled successfully"
-              << std::endl;
   }
 }
 

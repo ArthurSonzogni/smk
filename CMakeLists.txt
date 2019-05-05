@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 3.11)
 
-# Fetch third_party/ dependencies
 add_subdirectory(third_party)
 
 project(smk
@@ -64,9 +63,9 @@ target_compile_options(smk
   -Wextra
 )
 
-set_property(TARGET smk PROPERTY CXX_STANDARD 14)
+set_property(TARGET smk PROPERTY CXX_STANDARD 17)
 
-if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") 
+if(EMSCRIPTEN)
   target_link_libraries(smk PUBLIC "-s USE_GLFW=3")
   target_link_libraries(smk PUBLIC "-s USE_WEBGL2=1")
 else()
@@ -78,3 +77,5 @@ target_link_libraries(smk PUBLIC glm)
 target_link_libraries(smk PRIVATE freetype)
 target_link_libraries(smk PRIVATE OpenAL)
 target_link_libraries(smk PRIVATE libnyquist)
+
+add_subdirectory(examples)

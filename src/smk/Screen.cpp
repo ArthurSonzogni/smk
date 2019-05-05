@@ -92,12 +92,35 @@ Screen::Screen(int width, int height, const std::string& title)
   //glEnable(GL_MULTISAMPLE);  
 
   View default_view;
-  default_view.SetCenter(320, 480);
-  default_view.SetSize(640, 480);
+  default_view.SetCenter(width_ / 2, height_ / 2);
+  default_view.SetSize(width_, height_);
   SetView(default_view);
 
-  vertex_shader = Shader(P "./shader/shader.vert", GL_VERTEX_SHADER);
-  fragment_shader = Shader(P "./shader/shader.frag", GL_FRAGMENT_SHADER);
+  vertex_shader = Shader::FromString(R"(
+    layout(location = 0) in vec2 space_position;
+    layout(location = 1) in vec2 texture_position;
+
+    uniform mat4 view;
+
+    out vec2 f_texture_position;
+
+    void main() {
+      f_texture_position = texture_position;
+      gl_Position = view * vec4(space_position, 0.0, 1.0);
+    }
+  )", GL_VERTEX_SHADER);
+
+  fragment_shader = Shader::FromString(R"(
+    in vec2 f_texture_position;
+    uniform sampler2D tex;
+    uniform vec4 color;
+    out vec4 out_color;
+
+    void main() {
+      out_color = texture(tex, f_texture_position) * color;
+    }
+  )", GL_FRAGMENT_SHADER);
+
   program.AddShader(vertex_shader);
   program.AddShader(fragment_shader);
   program.Link();

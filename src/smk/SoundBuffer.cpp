@@ -15,13 +15,10 @@ SoundBuffer::SoundBuffer(const std::string filename) {
   nqr::NyquistIO loader;
   loader.Load(&fileData, filename);
 
-  ALsizei size =
-      static_cast<ALsizei>(fileData.channelCount * fileData.frameSize);
   ALsizei sample_rate = static_cast<ALsizei>(fileData.sampleRate);
 
   const float mult = 128 * 128;
   std::vector<ALshort> data;
-  int i = 0;
   for (auto& it : fileData.samples) {
     data.push_back(128 + it * mult);
   }
