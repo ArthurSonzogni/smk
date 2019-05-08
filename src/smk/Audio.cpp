@@ -41,8 +41,10 @@ void Audio::IncreaseRef() {
 
   std::vector<std::string> devices;
   GetDevices(devices);
+  std::cerr << "Audio devices found " << devices.size() << ":" << std::endl;
   for (auto& it : devices)
-    std::cerr << "Audio devices found: " << it << std::endl;
+    std::cerr << "* " << it << std::endl;
+  std::cerr << std::endl;
 
   audioDevice = alcOpenDevice(devices[0].c_str());
   if (!audioDevice) {

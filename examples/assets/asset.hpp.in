@@ -1,0 +1,6 @@
+#include <string>
+namespace asset {
+
+constexpr char water_mp3[] = "@ASSET_DIR@/water.mp3";
+
+}  // namespace asset

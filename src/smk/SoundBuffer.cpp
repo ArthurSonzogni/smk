@@ -31,7 +31,7 @@ SoundBuffer::SoundBuffer(const std::string filename) {
   switch (fileData.channelCount) {
     case 1: format = AL_FORMAT_MONO16; break;
     case 2: format = AL_FORMAT_STEREO16; break;
-    default: std::cerr << "SoundBuffer: Unsupported format" << std::endl;
+    default: std::cerr << "SoundBuffer: Unsupported format file " + filename << std::endl;
       return;
   }
   // clang-format on.
