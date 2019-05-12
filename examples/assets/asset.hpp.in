@@ -2,5 +2,7 @@
 namespace asset {
 
 constexpr char water_mp3[] = "@ASSET_DIR@/water.mp3";
+constexpr char hero_png[] = "@ASSET_DIR@/InTheCube_hero.png";
+constexpr char arial_ttf[] = "@ASSET_DIR@/arial.ttf";
 
 }  // namespace asset

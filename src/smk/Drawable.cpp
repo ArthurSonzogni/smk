@@ -27,8 +27,12 @@ void Drawable::SetPosition(float position_x, float position_y) {
 }
 
 void Drawable::SetCenter(float center_x, float center_y) {
-  center_x_ = center_x;
-  center_y_ = center_y;
+  center_.x = center_x;
+  center_.y = center_y;
+}
+
+void Drawable::SetCenter(glm::vec2 center) {
+  center_ = center;
 }
 
 void Drawable::SetScale(float scale_x, float scale_y) {
@@ -60,7 +64,8 @@ glm::mat4 Drawable::Transformation() const {
   ret = glm::translate(ret, glm::vec3(position_.x, position_.y, 0.0));
   ret = glm::rotate(ret, -rotation_ / 360.f * 2.f * 3.1415f,
                     glm::vec3(0.0, 0.0, 1.0));
-  ret = glm::translate(ret, glm::vec3(-center_x_, -center_y_, 0.f));
+  ret = glm::translate(
+      ret, glm::vec3(-center_.x * scale_x_, -center_.y * scale_y_, 0.f));
   ret = glm::scale(ret, glm::vec3(size_x * scale_x_, +size_y * scale_y_, 1.0));
   return ret;
 }

@@ -23,6 +23,8 @@ struct Texture {
   int width = -1;
   int height = -1;
 
+  operator bool() const { return id != 0; }
+
   // --- Move only resource ----------------------------------------------------
   Texture(Texture&&);
   Texture(const Texture&) = delete;

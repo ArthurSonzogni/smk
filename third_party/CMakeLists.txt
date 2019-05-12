@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(freetype2
   GIT_REPOSITORY https://github.com/aseprite/freetype2.git
   GIT_TAG VER-2-10-0
-  )
+)
 
 FetchContent_GetProperties(freetype2)
 if(NOT freetype2_POPULATED)
@@ -33,7 +33,8 @@ endif()
 # ------------------------------------------------------------------------------
 FetchContent_Declare(glm
   GIT_REPOSITORY https://github.com/g-truc/glm
-  )
+  GIT_TAG fce2abd01ce21063bd25ba67c9318be83bf48813
+)
 
 FetchContent_GetProperties(glm)
 if(NOT glm_POPULATED)
@@ -47,8 +48,8 @@ if(NOT EMSCRIPTEN)
   # ----------------------------------------------------------------------------
   FetchContent_Declare(glew
     GIT_REPOSITORY https://github.com/ArthurSonzogni/glew-cmake
-    GIT_TAG        origin/fix-issue-17
-    )
+    GIT_TAG 4b5f38fec0cee5640e06f550f2cbc8c7036aecb5
+  )
 
   FetchContent_GetProperties(glew)
   if(NOT glew_POPULATED)
@@ -61,7 +62,8 @@ if(NOT EMSCRIPTEN)
   # ----------------------------------------------------------------------------
   FetchContent_Declare(glfw
     GIT_REPOSITORY https://github.com/glfw/glfw
-    )
+    GIT_TAG 3.3
+  )
 
   FetchContent_GetProperties(glfw)
   if(NOT glfw_POPULATED)
@@ -73,8 +75,9 @@ if(NOT EMSCRIPTEN)
   # OpenAL for communicating with the OS for Audio
   # ----------------------------------------------------------------------------
   FetchContent_Declare(openal
-    GIT_REPOSITORY https://github.com/kcat/openal-soft
-    )
+    GIT_REPOSITORY https://github.com/arthursonzogni/openal-soft
+    GIT_TAG 5e2e4d50d324f713a7c39cdc71ce9050d2c34b5e
+  )
 
   FetchContent_GetProperties(openal)
   if(NOT openal_POPULATED)

@@ -19,7 +19,8 @@ class Drawable {
   // Transformation.
   void Move(float move_x, float move_y);
   void Rotate(float rotation);
-  void SetCenter(float position_x, float position_y);
+  void SetCenter(float center_x, float center_y);
+  void SetCenter(glm::vec2);
   void SetPosition(float position_x, float position_y);
   void SetPosition(glm::vec2 position);
   void SetRotation(float rotation);
@@ -44,9 +45,8 @@ class Drawable {
 
  private:
   float rotation_ = 0.f;
-  glm::vec2 position_;
-  float center_x_ = 0.f;
-  float center_y_ = 0.f;
+  glm::vec2 position_ = glm::vec2(0.f, 0.f);
+  glm::vec2 center_ = glm::vec2(0.f, 0.f);
   float scale_x_ = 1.f;
   float scale_y_ = 1.f;
   glm::vec4 color_ = {1.0, 1.0, 1.0, 1.0};

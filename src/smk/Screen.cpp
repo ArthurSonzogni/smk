@@ -179,12 +179,18 @@ Screen::~Screen() {
 }
 
 void Screen::UpdateDimensions() {
+  int width = width_;
+  int height = height_;
 #ifdef __EMSCRIPTEN__
   emscripten_get_canvas_element_size("canvas", &width_, &height_);
 #else
   glfwGetWindowSize(window_, &width_, &height_);
 #endif
-  glViewport(0, 0, width_, height_);
+
+  if (width != width_ || height != height_) {
+    glViewport(0, 0, width_, height_);
+    SetView(view_);
+  }
 }
 
 void Screen::Draw(const Drawable& drawable) {
@@ -243,10 +249,10 @@ void Screen::SetView(const View& view) {
   float tx = view_.x_ - view_.width_ / 2.f;
   float ty = view_.y_ - view_.height_ / 2.f;
   view_mat_ =
-      glm::mat4(2.0 / 640, 0.0, 0.0, 0.0,                                //
-                0.0, -2.f / 480, 0.0, 0.0,                               //
+      glm::mat4(2.0 / width_, 0.0, 0.0, 0.0,                             //
+                0.0, -2.f / height_, 0.0, 0.0,                           //
                 0.0, 0.0, 1.0, 0.0,                                      //
-                -1.0 - 2.0 * tx / 640, 1.0 + 2.0 * ty / 480, 0.0, 1.0);  //
+                -1.0 - 2.0 * tx / width_, 1.0 + 2.0 * ty / height_, 0.0, 1.0);  //
 }
 
 void Screen::Clear(const glm::vec4& color) {

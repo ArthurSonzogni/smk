@@ -26,8 +26,8 @@ int next_power_of_2(int v) {
 Texture::Texture(const std::string& filename) {
   FILE* file = fopen(filename.c_str(), "rb");
   if (!file) {
-    std::cerr << "File not found" << std::endl;
-    fclose(file);
+    std::cerr << "File " << filename << " not found" << std::endl;
+    return;
   }
 
   int comp = -1;

@@ -35,6 +35,7 @@ class Screen {
   // Various data about the current window.
   int height() const { return height_; }
   int width() const { return width_; }
+  glm::vec2 dimension() const { return glm::vec2(width_, height_); }
   float time() const { return time_; }
   GLFWwindow* window() const { return window_; }
   Input& input() { return input_; }

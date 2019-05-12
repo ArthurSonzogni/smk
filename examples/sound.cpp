@@ -11,6 +11,9 @@ int main() {
   sound.Play();
 
   auto screen = smk::Screen(640, 480, "Sound");
-  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE))
+  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
     screen.PoolEvents();
+    screen.LimitFrameRate(5 /* fps */);
+  }
+  return 0;
 }

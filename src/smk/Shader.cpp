@@ -125,7 +125,6 @@ void ShaderProgram::Link() {
 
     std::cout << log << std::endl;
   }
-  std::cerr << "Link success" << std::endl;
 }
 
 GLint ShaderProgram::uniform(const std::string& name) {
@@ -133,7 +132,6 @@ GLint ShaderProgram::uniform(const std::string& name) {
   if (it == uniforms_.end()) {
     // uniforms_ that is not referenced
     GLint r = glGetUniformLocation(handle_, name.c_str());
-    std::cerr << "new uniform " << name << std::endl;
 
     if (r == GL_INVALID_OPERATION || r < 0) {
       std::cerr << "[Error] uniform " << name << " doesn't exist in program"
