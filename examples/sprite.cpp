@@ -45,6 +45,7 @@ int main() {
                                  Player(624, 64)};
 
   while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+    screen.PoolEvents();
     for (auto& player : players)
       player.Step();
 

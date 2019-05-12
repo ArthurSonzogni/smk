@@ -10,7 +10,7 @@ int main() {
 
   float step = 0;
   while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
-
+    screen.PoolEvents();
     screen.Clear(smk::Color::Black);
 
     smk::Text text;

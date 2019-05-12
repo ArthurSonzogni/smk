@@ -1,18 +1,20 @@
 # SMK (Simple multimedia kit)
 
 The story of this library is simple, I wanted to port a few SFML games to the
-web by using WebAssembly. SFML wasn't supporting WebAssembly yet, so I had to
+web by using WebAssembly. SFML isn't supporting WebAssembly (yet), so I had to
 reimplement it myself. If you know the SFML, then SMK must be very familiar to
 you.
 
 What you can expect compared to the SFML:
-- It works with WebAssembly \o/. One build (Web) for every platforms.
-- Fewers features. I am looking forward for your pull requests.
+- It works with WebAssembly \o/. One build for every platforms!
+- No dependencies, everything is fetched and built from source thanks to
+  CMake. See [cmake tutorial](./doc/build_with_cmake.md)
+- Fewers features... but I am looking forward for your pull requests.
 - Less qualitative ;-) It is just a hackish project and I am the main user. This
   is still WIP.
 - The API is not meant to be stable for now. I am going to break your project.
-- I do not distribute build of the library. Please build it yourself ;-) For
-  instance, use git submodule to include SMK and then use CMake.
+- A few twist. Resources are move-only classes. Colors are glm::vec4. Key/Mouse
+  are raw GLFW enum.
 
 ## Opening a new Window:
 ~~~bash
