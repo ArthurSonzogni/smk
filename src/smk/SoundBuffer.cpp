@@ -12,16 +12,22 @@
 #include <vector>
 
 namespace smk {
-SoundBuffer::SoundBuffer() {
-  if (!Audio::Initialized()) {
-    std::cerr << "Error: smk::Audio has not been initialized. Please create a "
-                 "smk::Audio instance in the main() function before creating a "
-                 "smk::SoundBuffer"
-              << std::endl;
-  }
-}
+
+SoundBuffer::SoundBuffer() {}
 
 SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
+  if (!Audio::Initialized()) {
+    static bool once = true;
+    if (once) {
+      std::cerr
+          << "Error: smk::Audio has not been initialized. Please create a "
+             "smk::Audio instance in the main() function before creating a "
+             "smk::SoundBuffer"
+          << std::endl;
+      once = false;
+    }
+  }
+
   nqr::AudioData fileData;
   nqr::NyquistIO loader;
   loader.Load(&fileData, filename);

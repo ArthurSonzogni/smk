@@ -35,6 +35,8 @@ class Sound {
   const SoundBuffer* buffer_ = nullptr;
   unsigned int source_ = 0;
   bool is_playing_ = false;
+
+  void EnsureSourceIsCreated();
 };
 
 }  // namespace smk

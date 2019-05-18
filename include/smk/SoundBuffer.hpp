@@ -11,7 +11,7 @@ namespace smk {
 class Sound;
 class SoundBuffer {
  public:
-  // Please make sure to init OpenAL in main() by creating a smk::Audio.
+  // Please make sure to init OpenAL in main() before loading a file.
   SoundBuffer();  // Empty sound buffer
   SoundBuffer(const std::string filename);
 

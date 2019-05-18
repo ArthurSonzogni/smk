@@ -11,15 +11,26 @@
 
 namespace smk {
 
-Sound::Sound() {
+void Sound::EnsureSourceIsCreated() {
+  if (source_)
+    return;
+
   if (!Audio::Initialized()) {
-    std::cerr << "Error: smk::Audio has not been initialized. Please create a "
-                 "smk::Audio instance in the main() function before creating a "
-                 "smk::Sound"
-              << std::endl;
+    static bool once = true;
+    if (once) {
+      std::cerr
+          << "Error: smk::Audio has not been initialized. Please create a "
+             "smk::Audio instance in the main() function before creating a "
+             "smk::Sound"
+          << std::endl;
+      once = false;
+    }
   }
+
   alGenSources(1, &source_);
 }
+
+Sound::Sound() {}
 
 Sound::~Sound() {
   Stop();
@@ -30,6 +41,7 @@ Sound::~Sound() {
 void Sound::SetBuffer(const SoundBuffer& buffer) {
   if (buffer_ == &buffer)
     return;
+  EnsureSourceIsCreated();
   Stop();
   buffer_ = &buffer;
 }
@@ -51,6 +63,7 @@ void Sound::Stop() {
 }
 
 void Sound::SetLoop(bool looping) {
+  EnsureSourceIsCreated();
   alSourcei(source_, AL_LOOPING, looping);
 }
 
@@ -67,6 +80,7 @@ void Sound::operator=(Sound&& o) {
 void Sound::SetVolume(float volume) {
   if (!source_)
     return;
+  EnsureSourceIsCreated();
   alSourcef(source_, AL_GAIN, volume);
 }
 
