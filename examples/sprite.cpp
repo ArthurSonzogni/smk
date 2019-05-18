@@ -10,7 +10,6 @@ struct Player {
  public:
   static smk::Texture texture;
   Player(int x, int y) : x(x), y(y) {}
-
   void Step() {
     x += dx;
     
@@ -41,8 +40,7 @@ int main() {
   auto screen = smk::Screen(640, 32*3, "smk/example/sprite");
   Player::texture = smk::Texture(asset::hero_png); // Defined after screen.
 
-  std::vector<Player> players = {Player(320, 0), Player(32, 32),
-                                 Player(624, 64)};
+  std::vector<Player> players = {Player(320, 0), Player(32, 32), Player(624, 64)};
 
   while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
     screen.PoolEvents();

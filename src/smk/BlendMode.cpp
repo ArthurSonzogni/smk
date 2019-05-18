@@ -23,7 +23,7 @@ const BlendMode BlendMode::Substract = {
     GL_ONE,
 };
 
-const BlendMode BlendMode::Transparent{
+const BlendMode BlendMode::Alpha{
     GL_FUNC_ADD,  GL_FUNC_ADD,
     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,

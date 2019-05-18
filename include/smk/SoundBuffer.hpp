@@ -5,13 +5,13 @@
 #ifndef SMK_SOUND_BUFFER_HPP
 #define SMK_SOUND_BUFFER_HPP
 
-#include <smk/Audio.hpp>
 #include <string>
 
 namespace smk {
 class Sound;
-class SoundBuffer : public Audio {
+class SoundBuffer {
  public:
+  // Please make sure to init OpenAL in main() by creating a smk::Audio.
   SoundBuffer();  // Empty sound buffer
   SoundBuffer(const std::string filename);
 

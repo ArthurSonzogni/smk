@@ -199,7 +199,7 @@ void Screen::Draw(const Drawable& drawable) {
   state.color = smk::Color::White;
   state.vertex_array = nullptr;
   state.texture = nullptr;
-  state.blend_mode = smk::BlendMode::Transparent;
+  state.blend_mode = smk::BlendMode::Alpha;
   drawable.Draw(*this, state);
 }
 

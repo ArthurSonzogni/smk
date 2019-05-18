@@ -16,7 +16,7 @@ namespace smk {
 
 class Font {
  public:
-  Font() = default; // Empty font.
+  Font() = default;  // Empty font.
   Font(const std::string& filename, int size);
 
   int size() const { return size_; }

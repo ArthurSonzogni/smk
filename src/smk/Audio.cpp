@@ -7,15 +7,14 @@
 #include <iostream>
 #include <smk/Audio.hpp>
 
-#include <vector>
-#include <string>
 #include <cstring>
+#include <string>
+#include <vector>
 namespace smk {
 
 namespace {
 ALCdevice* audioDevice = nullptr;
 ALCcontext* audioContext = nullptr;
-int users = 0;
 
 void GetDevices(std::vector<std::string>& Devices) {
   // Vidage de la liste
@@ -35,10 +34,7 @@ void GetDevices(std::vector<std::string>& Devices) {
 
 }  // namespace
 
-void Audio::IncreaseRef() {
-  if (users++)
-    return;
-
+Audio::Audio() {
   std::vector<std::string> devices;
   GetDevices(devices);
   std::cerr << "Audio devices found " << devices.size() << ":" << std::endl;
@@ -67,10 +63,7 @@ void Audio::IncreaseRef() {
   }
 }
 
-void Audio::DecreaseRef() {
-  if (--users)
-    return;
-
+Audio::~Audio() {
   // Destroy the context
   alcMakeContextCurrent(nullptr);
   if (audioContext) {

@@ -5,13 +5,13 @@
 #ifndef SMK_SOUND_HPP
 #define SMK_SOUND_HPP
 
-#include <smk/Audio.hpp>
 #include <smk/SoundBuffer.hpp>
 
 namespace smk {
 
-class Sound : public Audio {
+class Sound {
  public:
+  // Please make sure to init OpenAL in main() by creating a smk::Audio.
   Sound();
   ~Sound();
   void SetBuffer(const SoundBuffer& buffer);
@@ -20,7 +20,7 @@ class Sound : public Audio {
   void Play();
   void Stop();
   void SetLoop(bool looping);
-  bool is_playing() { return is_playing_;};
+  bool is_playing() { return is_playing_; };
 
   // The gain applied to the source. Default is 1.
   void SetVolume(float volume);

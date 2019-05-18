@@ -22,12 +22,13 @@ struct BlendMode {
   GLenum src_alpha = GL_ONE;
   GLenum dst_alpha = GL_ONE;
 
-  static const BlendMode Replace;       // dst = src
-  static const BlendMode Add;           // dst += src
-  static const BlendMode Substract;     // dst -= src
-  static const BlendMode Transparent;   // dst = src * a + dest * (1 - a)
-  static const BlendMode Multiply;      // dst *= src
-  static const BlendMode Invert;        // dst = 1 - dst
+  // Some predefined blend mode.
+  static const BlendMode Replace;    // dst = src
+  static const BlendMode Add;        // dst += src
+  static const BlendMode Substract;  // dst -= src
+  static const BlendMode Multiply;   // dst *= src
+  static const BlendMode Alpha;      // dst = src * a + dest * (1 - a)
+  static const BlendMode Invert;     // dst = 1 - dst
 
   bool operator==(const BlendMode&) const;
   bool operator!=(const BlendMode&) const;

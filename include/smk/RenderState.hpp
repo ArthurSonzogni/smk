@@ -17,7 +17,7 @@ struct RenderState {
   const VertexArray* vertex_array = nullptr;
   glm::mat4 view;
   glm::vec4 color;
-  BlendMode blend_mode = BlendMode::Transparent;
+  BlendMode blend_mode = BlendMode::Alpha;
 };
 
 } // namespace smk

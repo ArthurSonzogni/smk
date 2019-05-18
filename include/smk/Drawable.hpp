@@ -8,9 +8,9 @@
 #include <smk/RenderState.hpp>
 
 namespace smk {
-  struct Texture;
-  class Screen;
-  class VertexArray;
+struct Texture;
+class Screen;
+class VertexArray;
 
 class Drawable {
  public:
@@ -35,7 +35,7 @@ class Drawable {
 
   // Texture
   void SetTexture(const Texture& texture);
-  const Texture* texture() const { return texture_;}
+  const Texture* texture() const { return texture_; }
 
   // BlendMode
   void SetBlendMode(const BlendMode&);
@@ -54,6 +54,6 @@ class Drawable {
   BlendMode blend_mode_;
 };
 
-} // namespace smk
+}  // namespace smk
 
 #endif /* end of include guard: SMK_DRAWABLE_HPP */

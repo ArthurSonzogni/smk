@@ -7,18 +7,11 @@
 
 namespace smk {
 
-// Initialize OpenAL.
+// Used to Initialize OpenAL. It is required to use it in the main() function.
 class Audio {
  public:
-  Audio() { IncreaseRef();}
-  ~Audio() { DecreaseRef(); }
-
-  Audio(const Audio&) { IncreaseRef(); }
-  Audio(Audio&&) { IncreaseRef(); }
-
- private:
-  void IncreaseRef();
-  void DecreaseRef();
+  Audio();
+  ~Audio();
 };
 
 }  // namespace smk
