@@ -12,6 +12,8 @@ class Audio {
  public:
   Audio();
   ~Audio();
+
+  static bool Initialized();
 };
 
 }  // namespace smk

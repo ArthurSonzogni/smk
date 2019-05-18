@@ -13,6 +13,7 @@
 namespace smk {
 
 namespace {
+int ref_count = 0;
 ALCdevice* audioDevice = nullptr;
 ALCcontext* audioContext = nullptr;
 
@@ -35,6 +36,8 @@ void GetDevices(std::vector<std::string>& Devices) {
 }  // namespace
 
 Audio::Audio() {
+  if (ref_count++)
+    return;
   std::vector<std::string> devices;
   GetDevices(devices);
   std::cerr << "Audio devices found " << devices.size() << ":" << std::endl;
@@ -64,6 +67,8 @@ Audio::Audio() {
 }
 
 Audio::~Audio() {
+  if (--ref_count)
+    return;
   // Destroy the context
   alcMakeContextCurrent(nullptr);
   if (audioContext) {
@@ -76,6 +81,11 @@ Audio::~Audio() {
     alcCloseDevice(audioDevice);
     audioContext = nullptr;
   }
+}
+
+// static
+bool Audio::Initialized() {
+  return ref_count;
 }
 
 }  // namespace smk

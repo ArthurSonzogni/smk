@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 #include <smk/Sound.hpp>
+#include <smk/Audio.hpp>
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -11,6 +12,12 @@
 namespace smk {
 
 Sound::Sound() {
+  if (!Audio::Initialized()) {
+    std::cerr << "Error: smk::Audio has not been initialized. Please create a "
+                 "smk::Audio instance in the main() function before creating a "
+                 "smk::Sound"
+              << std::endl;
+  }
   alGenSources(1, &source_);
 }
 

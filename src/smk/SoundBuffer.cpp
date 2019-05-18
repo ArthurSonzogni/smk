@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 #include <smk/SoundBuffer.hpp>
+#include <smk/Audio.hpp>
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -11,9 +12,16 @@
 #include <vector>
 
 namespace smk {
-SoundBuffer::SoundBuffer() {}
+SoundBuffer::SoundBuffer() {
+  if (!Audio::Initialized()) {
+    std::cerr << "Error: smk::Audio has not been initialized. Please create a "
+                 "smk::Audio instance in the main() function before creating a "
+                 "smk::SoundBuffer"
+              << std::endl;
+  }
+}
 
-SoundBuffer::SoundBuffer(const std::string filename) {
+SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
   nqr::AudioData fileData;
   nqr::NyquistIO loader;
   loader.Load(&fileData, filename);
