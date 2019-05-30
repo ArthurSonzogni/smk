@@ -7,15 +7,22 @@
 #include <iostream>
 
 int main() {
-  auto screen = smk::Screen(100, 100, "smk/example/sprite");
+  auto screen = smk::Screen(100, 100, "smk/example/texture_subrectangle");
   auto texture = smk::Texture(asset::hero_png);
-  auto sprite = smk::Sprite();
-  sprite.SetTexture(texture);
+
+  auto sprite_full = smk::Sprite();
+  sprite_full.SetTexture(texture);
+
+  auto sprite_subpart = smk::Sprite();
+  sprite_subpart.SetTexture(texture);
+  sprite_subpart.SetTextureRectangle({5, 5, 25, 25});
+  sprite_subpart.Move(35,5);
 
   while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
-    screen.Draw(sprite);
+    screen.Draw(sprite_full);
+    screen.Draw(sprite_subpart);
     screen.Display();
     screen.LimitFrameRate(60);
   }

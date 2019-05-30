@@ -5,17 +5,27 @@
 #ifndef SMK_SPRITE_HPP
 #define SMK_SPRITE_HPP
 
-#include "Drawable.hpp"
-#include <smk/Texture.hpp>
+#include <smk/Drawable.hpp>
+#include <smk/Rectangle.hpp>
 #include <smk/RenderState.hpp>
 #include <smk/Screen.hpp>
+#include <smk/Texture.hpp>
 
 namespace smk {
 
+// A Drawable specialised in displaying rectangular texture.
 class Sprite : public Drawable {
  public:
-  ~Sprite() override = default;
-  void Draw(Screen& screen, RenderState state) const override;
+  void SetTexture(const Texture& texture);
+
+  // Useful to display a sub part of the texture.
+  void SetTextureRectangle(const Rectangle& rectangle);
+
+  Sprite() = default;
+  Sprite(Sprite&&) = default;
+  Sprite(const Sprite&) = delete;
+  Sprite& operator=(Sprite&&) = default;
+  Sprite& operator=(const Sprite&) = delete;
 };
 
 }  // namespace smk

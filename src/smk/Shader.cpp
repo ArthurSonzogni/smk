@@ -100,13 +100,14 @@ void Shader::operator=(Shader&& other) {
 }
 
 ShaderProgram::ShaderProgram() = default;
+
 void ShaderProgram::AddShader(const Shader& shader) {
   if (!handle_) {
     handle_ = glCreateProgram();
     if (!handle_)
       std::cerr << "[Error] Impossible to create a new Shader" << std::endl;
-    std::cerr << "Created a handle" << std::endl;
   }
+
   glAttachShader(handle_, shader.getHandle());
 }
 

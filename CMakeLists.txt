@@ -27,6 +27,7 @@ add_library(smk STATIC
   include/smk/Vertex.hpp
   include/smk/VertexArray.hpp
   include/smk/View.hpp
+  include/smk/Rectangle.hpp
   src/smk/Audio.cpp
   src/smk/BlendMode.cpp
   src/smk/Color.cpp

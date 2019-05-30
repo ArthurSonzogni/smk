@@ -14,16 +14,22 @@ class VertexArray;
 
 class Drawable {
  public:
-  virtual ~Drawable() = default;
-
-  // Transformation.
-  void Move(float move_x, float move_y);
-  void Rotate(float rotation);
+  // Center
   void SetCenter(float center_x, float center_y);
   void SetCenter(glm::vec2);
+
+  // Position
+  void Move(glm::vec2 move);
+  void Move(float move_x, float move_y);
   void SetPosition(float position_x, float position_y);
   void SetPosition(glm::vec2 position);
+
+  // Rotation
+  void Rotate(float rotation);
   void SetRotation(float rotation);
+
+  // Scale
+  void SetScale(glm::vec2 scale);
   void SetScale(float scale_x, float scale_y);
   void SetScaleX(float scale_x);
   void SetScaleY(float scale_y);
@@ -41,17 +47,28 @@ class Drawable {
   void SetBlendMode(const BlendMode&);
   const BlendMode& blend_mode() const { return blend_mode_; }
 
-  virtual void Draw(Screen& screen, RenderState state) const = 0;
+  // VertexArray
+  void SetVertexArray(VertexArray vertex_array);
+  const VertexArray* vertex_array() const { return &vertex_array_; }
+
+  void Draw(Screen& screen, RenderState state) const;
+  
+  // Move only class.
+  Drawable() = default;
+  Drawable(Drawable&&) = default;
+  Drawable(const Drawable&) = delete;
+  Drawable& operator=(Drawable&&) = default;
+  Drawable& operator=(const Drawable&) = delete;
 
  private:
-  float rotation_ = 0.f;
-  glm::vec2 position_ = glm::vec2(0.f, 0.f);
-  glm::vec2 center_ = glm::vec2(0.f, 0.f);
-  float scale_x_ = 1.f;
-  float scale_y_ = 1.f;
+  glm::vec2 center_ = {0.f, 0.f};
+  glm::vec2 position_ = {0.f, 0.f};
+  glm::vec2 scale_ = {1.0, 1.0};
   glm::vec4 color_ = {1.0, 1.0, 1.0, 1.0};
+  float rotation_ = 0.f;
   const Texture* texture_ = nullptr;
   BlendMode blend_mode_;
+  VertexArray vertex_array_;
 };
 
 }  // namespace smk

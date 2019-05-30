@@ -42,15 +42,17 @@ const BlendMode BlendMode::Invert = {
     GL_ZERO,
 };
 
-bool BlendMode::operator==(const BlendMode &o) const {
-  return equation_rgb == o.equation_rgb &&     //
-         equation_alpha == o.equation_alpha && //
-         src_rgb == o.src_rgb &&               //
-         dst_rgb == o.dst_rgb &&               //
-         src_alpha == o.src_alpha &&           //
-         dst_alpha == o.dst_alpha;             //
+bool BlendMode::operator==(const BlendMode& o) const {
+  return equation_rgb == o.equation_rgb &&      //
+         equation_alpha == o.equation_alpha &&  //
+         src_rgb == o.src_rgb &&                //
+         dst_rgb == o.dst_rgb &&                //
+         src_alpha == o.src_alpha &&            //
+         dst_alpha == o.dst_alpha;              //
 }
 
-bool BlendMode::operator!=(const BlendMode &o) const { return !operator==(o); }
+bool BlendMode::operator!=(const BlendMode& o) const {
+  return !operator==(o);
+}
 
-} // namespace smk
+}  // namespace smk

@@ -26,26 +26,34 @@ void Drawable::SetPosition(float position_x, float position_y) {
   position_.y = position_y;
 }
 
+void Drawable::SetCenter(glm::vec2 center) {
+  center_ = center;
+}
+
 void Drawable::SetCenter(float center_x, float center_y) {
   center_.x = center_x;
   center_.y = center_y;
 }
 
-void Drawable::SetCenter(glm::vec2 center) {
-  center_ = center;
+void Drawable::SetScale(glm::vec2 scale) {
+  scale_ = scale;
 }
 
 void Drawable::SetScale(float scale_x, float scale_y) {
-  scale_x_ = scale_x;
-  scale_y_ = scale_y;
+  scale_.x = scale_x;
+  scale_.y = scale_y;
 }
 
 void Drawable::SetScaleX(float scale_x) {
-  scale_x_ = scale_x;
+  scale_.x = scale_x;
 }
 
 void Drawable::SetScaleY(float scale_y) {
-  scale_y_ = scale_y;
+  scale_.y = scale_y;
+}
+
+void Drawable::Move(glm::vec2 move) {
+  position_ += move;
 }
 
 void Drawable::Move(float move_x, float move_y) {
@@ -54,19 +62,13 @@ void Drawable::Move(float move_x, float move_y) {
 }
 
 glm::mat4 Drawable::Transformation() const {
-  float size_x = 1.0;
-  float size_y = 1.0;
-  if (texture_) {
-    size_x = texture_->width;
-    size_y = texture_->height;
-  }
   glm::mat4 ret = glm::mat4(1.0);
   ret = glm::translate(ret, glm::vec3(position_.x, position_.y, 0.0));
   ret = glm::rotate(ret, -rotation_ / 360.f * 2.f * 3.1415f,
                     glm::vec3(0.0, 0.0, 1.0));
   ret = glm::translate(
-      ret, glm::vec3(-center_.x * scale_x_, -center_.y * scale_y_, 0.f));
-  ret = glm::scale(ret, glm::vec3(size_x * scale_x_, +size_y * scale_y_, 1.0));
+      ret, glm::vec3(-center_.x * scale_.x, -center_.y * scale_.y, 0.f));
+  ret = glm::scale(ret, glm::vec3(scale_.x, scale_.y, 1.0));
   return ret;
 }
 
@@ -82,4 +84,17 @@ void Drawable::SetTexture(const Texture& texture) {
   texture_ = &texture;
 }
 
-} // namespace smk
+void Drawable::SetVertexArray(VertexArray vertex_array) {
+  vertex_array_ = std::move(vertex_array);
+}
+
+void Drawable::Draw(Screen& screen, RenderState state) const {
+  state.color *= color();
+  state.texture = texture();
+  state.view *= Transformation();
+  state.vertex_array = vertex_array();
+  state.blend_mode = blend_mode();
+  screen.Draw(state);
+}
+
+}  // namespace smk

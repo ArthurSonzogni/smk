@@ -52,7 +52,6 @@ class Shader {
 class ShaderProgram {
  public:
   ShaderProgram();
-
   void AddShader(const Shader& shader);
   void Link();
 

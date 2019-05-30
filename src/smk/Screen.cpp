@@ -22,18 +22,11 @@
 #include <cmath>
 #endif
 
-#ifdef __EMSCRIPTEN__
-#define P "./"
-#else
-#define P "../"
-#endif
-
 namespace smk {
 
 Screen::Screen() {}
 Screen::Screen(int width, int height, const std::string& title)
     : width_(width), height_(height) {
-  std::cout << "[Info] GLFW initialisation" << std::endl;
 
   // initialize the GLFW library
   if (!glfwInit()) {
@@ -80,16 +73,9 @@ Screen::Screen(int width, int height, const std::string& title)
   std::cout << "Renderer: " << renderer << std::endl;
   std::cout << "OpenGL version supported " << version << std::endl;
 
-  // opengl configuration
-  //glEnable(GL_DEPTH_TEST);  // enable depth-testing
-  //glDepthFunc(GL_LESS);  // depth-testing interprets a smaller value as "closer"
-
-  // Alph transparency.
+  // Alpha transparency.
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-  // Multisampling
-  //glEnable(GL_MULTISAMPLE);  
 
   View default_view;
   default_view.SetCenter(width_ / 2, height_ / 2);
@@ -269,5 +255,21 @@ void Screen::LimitFrameRate(float fps) {
       std::chrono::microseconds(int(sleep_duration * 1'000'000)));
   time_last_sleep_ = glfwGetTime();
 }
+
+static Texture white_texture;
+Texture* WhiteTexture() {
+  if (white_texture.id == 0) {
+    white_texture.width = 1;
+    white_texture.height = 1;
+    const uint8_t data[4] = {255, 255, 255, 255};
+    glGenTextures(1, &white_texture.id);
+    glBindTexture(GL_TEXTURE_2D, white_texture.id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, white_texture.width,
+                 white_texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
+  }
+  return &white_texture;
+}
+
 
 } // namespace smk

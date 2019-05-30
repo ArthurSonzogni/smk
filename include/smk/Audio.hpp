@@ -13,6 +13,7 @@ class Audio {
   Audio();
   ~Audio();
 
+  // Returns true if there is one Audio class instanciated.
   static bool Initialized();
 };
 
