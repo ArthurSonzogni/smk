@@ -39,7 +39,7 @@ Transformable Square() {
 }
 
 Transformable Circle(float radius) {
-  return Circle(radius, radius * 0.5);
+  return Circle(radius, 16 + radius * 0.9);
 }
 
 Transformable Circle(float radius, int subdivisions) {
