@@ -31,13 +31,19 @@ VertexArray::VertexArray(const std::vector<Vertex>& array) {
 VertexArray::~VertexArray() {
   if (!vbo_)
     return;
+
   if (ref_count_) {
-    if (*ref_count_--)
+    if (--(*ref_count_))
       return;
     delete ref_count_;
+    ref_count_ = nullptr;
   }
+
   glDeleteBuffers(1, &vbo_);
+  vbo_ = 0;
+
   glDeleteVertexArrays(1, &vao_);
+  vao_ = 0;
 }
 
 void VertexArray::Bind() const {
@@ -58,13 +64,15 @@ VertexArray::VertexArray(VertexArray&& other) {
 
 VertexArray& VertexArray::operator=(const VertexArray& other) {
   this->~VertexArray();
-  vao_ = other.vao_;
+  if (!other.vbo_)
+    return *this;
+
   vbo_ = other.vbo_;
+  vao_ = other.vao_;
   if (!other.ref_count_)
     other.ref_count_ = new int(1);
   ref_count_ = other.ref_count_;
   *ref_count_ += 1;
-
   return *this;
 }
 
