@@ -5,16 +5,16 @@
 #ifndef SMK_SHAPE_HPP
 #define SMK_SHAPE_HPP
 
-#include <smk/Drawable.hpp>
+#include <smk/Transformable.hpp>
 #include <smk/VertexArray.hpp>
 
 namespace smk {
 namespace Shape {
 
-Drawable Line(glm::vec2 a, glm::vec2 b, float thickness);
-Drawable Square();
-Drawable Circle(float radius);
-Drawable Circle(float radius, int subdivisions);
+Transformable Line(glm::vec2 a, glm::vec2 b, float thickness);
+Transformable Square();
+Transformable Circle(float radius);
+Transformable Circle(float radius, int subdivisions);
 
 }  // namespace Shape
 }  // namespace smk

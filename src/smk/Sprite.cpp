@@ -11,7 +11,7 @@
 namespace smk {
 
 void Sprite::SetTexture(const Texture& texture) {
-  Drawable::SetTexture(texture);
+  Transformable::SetTexture(texture);
   SetTextureRectangle({0.f, 0.f, float(texture.width), float(texture.height)});
 }
 
@@ -24,11 +24,11 @@ void Sprite::SetTextureRectangle(const Rectangle& rectangle) {
   float hhh = rectangle.height();
   SetVertexArray(VertexArray(std::vector<Vertex>({
       {{0.f, 0.f}, {l, t}},
-      {{0.f, www}, {l, b}},
-      {{hhh, www}, {r, b}},
+      {{0.f, hhh}, {l, b}},
+      {{www, hhh}, {r, b}},
       {{0.f, 0.f}, {l, t}},
-      {{hhh, www}, {r, b}},
-      {{hhh, 0.f}, {r, t}},
+      {{www, hhh}, {r, b}},
+      {{www, 0.f}, {r, t}},
   })));
 }
 

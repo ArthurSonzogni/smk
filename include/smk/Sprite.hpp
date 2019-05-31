@@ -5,16 +5,16 @@
 #ifndef SMK_SPRITE_HPP
 #define SMK_SPRITE_HPP
 
-#include <smk/Drawable.hpp>
 #include <smk/Rectangle.hpp>
 #include <smk/RenderState.hpp>
 #include <smk/Screen.hpp>
 #include <smk/Texture.hpp>
+#include <smk/Transformable.hpp>
 
 namespace smk {
 
 // A Drawable specialised in displaying rectangular texture.
-class Sprite : public Drawable {
+class Sprite : public Transformable {
  public:
   void SetTexture(const Texture& texture);
 

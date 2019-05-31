@@ -8,13 +8,13 @@
 namespace smk {
 namespace Shape {
 
-Drawable Shape(VertexArray vertex_array) {
-  Drawable drawable;
+Transformable Shape(VertexArray vertex_array) {
+  Transformable drawable;
   drawable.SetVertexArray(std::move(vertex_array));
   return drawable;
 }
 
-Drawable Line(glm::vec2 a, glm::vec2 b, float thickness) {
+Transformable Line(glm::vec2 a, glm::vec2 b, float thickness) {
   glm::vec2 dt =
       glm::normalize(glm::vec2(b.y - a.y, -b.x + a.x)) * thickness * 0.5f;
   return Shape(VertexArray({
@@ -27,7 +27,7 @@ Drawable Line(glm::vec2 a, glm::vec2 b, float thickness) {
   }));
 }
 
-Drawable Square() {
+Transformable Square() {
   return Shape(VertexArray({
       {{0.f, 0.f}, {0.f, 0.f}},
       {{1.f, 0.f}, {1.f, 0.f}},
@@ -38,11 +38,11 @@ Drawable Square() {
   }));
 }
 
-Drawable Circle(float radius) {
+Transformable Circle(float radius) {
   return Circle(radius, radius * 0.5);
 }
 
-Drawable Circle(float radius, int subdivisions) {
+Transformable Circle(float radius, int subdivisions) {
   std::vector<Vertex> v;
   glm::vec2 p1 = glm::vec2(1.0f, 0.0f);
   glm::vec2 t1 = glm::vec2(0.5f, 0.5f) + 0.5f * p1;

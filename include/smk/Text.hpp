@@ -5,19 +5,22 @@
 #ifndef SMK_TEXT_HPP
 #define SMK_TEXT_HPP
 
-#include <string>
-#include <smk/Drawable.hpp>
 #include <smk/Texture.hpp>
+#include <smk/Transformable.hpp>
+#include <string>
 
 namespace smk {
 class Font;
 
-class Text : public Drawable {
+class Text : public Transformable {
  public:
+  virtual ~Text() = default;
+
   void SetString(const std::wstring&);
   void SetString(const std::string&);
   void SetFont(const Font& font);
-  void Draw(Screen& screen, RenderState state) const;
+
+  virtual void Draw(Screen& screen, RenderState state) const override;
 
   glm::vec2 ComputeDimensions() const;
 
@@ -26,6 +29,6 @@ class Text : public Drawable {
   std::wstring string_;
 };
 
-} // namespace smk
+}  // namespace smk
 
 #endif /* end of include guard: SMK_TEXT_HPP */

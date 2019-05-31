@@ -15,6 +15,7 @@ add_library(smk STATIC
   include/smk/Font.hpp
   include/smk/Input.hpp
   include/smk/OpenGL.hpp
+  include/smk/Rectangle.hpp
   include/smk/RenderState.hpp
   include/smk/Screen.hpp
   include/smk/Shader.hpp
@@ -24,14 +25,13 @@ add_library(smk STATIC
   include/smk/Sprite.hpp
   include/smk/Text.hpp
   include/smk/Texture.hpp
+  include/smk/Transformable.hpp
   include/smk/Vertex.hpp
   include/smk/VertexArray.hpp
   include/smk/View.hpp
-  include/smk/Rectangle.hpp
   src/smk/Audio.cpp
   src/smk/BlendMode.cpp
   src/smk/Color.cpp
-  src/smk/Drawable.cpp
   src/smk/Font.cpp
   src/smk/Input.cpp
   src/smk/Screen.cpp
@@ -44,6 +44,7 @@ add_library(smk STATIC
   src/smk/StbImage.hpp
   src/smk/Text.cpp
   src/smk/Texture.cpp
+  src/smk/Transformable.cpp
   src/smk/VertexArray.cpp
   src/smk/View.cpp
 )
