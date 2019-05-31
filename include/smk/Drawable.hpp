@@ -53,12 +53,12 @@ class Drawable {
 
   void Draw(Screen& screen, RenderState state) const;
   
-  // Move only class.
+  // Movable-copyable class.
   Drawable() = default;
   Drawable(Drawable&&) = default;
-  Drawable(const Drawable&) = delete;
+  Drawable(const Drawable&) = default;
   Drawable& operator=(Drawable&&) = default;
-  Drawable& operator=(const Drawable&) = delete;
+  Drawable& operator=(const Drawable&) = default;
 
  private:
   glm::vec2 center_ = {0.f, 0.f};

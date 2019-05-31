@@ -21,11 +21,11 @@ class VertexArray {
   void Bind() const;
   void UnBind() const;
 
-  // --- Move only resource ----------------------------------------------------
+  // --- Movable-Copyable resource ---------------------------------------------
   VertexArray(VertexArray&&);
-  VertexArray(const VertexArray&) = delete;
-  void operator=(VertexArray&&);
-  void operator=(const VertexArray&) = delete;
+  VertexArray(const VertexArray&);
+  VertexArray& operator=(VertexArray&&);
+  VertexArray& operator=(const VertexArray&);
   // ---------------------------------------------------------------------------
   
   int size() const { return size_;} 
@@ -34,6 +34,10 @@ class VertexArray {
   GLuint vbo_ = 0;
   GLuint vao_ = 0;
   int size_ = 0;
+
+  // Used to support copy. Nullptr as long as this class is not copied.
+  // Otherwise an integer counting how many instances shares this resource.
+  mutable int* ref_count_ = nullptr;
 };
 
 }  // namespace smk.

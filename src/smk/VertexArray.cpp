@@ -29,10 +29,15 @@ VertexArray::VertexArray(const std::vector<Vertex>& array) {
 }
 
 VertexArray::~VertexArray() {
-  if (vbo_)
-    glDeleteBuffers(1, &vbo_);
-  if (vao_)
-    glDeleteVertexArrays(1, &vao_);
+  if (!vbo_)
+    return;
+  if (ref_count_) {
+    if (*ref_count_--)
+      return;
+    delete ref_count_;
+  }
+  glDeleteBuffers(1, &vbo_);
+  glDeleteVertexArrays(1, &vao_);
 }
 
 void VertexArray::Bind() const {
@@ -43,14 +48,32 @@ void VertexArray::UnBind() const {
   glBindVertexArray(0);
 }
 
+VertexArray::VertexArray(const VertexArray& other) {
+  this->operator=(other);
+}
+
 VertexArray::VertexArray(VertexArray&& other) {
   this->operator=(std::move(other));
 }
 
-void VertexArray::operator=(VertexArray&& other) {
+VertexArray& VertexArray::operator=(const VertexArray& other) {
+  this->~VertexArray();
+  vao_ = other.vao_;
+  vbo_ = other.vbo_;
+  if (!other.ref_count_)
+    other.ref_count_ = new int(1);
+  ref_count_ = other.ref_count_;
+  *ref_count_ += 1;
+
+  return *this;
+}
+
+VertexArray& VertexArray::operator=(VertexArray&& other) {
   std::swap(vbo_, other.vbo_);
   std::swap(vao_, other.vao_);
   std::swap(size_, other.size_);
+  std::swap(ref_count_, other.ref_count_);
+  return *this;
 }
 
-} // namespace smk.
+}  // namespace smk.

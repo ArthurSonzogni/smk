@@ -23,9 +23,9 @@ class Sprite : public Drawable {
 
   Sprite() = default;
   Sprite(Sprite&&) = default;
-  Sprite(const Sprite&) = delete;
+  Sprite(const Sprite&) = default;
   Sprite& operator=(Sprite&&) = default;
-  Sprite& operator=(const Sprite&) = delete;
+  Sprite& operator=(const Sprite&) = default;
 };
 
 }  // namespace smk
