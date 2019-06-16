@@ -45,10 +45,12 @@ void Text::Draw(Screen& screen, RenderState state) const {
     if (!character)
       continue;
 
-    sprite.SetPosition(advance_x + character->bearing.x,
-                       advance_y + character->bearing.y);
-    sprite.SetTexture(character->texture);
-    sprite.Draw(screen, state);
+    if (character->texture.id) {
+      sprite.SetPosition(advance_x + character->bearing.x,
+                         advance_y + character->bearing.y);
+      sprite.SetTexture(character->texture);
+      sprite.Draw(screen, state);
+    }
     advance_x += character->advance;
   }
 }

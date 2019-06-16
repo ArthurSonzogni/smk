@@ -57,18 +57,6 @@ Font::Font(const std::string& filename, int size) {
 
     int width = face->glyph->bitmap.width;
     int height = face->glyph->bitmap.rows;
-    std::vector<uint8_t> buffer_rgba(width * height * 4);
-    {
-      int j = 0;
-      for (int i = 0; i < width * height; ++i) {
-        const uint8_t v = face->glyph->bitmap.buffer[i];
-        buffer_rgba[j++] = 255;
-        buffer_rgba[j++] = 255;
-        buffer_rgba[j++] = 255;
-        buffer_rgba[j++] = v;
-      }
-    }
-
     auto character = std::make_unique<Character>();
     character->texture.width = width;
     character->texture.height = height;
@@ -77,19 +65,32 @@ Font::Font(const std::string& filename, int size) {
                    -face->glyph->bitmap_top / super_resolution);
     character->advance = face->glyph->advance.x / (64.0f * super_resolution);
 
+    if (width * height != 0) {
+      std::vector<uint8_t> buffer_rgba(width * height * 4);
+      {
+        int j = 0;
+        for (int i = 0; i < width * height; ++i) {
+          const uint8_t v = face->glyph->bitmap.buffer[i];
+          buffer_rgba[j++] = 255;
+          buffer_rgba[j++] = 255;
+          buffer_rgba[j++] = 255;
+          buffer_rgba[j++] = v;
+        }
+      }
 
-    // Generate texture
-    glGenTextures(1, &character->texture.id);
-    glBindTexture(GL_TEXTURE_2D, character->texture.id);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, buffer_rgba.data());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+      // Generate texture
+      glGenTextures(1, &character->texture.id);
+      glBindTexture(GL_TEXTURE_2D, character->texture.id);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                   GL_UNSIGNED_BYTE, buffer_rgba.data());
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    character->texture.width /= super_resolution;
-    character->texture.height /= super_resolution;
+      character->texture.width /= super_resolution;
+      character->texture.height /= super_resolution;
+    }
 
     characters_[c] = std::move(character);
   }
