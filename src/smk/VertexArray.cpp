@@ -74,6 +74,7 @@ VertexArray& VertexArray::operator=(const VertexArray& other) {
   vbo_ = other.vbo_;
   vao_ = other.vao_;
   ref_count_ = other.ref_count_;
+  size_ = other.size_;
 
   (*ref_count_)++;
   return *this;
