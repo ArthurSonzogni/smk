@@ -17,7 +17,7 @@ struct Texture {
 
   ~Texture();
 
-  void Bind(GLuint active_texture = 0) const;
+  void Bind(GLuint active_texture = GL_TEXTURE0) const;
 
   GLuint id = 0;
   int width = -1;
