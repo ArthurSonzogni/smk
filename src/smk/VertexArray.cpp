@@ -33,7 +33,8 @@ VertexArray::~VertexArray() {
     return;
 
   if (ref_count_) {
-    if (--(*ref_count_))
+    --(*ref_count_);
+    if (*ref_count_)
       return;
     delete ref_count_;
     ref_count_ = nullptr;
@@ -67,12 +68,14 @@ VertexArray& VertexArray::operator=(const VertexArray& other) {
   if (!other.vbo_)
     return *this;
 
-  vbo_ = other.vbo_;
-  vao_ = other.vao_;
   if (!other.ref_count_)
     other.ref_count_ = new int(1);
+
+  vbo_ = other.vbo_;
+  vao_ = other.vao_;
   ref_count_ = other.ref_count_;
-  *ref_count_ += 1;
+
+  (*ref_count_)++;
   return *this;
 }
 
