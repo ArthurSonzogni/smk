@@ -218,14 +218,14 @@ void Screen::Draw(const RenderState& state) {
     texture->Bind();
   }
 
-  //if (cached_render_state_.blend_mode != state.blend_mode || true) {
+  if (cached_render_state_.blend_mode != state.blend_mode) {
     cached_render_state_.blend_mode = state.blend_mode;
     glEnable(GL_BLEND);
     glBlendEquationSeparate(state.blend_mode.equation_rgb,
                             state.blend_mode.equation_alpha);
     glBlendFuncSeparate(state.blend_mode.src_rgb, state.blend_mode.dst_rgb,
                         state.blend_mode.src_alpha, state.blend_mode.dst_alpha);
-  //}
+  }
 
   glDrawArrays(GL_TRIANGLES, 0, state.vertex_array->size());
 }
