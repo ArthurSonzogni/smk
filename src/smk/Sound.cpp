@@ -47,8 +47,10 @@ void Sound::SetBuffer(const SoundBuffer& buffer) {
 }
 
 void Sound::Play() {
-  if (!source_ || !buffer_ || !buffer_->buffer || is_playing_)
+  if (!source_ || !buffer_ || !buffer_->buffer)
     return;
+  if (is_playing_)
+    Stop();
   alSourcei(source_, AL_BUFFER, buffer_->buffer);
   alSourcePlay(source_);
   is_playing_ = true;
