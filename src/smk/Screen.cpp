@@ -234,11 +234,11 @@ void Screen::SetView(const View& view) {
   view_ = view;
   float tx = view_.x_ - view_.width_ / 2.f;
   float ty = view_.y_ - view_.height_ / 2.f;
-  view_mat_ =
-      glm::mat4(2.0 / width_, 0.0, 0.0, 0.0,                             //
-                0.0, -2.f / height_, 0.0, 0.0,                           //
-                0.0, 0.0, 1.0, 0.0,                                      //
-                -1.0 - 2.0 * tx / width_, 1.0 + 2.0 * ty / height_, 0.0, 1.0);  //
+  view_mat_ = glm::mat4(2.0 / view.width_, 0.0, 0.0, 0.0,    //
+                        0.0, -2.f / view.height_, 0.0, 0.0,  //
+                        0.0, 0.0, 1.0, 0.0,                  //
+                        -1.0 - 2.0 * tx / view.width_,
+                        1.0 + 2.0 * ty / view.height_, 0.0, 1.0);  //
 }
 
 void Screen::Clear(const glm::vec4& color) {
