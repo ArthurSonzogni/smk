@@ -12,8 +12,14 @@ namespace smk {
 
 struct Texture {
  public:
+  struct Option {
+    GLenum min_filter = GL_LINEAR;
+    GLenum mag_filter = GL_LINEAR;
+  };
+
   Texture();  // empty texture.
   Texture(const std::string& filename);
+  Texture(const std::string& filename, Option option);
 
   ~Texture();
 

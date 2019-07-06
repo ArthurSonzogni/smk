@@ -23,7 +23,8 @@ int next_power_of_2(int v) {
   return v;
 }
 
-Texture::Texture(const std::string& filename) {
+Texture::Texture(const std::string& filename) : Texture(filename, Option()) {}
+Texture::Texture(const std::string& filename, Option option) {
   FILE* file = fopen(filename.c_str(), "rb");
   if (!file) {
     std::cerr << "File " << filename << " not found" << std::endl;
@@ -51,8 +52,8 @@ Texture::Texture(const std::string& filename) {
   glBindTexture(GL_TEXTURE_2D, id);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width_b, height_b, 0, GL_RGBA,
                GL_UNSIGNED_BYTE, transformed.data());
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, option.min_filter);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, option.mag_filter);
   glBindTexture(GL_TEXTURE_2D, GL_NONE);
   stbi_image_free(data);
 }
