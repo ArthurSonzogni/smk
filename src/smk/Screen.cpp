@@ -232,13 +232,14 @@ void Screen::Draw(const RenderState& state) {
 
 void Screen::SetView(const View& view) {
   view_ = view;
-  float tx = view_.x_ - view_.width_ / 2.f;
-  float ty = view_.y_ - view_.height_ / 2.f;
-  view_mat_ = glm::mat4(2.0 / view.width_, 0.0, 0.0, 0.0,    //
-                        0.0, -2.f / view.height_, 0.0, 0.0,  //
-                        0.0, 0.0, 1.0, 0.0,                  //
-                        -1.0 - 2.0 * tx / view.width_,
-                        1.0 + 2.0 * ty / view.height_, 0.0, 1.0);  //
+  float z_x = +2.0 / view.width_;   // [0, width]  -> [-1,1]
+  float z_y = -2.0 / view.height_;  // [0, height] -> [-1,1]
+  float t_x = -view.x_ * z_x;
+  float t_y = -view.y_ * z_y;
+  view_mat_ = glm::mat4(z_x, 0.0, 0.0, 0.0,   //
+                        0.0, z_y, 0.0, 0.0,   //
+                        0.0, 0.0, 1.0, 0.0,   //
+                        t_x, t_y, 0.0, 1.0);  //
 }
 
 void Screen::Clear(const glm::vec4& color) {
