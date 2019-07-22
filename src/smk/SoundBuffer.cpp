@@ -35,8 +35,11 @@ SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
   ALsizei sample_rate = static_cast<ALsizei>(fileData.sampleRate);
 
   std::vector<ALshort> data;
-  for (auto& it : fileData.samples)
-    data.push_back(it * (1 << 15));
+  for (auto& it : fileData.samples) {
+    it = std::min(it, +1.f);
+    it = std::max(it, -1.f);
+    data.push_back(it * ((1 << 15) - 1));
+  }
 
   // clang-format off
   ALenum format;
