@@ -85,6 +85,12 @@ the smk.
   screen.SetView(view);
 ~~~
 
+# Games made using SMK
+ * [InTheCube](https://github.com/ArthurSonzogni/InTheCube)
+ * [IceMaze](https://github.com/ArthurSonzogni/IceMaze)
+
+(Feel free to add yours)
+
 # Thanks
 
 SMK depends directly on many great projects listed below:
