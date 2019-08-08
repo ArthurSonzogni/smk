@@ -1,23 +1,25 @@
 # SMK (Simple multimedia kit)
 
-The story of this library is simple, I wanted to port a few SFML games to the
-web by using WebAssembly. SFML isn't supporting WebAssembly (yet), so I had to
-reimplement it myself. If you know the SFML, then SMK must be very familiar to
-you.
+![header](./doc/header_logo.png)
 
-What you can expect compared to the SFML:
-- It works with WebAssembly \o/. One build for every platforms!
-- No dependencies, everything is fetched and built from source thanks to
-  CMake. See [cmake tutorial](./doc/build_with_cmake.md)
-- Fewers features... but I am looking forward for your pull requests.
-- Less qualitative ;-) It is just a hackish project and I am the main user. This
-  is still WIP.
-- The API is not meant to be stable for now. I am going to break your project.
-- A few twist. Resources are move-only classes. Colors are glm::vec4. Key/Mouse
-  are raw GLFW enum.
+**Story**:
+~~~
+I needed to port several games made using the
+[SFML](https://www.sfml-dev.org/) to WebAssembly. SFML isn't supporting
+WebAssembly (yet), so I had to reimplement it myself. If you know the SFML, then
+SMK must be very familiar to you.
+~~~
+
+Features:
+  * Compatible with WebAssembly. One build for every platforms!
+  * No dependencies, everything is fetched using cmake FetchContent.
+  * Fast & simple.
+
+Ready to start? See [tutorial](./doc/build_with_cmake.md) on how to depend on
+the smk.
 
 ## Opening a new Window:
-~~~bash
+~~~cpp
   auto screen = smk::Screen(640, 480, "Title");
 ~~~
 
@@ -49,7 +51,7 @@ What you can expect compared to the SFML:
 
 ## Text
 ### Loading font
-~~~
+~~~cpp
   auto font_arial = Font("./arial.ttf", 32);
 ~~~
 
@@ -76,7 +78,7 @@ What you can expect compared to the SFML:
 ~~~
 
 ## Transforming the view
-~~~
+~~~cpp
   View view;
   view.SetCenter({200, 200});
   view.SetSize(320,240);
