@@ -13,6 +13,7 @@ class Sound {
  public:
   // Please make sure to init OpenAL in main() by creating a smk::Audio.
   Sound();
+  Sound(const SoundBuffer& buffer);
   ~Sound();
   void SetBuffer(const SoundBuffer& buffer);
   const SoundBuffer* buffer() { return buffer_; }

@@ -10,11 +10,8 @@ int main() {
   auto screen = smk::Screen(100, 100, "smk/example/texture_subrectangle");
   auto texture = smk::Texture(asset::hero_png);
 
-  auto sprite_full = smk::Sprite();
-  sprite_full.SetTexture(texture);
-
-  auto sprite_subpart = smk::Sprite();
-  sprite_subpart.SetTexture(texture);
+  auto sprite_full = smk::Sprite(texture);
+  auto sprite_subpart = smk::Sprite(texture);
   sprite_subpart.SetTextureRectangle({5, 5, 25, 25});
   sprite_subpart.Move(35,5);
 

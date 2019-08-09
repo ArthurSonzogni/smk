@@ -17,6 +17,18 @@ std::wstring to_wstring(const std::string& s) {
   return converter.from_bytes(s);
 }
 
+Text::Text(const Font& font) {
+  SetFont(font);
+}
+
+Text::Text(const Font& font, const std::string& text) : Text(font) {
+  SetString(text);
+}
+
+Text::Text(const Font& font, const std::wstring& text) : Text(font) {
+  SetString(text);
+}
+
 void Text::SetString(const std::wstring& s) {
   string_ = s;
 }

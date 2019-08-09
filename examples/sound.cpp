@@ -13,8 +13,7 @@ int main() {
   auto sound_buffer = smk::SoundBuffer(asset::water_mp3);
 
   // Create a sound source.
-  auto sound = smk::Sound();
-  sound.SetBuffer(sound_buffer);  // Read from the previous sound file.
+  auto sound = smk::Sound(sound_buffer);
   sound.Play();                   // Start playing audio in a new thread.
 
   // Display a black screen to the user and wait for the ESC key to be pressed.

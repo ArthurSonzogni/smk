@@ -43,8 +43,7 @@ the smk.
 
 ### Displaying image
 ~~~cpp
-  auto ball_sprite = smk::Sprite();
-  ball_sprite.SetTexture(ball_texture);
+  auto ball_sprite = smk::Sprite(ball_texture);
   ball_sprite.SetPosition({200,200});
   screen.Draw(ball_sprite);
 ~~~
@@ -57,8 +56,7 @@ the smk.
 
 ### Displaying text
 ~~~cpp
-  auto text = smk::Text();
-  text.SetFont(font_arial);
+  auto text = smk::Text(font_arial, "hello world");
   text.SetPosition({200,200});
   screen.Draw(text);
 ~~~
@@ -72,8 +70,7 @@ the smk.
 
 ### Playing sound.
 ~~~cpp
-  auto sound = smk::Sound();
-  sound.SetBuffer(sound);
+  auto sound = smk::Sound(sound_buffer);
   sound.Play();
 ~~~
 

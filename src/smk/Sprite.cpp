@@ -10,6 +10,10 @@
 
 namespace smk {
 
+Sprite::Sprite(const Texture& texture) : Sprite() {
+  SetTexture(texture);
+}
+
 void Sprite::SetTexture(const Texture& texture) {
   Transformable::SetTexture(texture);
   SetTextureRectangle({0.f, 0.f, float(texture.width), float(texture.height)});

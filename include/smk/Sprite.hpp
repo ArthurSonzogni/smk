@@ -16,12 +16,14 @@ namespace smk {
 // A Drawable specialised in displaying rectangular texture.
 class Sprite : public Transformable {
  public:
+  Sprite() = default;
+  Sprite(const Texture& texture);
+
   void SetTexture(const Texture& texture);
 
   // Useful to display a sub part of the texture.
   void SetTextureRectangle(const Rectangle& rectangle);
 
-  Sprite() = default;
   Sprite(Sprite&&) = default;
   Sprite(const Sprite&) = default;
   Sprite& operator=(Sprite&&) = default;

@@ -21,8 +21,7 @@ struct Player {
   }
 
   void Draw(smk::Screen& screen) {
-    smk::Sprite sprite;
-    sprite.SetTexture(texture);
+    smk::Sprite sprite(texture);
     sprite.SetPosition({x, y});
     sprite.SetCenter(texture.width / 2.0, 0.f);
     sprite.SetScale(dx > 0 ? 1.0 : -1.0, 1.0);

@@ -31,6 +31,9 @@ void Sound::EnsureSourceIsCreated() {
 }
 
 Sound::Sound() {}
+Sound::Sound(const SoundBuffer& buffer) : Sound() {
+  SetBuffer(buffer);
+}
 
 Sound::~Sound() {
   Stop();

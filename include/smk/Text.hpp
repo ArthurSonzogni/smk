@@ -14,6 +14,10 @@ class Font;
 
 class Text : public Transformable {
  public:
+  Text() = default;
+  Text(const Font& font);
+  Text(const Font& font, const std::string& text);
+  Text(const Font& font, const std::wstring& text);
   virtual ~Text() = default;
 
   void SetString(const std::wstring&);
@@ -23,6 +27,11 @@ class Text : public Transformable {
   virtual void Draw(Screen& screen, RenderState state) const override;
 
   glm::vec2 ComputeDimensions() const;
+
+  Text(Text&&) = default;
+  Text(const Text&) = default;
+  Text& operator=(Text&&) = default;
+  Text& operator=(const Text&) = default;
 
  public:
   const Font* font_ = nullptr;
