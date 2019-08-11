@@ -1,5 +1,8 @@
 cmake_minimum_required (VERSION 3.11)
 
+# Configure dependencies for build static libraries only. 
+set(BUILD_SHARED_LIBS OFF)
+
 add_subdirectory(third_party)
 
 project(smk
