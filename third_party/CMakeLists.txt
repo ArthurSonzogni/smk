@@ -18,7 +18,8 @@ endif()
 # Libnyquist library for loading sounds.
 # ------------------------------------------------------------------------------
 FetchContent_Declare(libnyquist
-  GIT_REPOSITORY https://github.com/ArthurSonzogni/libnyquist
+  #GIT_REPOSITORY https://github.com/ArthurSonzogni/libnyquist
+  GIT_REPOSITORY https://github.com/ddiakopoulos/libnyquist
   )
 
 FetchContent_GetProperties(libnyquist)
@@ -47,8 +48,9 @@ if(NOT EMSCRIPTEN)
   # Glew for resolving OpenGL function at runtime.
   # ----------------------------------------------------------------------------
   FetchContent_Declare(glew
-    GIT_REPOSITORY https://github.com/ArthurSonzogni/glew-cmake
-    GIT_TAG 4b5f38fec0cee5640e06f550f2cbc8c7036aecb5
+    #GIT_REPOSITORY https://github.com/ArthurSonzogni/glew-cmake
+    #GIT_TAG 4b5f38fec0cee5640e06f550f2cbc8c7036aecb5
+    GIT_REPOSITORY https://github.com/Perlmint/glew-cmake
   )
 
   FetchContent_GetProperties(glew)
@@ -75,8 +77,9 @@ if(NOT EMSCRIPTEN)
   # OpenAL for communicating with the OS for Audio
   # ----------------------------------------------------------------------------
   FetchContent_Declare(openal
-    GIT_REPOSITORY https://github.com/arthursonzogni/openal-soft
-    GIT_TAG 5e2e4d50d324f713a7c39cdc71ce9050d2c34b5e
+    GIT_REPOSITORY https://github.com/kcat/openal-soft
+    #GIT_REPOSITORY https://github.com/arthursonzogni/openal-soft
+    #GIT_TAG 5e2e4d50d324f713a7c39cdc71ce9050d2c34b5e
   )
 
   FetchContent_GetProperties(openal)
