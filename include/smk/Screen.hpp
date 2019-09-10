@@ -86,8 +86,6 @@ class Screen {
   void operator=(const Screen&) = delete;  // Non copyable object.
 
   friend Sprite;
-  VertexArray square_vertex_array_;
-  VertexArray* square_vertex_array() { return &square_vertex_array_; }
 
   Shader vertex_shader;
   Shader fragment_shader;

@@ -115,15 +115,6 @@ Screen::Screen(int width, int height, const std::string& title)
   program.setUniform("tex", 0);
   program.setUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
   program.setUniform("view", glm::mat4(1.0));
-
-  square_vertex_array_ = VertexArray(std::vector<Vertex>({
-      {glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f)},
-      {glm::vec2(0.f, 1.f), glm::vec2(0.f, 1.f)},
-      {glm::vec2(1.f, 1.f), glm::vec2(1.f, 1.f)},
-      {glm::vec2(0.f, 0.f), glm::vec2(0.f, 0.f)},
-      {glm::vec2(1.f, 1.f), glm::vec2(1.f, 1.f)},
-      {glm::vec2(1.f, 0.f), glm::vec2(1.f, 0.f)},
-  }));
 }
 
 Screen::Screen(Screen&& screen) {
@@ -134,7 +125,6 @@ void Screen::operator=(Screen&& other) {
   std::swap(fragment_shader, other.fragment_shader);
   std::swap(height_, other.height_);
   std::swap(program, other.program);
-  std::swap(square_vertex_array_, other.square_vertex_array_);
   std::swap(time_, other.time_);
   std::swap(time_, other.time_);
   std::swap(vertex_shader, other.vertex_shader);

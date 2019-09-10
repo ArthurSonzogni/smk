@@ -11,7 +11,7 @@
 
 namespace smk {
 
-// An array of smk::Vertex moved to the CPU memory.
+// An array of smk::Vertex moved to the GPU memory.
 class VertexArray {
  public:
   VertexArray();  // The invalidVertexArray.
