@@ -16,6 +16,9 @@ Transformable Square();
 Transformable Circle(float radius);
 Transformable Circle(float radius, int subdivisions);
 
+Transformable3D Cube();
+Transformable3D IcoSphere(int interation);
+
 }  // namespace Shape
 }  // namespace smk
 

@@ -8,6 +8,7 @@
 #include <smk/OpenGL.hpp>
 #include <smk/Vertex.hpp>
 #include <vector>
+#include <initializer_list>
 
 namespace smk {
 
@@ -15,7 +16,10 @@ namespace smk {
 class VertexArray {
  public:
   VertexArray();  // The invalidVertexArray.
-  VertexArray(const std::vector<Vertex>& array);
+
+  VertexArray(const std::vector<Vertex2D>& array);
+  VertexArray(const std::vector<Vertex3D>& array);
+
   ~VertexArray();
 
   void Bind() const;
@@ -31,6 +35,9 @@ class VertexArray {
   int size() const { return size_;} 
 
  private:
+
+  void Allocate(int element_size, void* data);
+
   GLuint vbo_ = 0;
   GLuint vao_ = 0;
   int size_ = 0;

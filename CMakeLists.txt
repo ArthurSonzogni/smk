@@ -48,6 +48,7 @@ add_library(smk STATIC
   src/smk/Text.cpp
   src/smk/Texture.cpp
   src/smk/Transformable.cpp
+  src/smk/Vertex.cpp
   src/smk/VertexArray.cpp
   src/smk/View.cpp
 )

@@ -20,6 +20,10 @@ add_executable(text text.cpp)
 target_link_libraries(text PRIVATE smk asset)
 set_property(TARGET text PROPERTY CXX_STANDARD 11)
 
-add_executable(shape shape.cpp)
-target_link_libraries(shape PRIVATE smk asset)
-set_property(TARGET shape PROPERTY CXX_STANDARD 11)
+add_executable(shape_2d shape_2d.cpp)
+target_link_libraries(shape_2d PRIVATE smk asset)
+set_property(TARGET shape_2d PROPERTY CXX_STANDARD 11)
+
+add_executable(shape_3d shape_3d.cpp)
+target_link_libraries(shape_3d PRIVATE smk asset)
+set_property(TARGET shape_3d PROPERTY CXX_STANDARD 11)

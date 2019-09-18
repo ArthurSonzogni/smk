@@ -33,12 +33,15 @@ class Screen {
   ~Screen();
 
   // Various data about the current window.
+  GLFWwindow* window() const { return window_; }
   int height() const { return height_; }
   int width() const { return width_; }
   glm::vec2 dimension() const { return glm::vec2(width_, height_); }
   float time() const { return time_; }
-  GLFWwindow* window() const { return window_; }
   Input& input() { return input_; }
+  ShaderProgram* shader_program_2d() { return &shader_program_2d_; };
+  ShaderProgram* shader_program_3d() { return &shader_program_3d_; };
+  void SetShaderProgram(ShaderProgram* shader_program);
 
   // 0. Pool events. This updates the Input object.
   void PoolEvents();
@@ -48,6 +51,7 @@ class Screen {
 
   // 2. Set the base view transformation.
   void SetView(const View& view);
+  void SetView(const glm::mat4& mat);
   const View& GetView() const { return view_; }
 
   // 3. Draw.
@@ -73,7 +77,7 @@ class Screen {
   int height_ = 0;
 
   // View:
-  glm::mat4 view_mat_;
+  glm::mat4 projection_matrix_;
   smk::View view_;
 
   void UpdateDimensions();
@@ -87,9 +91,15 @@ class Screen {
 
   friend Sprite;
 
-  Shader vertex_shader;
-  Shader fragment_shader;
-  ShaderProgram program;
+  Shader vertex_shader_2d_;
+  Shader fragment_shader_2d_;
+  ShaderProgram shader_program_2d_;
+
+  Shader vertex_shader_3d_;
+  Shader fragment_shader_3d_;
+  ShaderProgram shader_program_3d_;
+
+  ShaderProgram* shader_program_;
 
   Input input_;
 

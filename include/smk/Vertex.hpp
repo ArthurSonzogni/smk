@@ -9,10 +9,22 @@
 
 namespace smk {
 
-struct Vertex {
+struct Vertex2D {
   glm::vec2 space_position;
   glm::vec2 texture_position;
+
+  static void Bind();
 };
+
+struct Vertex3D {
+  glm::vec3 space_position;
+  glm::vec3 normal;
+  glm::vec2 texture_position;
+
+  static void Bind();
+};
+
+using Vertex = Vertex2D;
 
 } // namespace smk.
 

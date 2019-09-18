@@ -71,29 +71,37 @@ glm::mat4 Transformable::Transformation() const {
   return ret;
 }
 
-void Transformable::SetColor(const glm::vec4& color) {
+void TransformableBase::SetColor(const glm::vec4& color) {
   color_ = color;
 }
 
-void Transformable::SetBlendMode(const BlendMode& blend_mode) {
+void TransformableBase::SetBlendMode(const BlendMode& blend_mode) {
   blend_mode_ = blend_mode;
 }
 
-void Transformable::SetTexture(const Texture& texture) {
+void TransformableBase::SetTexture(const Texture& texture) {
   texture_ = &texture;
 }
 
-void Transformable::SetVertexArray(VertexArray vertex_array) {
+void TransformableBase::SetVertexArray(VertexArray vertex_array) {
   vertex_array_ = std::move(vertex_array);
 }
 
-void Transformable::Draw(Screen& screen, RenderState state) const {
+void TransformableBase::Draw(Screen& screen, RenderState state) const {
   state.color *= color();
   state.texture = texture();
   state.view *= Transformation();
   state.vertex_array = vertex_array();
   state.blend_mode = blend_mode();
   screen.Draw(state);
+}
+
+void Transformable3D::SetTransformation(const glm::mat4 transformation) {
+  transformation_ = transformation;
+}
+
+glm::mat4 Transformable3D::Transformation() const {
+  return transformation_;
 }
 
 }  // namespace smk

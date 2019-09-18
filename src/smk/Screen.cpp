@@ -82,39 +82,99 @@ Screen::Screen(int width, int height, const std::string& title)
   default_view.SetSize(width_, height_);
   SetView(default_view);
 
-  vertex_shader = Shader::FromString(R"(
+  vertex_shader_2d_ = Shader::FromString(R"(
     layout(location = 0) in vec2 space_position;
     layout(location = 1) in vec2 texture_position;
 
+    uniform mat4 projection;
     uniform mat4 view;
 
     out vec2 f_texture_position;
 
     void main() {
       f_texture_position = texture_position;
-      gl_Position = view * vec4(space_position, 0.0, 1.0);
+      gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
     }
   )", GL_VERTEX_SHADER);
 
-  fragment_shader = Shader::FromString(R"(
+  fragment_shader_2d_ = Shader::FromString(R"(
     in vec2 f_texture_position;
-    uniform sampler2D tex;
+    uniform sampler2D texture_0;
     uniform vec4 color;
     out vec4 out_color;
 
     void main() {
-      out_color = texture(tex, f_texture_position) * color;
+      out_color = texture(texture_0, f_texture_position) * color;
     }
   )", GL_FRAGMENT_SHADER);
 
-  program.AddShader(vertex_shader);
-  program.AddShader(fragment_shader);
-  program.Link();
+  shader_program_2d_.AddShader(vertex_shader_2d_);
+  shader_program_2d_.AddShader(fragment_shader_2d_);
+  shader_program_2d_.Link();
 
-  program.use();
-  program.setUniform("tex", 0);
-  program.setUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  program.setUniform("view", glm::mat4(1.0));
+  vertex_shader_3d_ = Shader::FromString(R"(
+    layout(location = 0) in vec3 space_position;
+    layout(location = 1) in vec3 normal;
+    layout(location = 2) in vec2 texture_position;
+
+    uniform mat4 projection;
+    uniform mat4 view;
+    uniform vec4 light_position = vec4(0.f, 0.f, 0.f, 1.f);
+
+    out vec4 fPosition;
+    out vec2 fTexture;
+    out vec4 fLightPosition;
+    out vec3 fNormal;
+
+    void main() {
+      fTexture = texture_position;
+
+      fPosition = view * vec4(space_position,1.0);
+      fLightPosition = light_position;
+      fNormal = vec3(view * vec4(normal,0.0));
+
+      gl_Position = projection * fPosition;
+    }
+  )", GL_VERTEX_SHADER);
+
+  fragment_shader_3d_ = Shader::FromString(R"(
+    uniform sampler2D texture_0;
+    uniform vec4 color;
+
+    uniform float ambient = 0.3f;
+    uniform float diffus = 0.5f;
+    uniform float specular = 0.5f;
+
+    in vec4 fPosition;
+    in vec2 fTexture;
+    in vec4 fLightPosition;
+    in vec3 fNormal;
+
+    out vec4 out_color;
+
+    void main(void)
+    {
+      vec3 o =-normalize(fPosition.xyz);
+      vec3 n = normalize(fNormal);
+      vec3 r = reflect(o,n);
+      vec3 l = normalize(fLightPosition.xyz-fPosition.xyz);
+
+      float ambient = ambient;
+      float diffus = diffus*max(0.0,dot(n,l));
+      float specular = specular*pow(max(0.0,-dot(r,l)),4.0);
+
+      out_color = texture(texture_0, fTexture);
+      out_color.rgb *= ambient + diffus + specular;
+      out_color *= color;
+      out_color.a = 1.f;
+    }
+  )", GL_FRAGMENT_SHADER);
+
+  shader_program_3d_.AddShader(vertex_shader_3d_);
+  shader_program_3d_.AddShader(fragment_shader_3d_);
+  shader_program_3d_.Link();
+
+  SetShaderProgram(&shader_program_2d_);
 }
 
 Screen::Screen(Screen&& screen) {
@@ -122,16 +182,31 @@ Screen::Screen(Screen&& screen) {
 }
 
 void Screen::operator=(Screen&& other) {
-  std::swap(fragment_shader, other.fragment_shader);
-  std::swap(height_, other.height_);
-  std::swap(program, other.program);
-  std::swap(time_, other.time_);
-  std::swap(time_, other.time_);
-  std::swap(vertex_shader, other.vertex_shader);
-  std::swap(view_, other.view_);
-  std::swap(view_mat_, other.view_mat_);
-  std::swap(width_, other.width_);
   std::swap(window_, other.window_);
+  std::swap(time_, other.time_);
+  std::swap(time_last_sleep_, other.time_last_sleep_);
+  std::swap(width_, other.width_);
+  std::swap(height_, other.height_);
+  std::swap(projection_matrix_, other.projection_matrix_);
+  std::swap(view_, other.view_);
+  std::swap(vertex_shader_2d_, other.vertex_shader_2d_);
+  std::swap(fragment_shader_2d_, other.fragment_shader_2d_);
+  std::swap(shader_program_2d_, other.shader_program_2d_);
+  std::swap(vertex_shader_3d_, other.vertex_shader_3d_);
+  std::swap(fragment_shader_3d_, other.fragment_shader_3d_);
+  std::swap(shader_program_3d_, other.shader_program_3d_);
+  std::swap(shader_program_, other.shader_program_);
+  std::swap(input_, other.input_);
+  std::swap(cached_render_state_, other.cached_render_state_);
+}
+
+void Screen::SetShaderProgram(ShaderProgram* shader_program) {
+  shader_program_ = shader_program;
+  shader_program_->use();
+  shader_program_->setUniform("texture_0", 0);
+  shader_program_->setUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  shader_program_->setUniform("projection", glm::mat4(1.0));
+  shader_program_->setUniform("view", glm::mat4(1.0));
 }
 
 void Screen::PoolEvents() {
@@ -171,7 +246,7 @@ void Screen::UpdateDimensions() {
 
 void Screen::Draw(const Drawable& drawable) {
   RenderState state;
-  state.view = view_mat_;
+  state.view = glm::mat4(1.0);
   state.color = smk::Color::White;
   state.vertex_array = nullptr;
   state.texture = nullptr;
@@ -188,16 +263,17 @@ void Screen::Draw(const RenderState& state) {
     state.vertex_array->Bind();
   }
 
-  program.use();
+  shader_program_->use();
 
   // Color
   if (cached_render_state_.color != state.color) {
     cached_render_state_.color = state.color;
-    program.setUniform("color", state.color);
+    shader_program_->setUniform("color", state.color);
   }
 
   // View (not cached)
-  program.setUniform("view", state.view);
+  shader_program_->setUniform("projection", projection_matrix_);
+  shader_program_->setUniform("view", state.view);
 
   // Texture
   auto* texture = state.texture;
@@ -226,10 +302,14 @@ void Screen::SetView(const View& view) {
   float z_y = -2.0 / view.height_;  // [0, height] -> [-1,1]
   float t_x = -view.x_ * z_x;
   float t_y = -view.y_ * z_y;
-  view_mat_ = glm::mat4(z_x, 0.0, 0.0, 0.0,   //
-                        0.0, z_y, 0.0, 0.0,   //
-                        0.0, 0.0, 1.0, 0.0,   //
-                        t_x, t_y, 0.0, 1.0);  //
+  SetView(glm::mat4(z_x, 0.0, 0.0, 0.0,    //
+                    0.0, z_y, 0.0, 0.0,    //
+                    0.0, 0.0, 1.0, 0.0,    //
+                    t_x, t_y, 0.0, 1.0));  //
+}
+
+void Screen::SetView(const glm::mat4& mat) {
+  projection_matrix_ = mat;
 }
 
 void Screen::Clear(const glm::vec4& color) {
