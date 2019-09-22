@@ -7,6 +7,14 @@
 namespace smk {
 namespace Color {
 
+glm::vec4 RGBA(float red, float green, float blue, float alpha) {
+  return {red, green, blue, alpha};
+}
+
+glm::vec4 RGB(float red, float green, float blue) {
+  return {red, green, blue, 1.f};
+}
+
 // clang-format off
 glm::vec4 White       = glm::vec4(1.f, 1.f, 1.f, 1.f);
 glm::vec4 Black       = glm::vec4(0.f, 0.f, 0.f, 1.f);

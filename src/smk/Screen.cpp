@@ -246,6 +246,7 @@ void Screen::UpdateDimensions() {
 
 void Screen::Draw(const Drawable& drawable) {
   RenderState state;
+  state.shader_program = shader_program_;
   state.view = glm::mat4(1.0);
   state.color = smk::Color::White;
   state.vertex_array = nullptr;
@@ -263,7 +264,11 @@ void Screen::Draw(const RenderState& state) {
     state.vertex_array->Bind();
   }
 
-  shader_program_->use();
+  // Shader
+  if (cached_render_state_.shader_program != state.shader_program) {
+    state.shader_program->use();
+    cached_render_state_.shader_program = state.shader_program;
+  }
 
   // Color
   if (cached_render_state_.color != state.color) {
@@ -272,8 +277,8 @@ void Screen::Draw(const RenderState& state) {
   }
 
   // View (not cached)
-  shader_program_->setUniform("projection", projection_matrix_);
-  shader_program_->setUniform("view", state.view);
+  state.shader_program->setUniform("projection", projection_matrix_);
+  state.shader_program->setUniform("view", state.view);
 
   // Texture
   auto* texture = state.texture;

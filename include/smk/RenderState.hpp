@@ -9,10 +9,12 @@
 #include <smk/Texture.hpp>
 #include <smk/VertexArray.hpp>
 #include <smk/BlendMode.hpp>
+#include <smk/Shader.hpp>
 
 namespace smk {
 
 struct RenderState {
+  ShaderProgram* shader_program = nullptr;
   const Texture* texture = nullptr;
   const VertexArray* vertex_array = nullptr;
   glm::mat4 view;
