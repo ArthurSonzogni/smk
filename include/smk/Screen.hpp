@@ -10,6 +10,7 @@
 
 #include <glm/glm.hpp>
 
+#include <memory>
 #include <smk/Input.hpp>
 #include <smk/RenderState.hpp>
 #include <smk/Shader.hpp>
@@ -39,8 +40,8 @@ class Screen {
   glm::vec2 dimension() const { return glm::vec2(width_, height_); }
   float time() const { return time_; }
   Input& input() { return input_; }
-  ShaderProgram* shader_program_2d() { return &shader_program_2d_; };
-  ShaderProgram* shader_program_3d() { return &shader_program_3d_; };
+  ShaderProgram* shader_program_2d() { return shader_program_2d_.get(); };
+  ShaderProgram* shader_program_3d() { return shader_program_3d_.get(); };
   void SetShaderProgram(ShaderProgram* shader_program);
 
   // 0. Pool events. This updates the Input object.
@@ -93,11 +94,11 @@ class Screen {
 
   Shader vertex_shader_2d_;
   Shader fragment_shader_2d_;
-  ShaderProgram shader_program_2d_;
+  std::unique_ptr<ShaderProgram> shader_program_2d_;
 
   Shader vertex_shader_3d_;
   Shader fragment_shader_3d_;
-  ShaderProgram shader_program_3d_;
+  std::unique_ptr<ShaderProgram> shader_program_3d_;
 
   ShaderProgram* shader_program_;
 

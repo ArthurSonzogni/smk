@@ -108,9 +108,10 @@ Screen::Screen(int width, int height, const std::string& title)
     }
   )", GL_FRAGMENT_SHADER);
 
-  shader_program_2d_.AddShader(vertex_shader_2d_);
-  shader_program_2d_.AddShader(fragment_shader_2d_);
-  shader_program_2d_.Link();
+  shader_program_2d_ = std::make_unique<ShaderProgram>();
+  shader_program_2d_->AddShader(vertex_shader_2d_);
+  shader_program_2d_->AddShader(fragment_shader_2d_);
+  shader_program_2d_->Link();
 
   vertex_shader_3d_ = Shader::FromString(R"(
     layout(location = 0) in vec3 space_position;
@@ -170,11 +171,12 @@ Screen::Screen(int width, int height, const std::string& title)
     }
   )", GL_FRAGMENT_SHADER);
 
-  shader_program_3d_.AddShader(vertex_shader_3d_);
-  shader_program_3d_.AddShader(fragment_shader_3d_);
-  shader_program_3d_.Link();
+  shader_program_3d_ = std::make_unique<ShaderProgram>();
+  shader_program_3d_->AddShader(vertex_shader_3d_);
+  shader_program_3d_->AddShader(fragment_shader_3d_);
+  shader_program_3d_->Link();
 
-  SetShaderProgram(&shader_program_2d_);
+  SetShaderProgram(shader_program_2d_.get());
 }
 
 Screen::Screen(Screen&& screen) {
@@ -266,14 +268,14 @@ void Screen::Draw(const RenderState& state) {
 
   // Shader
   if (cached_render_state_.shader_program != state.shader_program) {
-    state.shader_program->use();
     cached_render_state_.shader_program = state.shader_program;
+    cached_render_state_.shader_program->use();
   }
 
   // Color
   if (cached_render_state_.color != state.color) {
     cached_render_state_.color = state.color;
-    shader_program_->setUniform("color", state.color);
+    cached_render_state_.shader_program->setUniform("color", state.color);
   }
 
   // View (not cached)
