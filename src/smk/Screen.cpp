@@ -167,7 +167,6 @@ Screen::Screen(int width, int height, const std::string& title)
       out_color = texture(texture_0, fTexture);
       out_color.rgb *= ambient + diffus + specular;
       out_color *= color;
-      out_color.a = 1.f;
     }
   )", GL_FRAGMENT_SHADER);
 
