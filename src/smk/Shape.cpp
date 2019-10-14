@@ -176,5 +176,25 @@ Transformable3D IcoSphere(int iteration) {
   return transformable;
 }
 
+Transformable3D Plane() {
+  constexpr float m = -0.5f;
+  constexpr float z = +0.f;
+  constexpr float p = +0.5f;
+  constexpr float l = 0.f;
+  constexpr float r = 1.f;
+  auto vertex_array = smk::VertexArray({
+      {{m, m, z}, {z, z, p}, {l, l}},
+      {{p, m, z}, {z, z, p}, {r, l}},
+      {{p, p, z}, {z, z, p}, {r, r}},
+      {{m, m, z}, {z, z, p}, {l, l}},
+      {{p, p, z}, {z, z, p}, {r, r}},
+      {{m, p, z}, {z, z, p}, {l, r}},
+  });
+
+  Transformable3D transformable;
+  transformable.SetVertexArray(std::move(vertex_array));
+  return transformable;
+}
+
 }  // namespace Shape
 }  // namespace smk
