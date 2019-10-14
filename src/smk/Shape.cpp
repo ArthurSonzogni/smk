@@ -77,11 +77,11 @@ Transformable3D Cube() {
       {{m, p, p}, {z, z, p}, {l, r}},
 
       {{m, m, m}, {z, z, m}, {l, l}},
+      {{p, p, m}, {z, z, m}, {r, r}},
       {{p, m, m}, {z, z, m}, {r, l}},
-      {{p, p, m}, {z, z, m}, {r, r}},
       {{m, m, m}, {z, z, m}, {l, l}},
-      {{p, p, m}, {z, z, m}, {r, r}},
       {{m, p, m}, {z, z, m}, {l, r}},
+      {{p, p, m}, {z, z, m}, {r, r}},
 
       {{m, p, m}, {z, p, z}, {l, l}},
       {{m, p, p}, {z, p, z}, {r, l}},
@@ -91,11 +91,11 @@ Transformable3D Cube() {
       {{p, p, m}, {z, p, z}, {l, r}},
 
       {{m, m, m}, {z, m, z}, {l, l}},
+      {{p, m, p}, {z, m, z}, {r, r}},
       {{m, m, p}, {z, m, z}, {r, l}},
-      {{p, m, p}, {z, m, z}, {r, r}},
       {{m, m, m}, {z, m, z}, {l, l}},
-      {{p, m, p}, {z, m, z}, {r, r}},
       {{p, m, m}, {z, m, z}, {l, r}},
+      {{p, m, p}, {z, m, z}, {r, r}},
 
       {{p, m, m}, {p, z, z}, {l, l}},
       {{p, p, m}, {p, z, z}, {r, l}},
@@ -105,11 +105,11 @@ Transformable3D Cube() {
       {{p, m, p}, {p, z, z}, {l, r}},
 
       {{m, m, m}, {m, z, z}, {l, l}},
+      {{m, p, p}, {m, z, z}, {r, r}},
       {{m, p, m}, {m, z, z}, {r, l}},
-      {{m, p, p}, {m, z, z}, {r, r}},
       {{m, m, m}, {m, z, z}, {l, l}},
-      {{m, p, p}, {m, z, z}, {r, r}},
       {{m, m, p}, {m, z, z}, {l, r}},
+      {{m, p, p}, {m, z, z}, {r, r}},
   });
 
   Transformable3D transformable;
