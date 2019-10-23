@@ -120,18 +120,14 @@ Screen::Screen(int width, int height, const std::string& title)
 
     uniform mat4 projection;
     uniform mat4 view;
-    uniform vec4 light_position = vec4(0.f, 0.f, 0.f, 1.f);
 
     out vec4 fPosition;
     out vec2 fTexture;
-    out vec4 fLightPosition;
     out vec3 fNormal;
 
     void main() {
       fTexture = texture_position;
-
       fPosition = view * vec4(space_position,1.0);
-      fLightPosition = light_position;
       fNormal = vec3(view * vec4(normal,0.0));
 
       gl_Position = projection * fPosition;
@@ -142,30 +138,33 @@ Screen::Screen(int width, int height, const std::string& title)
     uniform sampler2D texture_0;
     uniform vec4 color;
 
+    uniform vec4 light_position = vec4(0.f, 0.f, 0.f, 1.f);
     uniform float ambient = 0.3f;
-    uniform float diffus = 0.5f;
+    uniform float diffuse = 0.5f;
     uniform float specular = 0.5f;
+    uniform float specular_power = 4.0f;
 
     in vec4 fPosition;
     in vec2 fTexture;
-    in vec4 fLightPosition;
     in vec3 fNormal;
 
     out vec4 out_color;
 
     void main(void)
     {
-      vec3 o =-normalize(fPosition.xyz);
-      vec3 n = normalize(fNormal);
-      vec3 r = reflect(o,n);
-      vec3 l = normalize(fLightPosition.xyz-fPosition.xyz);
+      vec3 object_dir =-normalize(fPosition.xyz);
+      vec3 normal_dir = normalize(fNormal);
+      vec3 light_dir = normalize(light_position.xyz-fPosition.xyz);
+      vec3 reflect_dir = -reflect(object_dir,normal_dir);
 
-      float ambient = ambient;
-      float diffus = diffus*max(0.0,dot(n,l));
-      float specular = specular*pow(max(0.0,-dot(r,l)),4.0);
+      float diffuse_strength = max(0.0, dot(normal_dir, light_dir));
+      float specular_strength = pow(max(0.0, dot(reflect_dir, light_dir)),
+                                    specular_power);
 
       out_color = texture(texture_0, fTexture);
-      out_color.rgb *= ambient + diffus + specular;
+      out_color.rgb *= ambient +
+                       diffuse * diffuse_strength +
+                       specular * specular_strength;
       out_color *= color;
     }
   )", GL_FRAGMENT_SHADER);
