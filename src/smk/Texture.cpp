@@ -56,6 +56,8 @@ Texture::Texture(const std::string& filename, Option option) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, option.mag_filter);
   glBindTexture(GL_TEXTURE_2D, GL_NONE);
   stbi_image_free(data);
+
+  glGenerateTextureMipmap(id);
 }
 
 Texture::Texture() = default;

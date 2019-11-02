@@ -13,8 +13,8 @@ namespace smk {
 struct Texture {
  public:
   struct Option {
-    GLenum min_filter = GL_LINEAR;
-    GLenum mag_filter = GL_LINEAR;
+    GLenum min_filter = GL_LINEAR_MIPMAP_LINEAR;
+    GLenum mag_filter = GL_LINEAR_MIPMAP_LINEAR;
   };
 
   Texture();  // empty texture.
