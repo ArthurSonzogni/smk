@@ -319,7 +319,9 @@ void Screen::SetView(const glm::mat4& mat) {
 
 void Screen::Clear(const glm::vec4& color) {
   glClearColor(color.r, color.g, color.b, color.a);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_CULL_FACE);  
 }
 
 void Screen::LimitFrameRate(float fps) {
