@@ -3,6 +3,7 @@
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include "asset.hpp"
+#include "./util.hpp"  // ExecuteMainLoop
 
 #include <iostream>
 
@@ -41,7 +42,7 @@ int main() {
 
   std::vector<Player> players = {Player(320, 0), Player(32, 32), Player(624, 64)};
 
-  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+  ExecuteMainLoop([&] {
     screen.PoolEvents();
     for (auto& player : players)
       player.Step();
@@ -50,7 +51,8 @@ int main() {
     for (auto& player : players)
       player.Draw(screen);
     screen.Display();
-    screen.LimitFrameRate(60 /* fps */);
-  }
-  return 0;
+    LimitFrameRate(screen);
+  });
+
+  return EXIT_SUCCESS;
 }

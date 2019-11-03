@@ -25,7 +25,7 @@ class Shader {
   static Shader FromString(const std::string& content, GLenum type);
 
   // provide opengl shader identifiant.
-  GLuint getHandle() const;
+  GLuint GetHandle() const;
 
   ~Shader();
 
@@ -56,33 +56,33 @@ class ShaderProgram {
   void Link();
 
   // bind the program
-  void use() const;
-  void unuse() const;
+  void Use() const;
+  void Unuse() const;
 
   // provide the opengl identifiant
-  GLuint getHandle() const;
+  GLuint GetHandle() const;
 
   // clang-format off
   // provide attributes informations.
-  GLint attribute(const std::string& name);
-  void setAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLboolean normalize, GLenum type);
-  void setAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLboolean normalize);
-  void setAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLenum type); 
-  void setAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset);
+  GLint Attribute(const std::string& name);
+  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLboolean normalize, GLenum type);
+  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLboolean normalize);
+  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLenum type); 
+  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset);
   // clang-format on
 
   // provide uniform location
-  GLint uniform(const std::string& name);
+  GLint Uniform(const std::string& name);
   GLint operator[](const std::string& name);
 
   // affect uniform
-  void setUniform(const std::string& name, float x, float y, float z);
-  void setUniform(const std::string& name, const glm::vec3& v);
-  void setUniform(const std::string& name, const glm::vec4& v);
-  void setUniform(const std::string& name, const glm::mat4& m);
-  void setUniform(const std::string& name, const glm::mat3& m);
-  void setUniform(const std::string& name, float val);
-  void setUniform(const std::string& name, int val);
+  void SetUniform(const std::string& name, float x, float y, float z);
+  void SetUniform(const std::string& name, const glm::vec3& v);
+  void SetUniform(const std::string& name, const glm::vec4& v);
+  void SetUniform(const std::string& name, const glm::mat4& m);
+  void SetUniform(const std::string& name, const glm::mat3& m);
+  void SetUniform(const std::string& name, float val);
+  void SetUniform(const std::string& name, int val);
 
   ~ShaderProgram();
 

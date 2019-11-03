@@ -138,11 +138,11 @@ Screen::Screen(int width, int height, const std::string& title)
     uniform sampler2D texture_0;
     uniform vec4 color;
 
-    uniform vec4 light_position = vec4(0.f, 0.f, 0.f, 1.f);
-    uniform float ambient = 0.3f;
-    uniform float diffuse = 0.5f;
-    uniform float specular = 0.5f;
-    uniform float specular_power = 4.0f;
+    uniform vec4 light_position;
+    uniform float ambient;
+    uniform float diffuse;
+    uniform float specular;
+    uniform float specular_power;
 
     in vec4 fPosition;
     in vec2 fTexture;
@@ -174,6 +174,14 @@ Screen::Screen(int width, int height, const std::string& title)
   shader_program_3d_->AddShader(fragment_shader_3d_);
   shader_program_3d_->Link();
 
+  shader_program_3d_->Use();
+  shader_program_3d_->SetUniform("light_position",
+                                 glm::vec4(0.f, 5.f, 0.f, 1.f));
+  shader_program_3d_->SetUniform("ambient", 0.3f);
+  shader_program_3d_->SetUniform("diffuse", 0.5f);
+  shader_program_3d_->SetUniform("specular", 0.5f);
+  shader_program_3d_->SetUniform("specular_power", 4.0f);
+
   SetShaderProgram(shader_program_2d_.get());
 }
 
@@ -202,11 +210,11 @@ void Screen::operator=(Screen&& other) {
 
 void Screen::SetShaderProgram(ShaderProgram* shader_program) {
   shader_program_ = shader_program;
-  shader_program_->use();
-  shader_program_->setUniform("texture_0", 0);
-  shader_program_->setUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  shader_program_->setUniform("projection", glm::mat4(1.0));
-  shader_program_->setUniform("view", glm::mat4(1.0));
+  shader_program_->Use();
+  shader_program_->SetUniform("texture_0", 0);
+  shader_program_->SetUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  shader_program_->SetUniform("projection", glm::mat4(1.0));
+  shader_program_->SetUniform("view", glm::mat4(1.0));
 }
 
 void Screen::PoolEvents() {
@@ -267,18 +275,18 @@ void Screen::Draw(const RenderState& state) {
   // Shader
   if (cached_render_state_.shader_program != state.shader_program) {
     cached_render_state_.shader_program = state.shader_program;
-    cached_render_state_.shader_program->use();
+    cached_render_state_.shader_program->Use();
   }
 
   // Color
   if (cached_render_state_.color != state.color) {
     cached_render_state_.color = state.color;
-    cached_render_state_.shader_program->setUniform("color", state.color);
+    cached_render_state_.shader_program->SetUniform("color", state.color);
   }
 
   // View (not cached)
-  state.shader_program->setUniform("projection", projection_matrix_);
-  state.shader_program->setUniform("view", state.view);
+  state.shader_program->SetUniform("projection", projection_matrix_);
+  state.shader_program->SetUniform("view", state.view);
 
   // Texture
   auto* texture = state.texture;

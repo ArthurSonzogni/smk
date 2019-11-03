@@ -2,6 +2,7 @@
 #include <smk/Screen.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
+#include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
 #include <iostream>
@@ -11,12 +12,13 @@ int main() {
   auto texture = smk::Texture(asset::hero_png);
   auto sprite = smk::Sprite(texture);
 
-  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+  ExecuteMainLoop([&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
     screen.Draw(sprite);
     screen.Display();
-    screen.LimitFrameRate(60);
-  }
-  return 0;
+    LimitFrameRate(screen);
+  });
+
+  return EXIT_SUCCESS;
 }

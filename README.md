@@ -15,6 +15,8 @@ Features:
   * No dependencies, everything is fetched using cmake FetchContent.
   * Fast & simple.
 
+[WebAssembly demo](http://arthursonzogni.github.io/smk/examples/) from the ./examples directory.
+
 Ready to start? See [tutorial](./doc/build_with_cmake.md) on how to depend on
 the smk.
 

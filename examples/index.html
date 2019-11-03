@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SMK examples</title>
+  </head>
+  <body>
+    <script>
+      let example_list = [
+        "shape_2d.js",
+        "text.js",
+        "sprite.js",
+        "sprite_move.js",
+        "texture_subrectangle.js",
+        "shape_3d.js",
+        "sound.js",
+      ];
+
+      let load_examples = async function() {
+        // We are modifying the dom, so we need to wait until the document to be
+        // ready
+        await new Promise(resolve => {
+          window.addEventListener("DOMContentLoaded", resolve)
+        });
+
+        for(example of example_list) {
+          // Add the example title.
+          let h1 = document.createElement("h1");
+          h1.innerHTML = example;
+          document.body.appendChild(h1);
+
+          // Load the example script.
+          await new Promise(resolve => {
+            let script = document.createElement("script");
+            script.src = example;
+            script.addEventListener("load", resolve);
+            document.body.appendChild(script);
+          });
+
+          // Build a canvas to display the example
+          let canvas = document.createElement("canvas");
+          document.body.appendChild(canvas);
+
+          // Execute the example.
+          await new Promise(resolve => {
+            emscripten({
+              canvas: canvas,
+              print: console.log,
+              printErr: console.error,
+            }).then(function() {
+              console.log("loaded " + example);
+              resolve();
+            });
+          });
+        }
+      };
+
+      load_examples();
+    </script>
+  </body>
+</html>

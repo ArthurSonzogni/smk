@@ -52,6 +52,7 @@ Texture::Texture(const std::string& filename, Option option) {
   glBindTexture(GL_TEXTURE_2D, id);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width_b, height_b, 0, GL_RGBA,
                GL_UNSIGNED_BYTE, transformed.data());
+  glGenerateMipmap(GL_TEXTURE_2D);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, option.min_filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, option.mag_filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, option.wrap_s);
@@ -59,7 +60,6 @@ Texture::Texture(const std::string& filename, Option option) {
   glBindTexture(GL_TEXTURE_2D, GL_NONE);
   stbi_image_free(data);
 
-  glGenerateMipmap(id);
 }
 
 Texture::Texture() = default;

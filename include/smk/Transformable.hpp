@@ -90,7 +90,6 @@ class Transformable : public TransformableBase {
   glm::vec2 center_ = {0.f, 0.f};
   glm::vec2 position_ = {0.f, 0.f};
   glm::vec2 scale_ = {1.0, 1.0};
-  glm::vec4 color_ = {1.0, 1.0, 1.0, 1.0};
 };
 
 class Transformable3D : public TransformableBase {

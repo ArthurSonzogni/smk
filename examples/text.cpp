@@ -3,13 +3,14 @@
 #include <smk/Text.hpp>
 #include <smk/Font.hpp>
 #include "asset.hpp"
+#include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
   auto screen = smk::Screen(640, 640, "smk/example/text");
   auto font = smk::Font(asset::arial_ttf, 34);
 
   float step = 0;
-  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+  ExecuteMainLoop([&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
 
@@ -25,7 +26,8 @@ int main() {
     screen.Draw(text);
 
     screen.Display();
-    screen.LimitFrameRate(60 /* fps */);
-  }
-  return 0;
+    LimitFrameRate(screen);
+  });
+
+  return EXIT_SUCCESS;
 }

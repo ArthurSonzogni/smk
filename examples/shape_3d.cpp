@@ -1,3 +1,4 @@
+#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <smk/Color.hpp>
 #include <smk/Screen.hpp>
@@ -6,6 +7,7 @@
 #include <smk/Transformable.hpp>
 #include <smk/VertexArray.hpp>
 #include "asset.hpp"
+#include "./util.hpp" // ExecuteMainLoop
 
 int random(int& r, int modulo) {
   return (r = (r * 68152648) % 9876541) % modulo;
@@ -15,6 +17,8 @@ int main() {
   // Open a new window.
   auto screen = smk::Screen(640, 480, "test");
   screen.SetShaderProgram(screen.shader_program_3d());
+  screen.shader_program_3d()->SetUniform("light_position",
+                                         glm::vec4(0.f, 5.f, 0.f, 1.f));
 
   auto cube = smk::Shape::Cube();
   auto sphere = smk::Shape::IcoSphere(6);
@@ -23,20 +27,20 @@ int main() {
   cube.SetTexture(texture);
   sphere.SetTexture(texture);
 
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
 
   float animation = 0.f;
   float animation_df = 0.2f;
   float time = 0.f;
 
-  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+  ExecuteMainLoop([&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_CULL_FACE);
 
     animation += animation_df;
-    animation_df -= animation*0.0005;
+    animation_df -= animation * 0.0005;
     time += 0.1f;
 
     screen.SetView(glm::perspective(
@@ -54,7 +58,7 @@ int main() {
     // Draw the spheres
     {
       glm::mat4 view(1.f);
-      view = glm::translate(view, {-2.f, -1.f, -10.f-0.5f * animation});
+      view = glm::translate(view, {-2.f, -1.f, -10.f - 0.5f * animation});
       view = glm::scale(view, {0.4f, 0.4f, 0.4f});
 
       for (int i = 1; i < 27; ++i) {
@@ -67,7 +71,8 @@ int main() {
     }
 
     screen.Display();
-    screen.LimitFrameRate(60 /* fps */);
-  }
-  return 0;
+    LimitFrameRate(screen);
+  });
+
+  return EXIT_SUCCESS;
 }
