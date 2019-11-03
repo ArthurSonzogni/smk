@@ -28,14 +28,19 @@ Transformable Line(glm::vec2 a, glm::vec2 b, float thickness) {
 }
 
 Transformable Square() {
-  return Shape(VertexArray({
-      {{0.f, 0.f}, {0.f, 0.f}},
-      {{1.f, 0.f}, {1.f, 0.f}},
-      {{1.f, 1.f}, {1.f, 1.f}},
-      {{0.f, 0.f}, {0.f, 0.f}},
-      {{1.f, 1.f}, {1.f, 1.f}},
-      {{0.f, 1.f}, {0.f, 1.f}},
-  }));
+  static VertexArray vertex_array;
+  if (!vertex_array.size()) {
+    vertex_array = VertexArray({
+        {{0.f, 0.f}, {0.f, 0.f}},
+        {{1.f, 0.f}, {1.f, 0.f}},
+        {{1.f, 1.f}, {1.f, 1.f}},
+        {{0.f, 0.f}, {0.f, 0.f}},
+        {{1.f, 1.f}, {1.f, 1.f}},
+        {{0.f, 1.f}, {0.f, 1.f}},
+    });
+  }
+
+  return Shape(VertexArray(vertex_array));
 }
 
 Transformable Circle(float radius) {
