@@ -38,12 +38,12 @@ the smk.
 
 ## Images
 
-### Loading textures
+Loading textures:
 ~~~cpp
-  auto ball_texture = Texture("./ball.png");
+  auto ball_texture = smk::Texture("./ball.png");
 ~~~
 
-### Displaying image
+Displaying images:
 ~~~cpp
   auto ball_sprite = smk::Sprite(ball_texture);
   ball_sprite.SetPosition({200,200});
@@ -51,12 +51,13 @@ the smk.
 ~~~
 
 ## Text
-### Loading font
+
+Loading font:
 ~~~cpp
-  auto font_arial = Font("./arial.ttf", 32);
+  auto font_arial = smk::Font("./arial.ttf", 32);
 ~~~
 
-### Displaying text
+Displaying text:
 ~~~cpp
   auto text = smk::Text(font_arial, "hello world");
   text.SetPosition({200,200});
@@ -64,13 +65,12 @@ the smk.
 ~~~
 
 ## Sound
-
-### Loading sound.
+Loading sound:
 ~~~cpp
   auto sound_buffer = smk:SoundBuffer("./boing.ogg");
 ~~~
 
-### Playing sound.
+Playing sound:
 ~~~cpp
   auto sound = smk::Sound(sound_buffer);
   sound.Play();
