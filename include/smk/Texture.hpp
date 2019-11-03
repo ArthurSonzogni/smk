@@ -15,6 +15,8 @@ struct Texture {
   struct Option {
     GLenum min_filter = GL_LINEAR_MIPMAP_LINEAR;
     GLenum mag_filter = GL_LINEAR_MIPMAP_LINEAR;
+    GLenum wrap_s = GL_CLAMP_TO_EDGE;
+    GLenum wrap_t = GL_CLAMP_TO_EDGE;
   };
 
   Texture();  // empty texture.
