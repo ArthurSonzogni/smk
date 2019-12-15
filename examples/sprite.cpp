@@ -12,12 +12,11 @@ int main() {
   auto texture = smk::Texture(asset::hero_png);
   auto sprite = smk::Sprite(texture);
 
-  ExecuteMainLoop([&] {
+  ExecuteMainLoop(screen, [&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
     screen.Draw(sprite);
     screen.Display();
-    LimitFrameRate(screen);
   });
 
   return EXIT_SUCCESS;

@@ -32,7 +32,7 @@ int main() {
   float animation_df = 0.2f;
   float time = 0.f;
 
-  ExecuteMainLoop([&] {
+  ExecuteMainLoop(screen, [&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
     glEnable(GL_DEPTH_TEST);
@@ -71,7 +71,6 @@ int main() {
     }
 
     screen.Display();
-    LimitFrameRate(screen);
   });
 
   return EXIT_SUCCESS;

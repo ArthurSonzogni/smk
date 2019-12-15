@@ -25,12 +25,12 @@ int main() {
   // Create a sound source.
   auto sound = smk::Sound(sound_buffer);
 
-  ExecuteMainLoop([&] {
+  ExecuteMainLoop(screen, [&] {
     screen.PoolEvents();
 
     // Toggle sound.
     if (screen.input().IsMouseReleased(GLFW_MOUSE_BUTTON_1)) {
-      if (sound.is_playing()) {
+      if (sound.IsPlaying()) {
         sound.Stop();
       } else {
         sound.Play();
@@ -38,11 +38,9 @@ int main() {
     }
 
     screen.Clear(smk::Color::Black);
-    text.SetColor(sound.is_playing() ? smk::Color::White: smk::Color::Red);
+    text.SetColor(sound.IsPlaying() ? smk::Color::White: smk::Color::Red);
     screen.Draw(text);
     screen.Display();
-
-    LimitFrameRate(screen);
   });
 
   return EXIT_SUCCESS;

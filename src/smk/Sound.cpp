@@ -72,6 +72,14 @@ void Sound::SetLoop(bool looping) {
   alSourcei(source_, AL_LOOPING, looping);
 }
 
+bool Sound::IsPlaying() {
+  if (!source_)
+    return false;
+  ALint state;
+  alGetSourcei(source_, AL_SOURCE_STATE, &state);
+  return (state == AL_PLAYING);
+}
+
 Sound::Sound(Sound&& o) {
   operator=(std::move(o));
 }

@@ -25,7 +25,7 @@ int main() {
   line.SetColor(smk::Color::Yellow);
   line.Move(200, 200);
 
-  ExecuteMainLoop([&] {
+  ExecuteMainLoop(screen, [&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
 
@@ -34,7 +34,6 @@ int main() {
     screen.Draw(line);
 
     screen.Display();
-    LimitFrameRate(screen);
   });
   return EXIT_SUCCESS;
 }

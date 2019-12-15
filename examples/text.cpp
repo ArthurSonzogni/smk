@@ -10,7 +10,7 @@ int main() {
   auto font = smk::Font(asset::arial_ttf, 34);
 
   float step = 0;
-  ExecuteMainLoop([&] {
+  ExecuteMainLoop(screen, [&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
 
@@ -26,7 +26,6 @@ int main() {
     screen.Draw(text);
 
     screen.Display();
-    LimitFrameRate(screen);
   });
 
   return EXIT_SUCCESS;

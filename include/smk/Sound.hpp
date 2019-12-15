@@ -21,7 +21,7 @@ class Sound {
   void Play();
   void Stop();
   void SetLoop(bool looping);
-  bool is_playing() { return is_playing_; };
+  bool IsPlaying();
 
   // The gain applied to the source. Default is 1.
   void SetVolume(float volume);
@@ -35,7 +35,7 @@ class Sound {
  private:
   const SoundBuffer* buffer_ = nullptr;
   unsigned int source_ = 0;
-  bool is_playing_ = false;
+  int is_playing_ = false;
 
   void EnsureSourceIsCreated();
 };

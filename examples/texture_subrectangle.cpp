@@ -16,14 +16,12 @@ int main() {
   sprite_subpart.SetTextureRectangle({5, 5, 25, 25});
   sprite_subpart.Move(35,5);
 
-  ExecuteMainLoop([&] {
+  ExecuteMainLoop(screen, [&] {
     screen.PoolEvents();
     screen.Clear(smk::Color::Black);
     screen.Draw(sprite_full);
     screen.Draw(sprite_subpart);
     screen.Display();
-    screen.LimitFrameRate(60);
-    LimitFrameRate(screen);
   });
 
   return EXIT_SUCCESS;
