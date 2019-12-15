@@ -16,8 +16,8 @@ function(add_example target input)
   # Detect emscripten is used.
   if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") 
 
+    # Release flags
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s ALLOW_MEMORY_GROWTH=1")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s BINARYEN_TRAP_MODE='allow'")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DEMANGLE_SUPPORT=1")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=2")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s EXPORT_NAME='emscripten'")
