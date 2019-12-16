@@ -35,6 +35,10 @@ FetchContent_Declare(openal
 FetchContent_GetProperties(freetype2)
 if(NOT freetype2_POPULATED)
   FetchContent_Populate(freetype2)
+  set(CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz TRUE)
+  set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
+  set(CMAKE_DISABLE_FIND_PACKAGE_PNG TRUE)
+  set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
   add_subdirectory(${freetype2_SOURCE_DIR} ${freetype2_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
