@@ -1,5 +1,6 @@
 include(FetchContent)
 
+set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(freetype2
   GIT_REPOSITORY https://github.com/aseprite/freetype2.git
   GIT_TAG VER-2-10-0

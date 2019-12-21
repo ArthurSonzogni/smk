@@ -16,10 +16,12 @@ add_library(smk STATIC
   include/smk/Color.hpp
   include/smk/Drawable.hpp
   include/smk/Font.hpp
+  include/smk/Framebuffer.hpp
   include/smk/Input.hpp
   include/smk/OpenGL.hpp
   include/smk/Rectangle.hpp
   include/smk/RenderState.hpp
+  include/smk/RenderTarget.hpp
   include/smk/Screen.hpp
   include/smk/Shader.hpp
   include/smk/Shape.hpp
@@ -36,7 +38,9 @@ add_library(smk STATIC
   src/smk/BlendMode.cpp
   src/smk/Color.cpp
   src/smk/Font.cpp
+  src/smk/Framebuffer.cpp
   src/smk/Input.cpp
+  src/smk/RenderTarget.cpp
   src/smk/Screen.cpp
   src/smk/Shader.cpp
   src/smk/Shape.cpp

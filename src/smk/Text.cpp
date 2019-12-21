@@ -41,7 +41,7 @@ void Text::SetFont(const Font& font) {
   font_ = &font;
 }
 
-void Text::Draw(Screen& screen, RenderState state) const {
+void Text::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
   state.view *= Transformation();
   Sprite sprite;
@@ -61,7 +61,7 @@ void Text::Draw(Screen& screen, RenderState state) const {
       sprite.SetPosition(advance_x + character->bearing.x,
                          advance_y + character->bearing.y);
       sprite.SetTexture(character->texture);
-      sprite.Draw(screen, state);
+      sprite.Draw(target, state);
     }
     advance_x += character->advance;
   }

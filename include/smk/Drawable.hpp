@@ -8,11 +8,11 @@
 #include <smk/RenderState.hpp>
 
 namespace smk {
-class Screen;
+class RenderTarget;
 
 class Drawable {
  public:
-  virtual void Draw(Screen& screen, RenderState state) const = 0;
+  virtual void Draw(RenderTarget& target, RenderState state) const = 0;
 };
 
 }  // namespace smk

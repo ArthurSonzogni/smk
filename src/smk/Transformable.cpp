@@ -3,7 +3,7 @@
 // the LICENSE file.
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <smk/Screen.hpp>
+#include <smk/RenderTarget.hpp>
 #include <smk/Texture.hpp>
 #include <smk/Transformable.hpp>
 
@@ -87,13 +87,13 @@ void TransformableBase::SetVertexArray(VertexArray vertex_array) {
   vertex_array_ = std::move(vertex_array);
 }
 
-void TransformableBase::Draw(Screen& screen, RenderState state) const {
+void TransformableBase::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
   state.texture = texture();
   state.view *= Transformation();
   state.vertex_array = vertex_array();
   state.blend_mode = blend_mode();
-  screen.Draw(state);
+  target.Draw(state);
 }
 
 void Transformable3D::SetTransformation(const glm::mat4 transformation) {

@@ -7,19 +7,22 @@
 
 #include <smk/Rectangle.hpp>
 #include <smk/RenderState.hpp>
-#include <smk/Screen.hpp>
 #include <smk/Texture.hpp>
 #include <smk/Transformable.hpp>
 
 namespace smk {
+
+class Framebuffer;
 
 // A Drawable specialised in displaying rectangular texture.
 class Sprite : public Transformable {
  public:
   Sprite() = default;
   Sprite(const Texture& texture);
+  Sprite(const Framebuffer& framebuffer);
 
   void SetTexture(const Texture& texture);
+  void SetFramebuffer(const Framebuffer& framebuffer);
 
   // Useful to display a sub part of the texture.
   void SetTextureRectangle(const Rectangle& rectangle);

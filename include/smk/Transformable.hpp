@@ -10,7 +10,7 @@
 
 namespace smk {
 struct Texture;
-class Screen;
+class RenderTarget;
 class VertexArray;
 
 class TransformableBase : public Drawable {
@@ -35,7 +35,7 @@ class TransformableBase : public Drawable {
   const VertexArray* vertex_array() const { return &vertex_array_; }
 
   // Drawable override
-  virtual void Draw(Screen& screen, RenderState state) const override;
+  virtual void Draw(RenderTarget& target, RenderState state) const override;
 
   // Movable-copyable class.
   TransformableBase() = default;

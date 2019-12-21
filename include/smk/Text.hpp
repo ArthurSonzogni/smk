@@ -24,7 +24,7 @@ class Text : public Transformable {
   void SetString(const std::string&);
   void SetFont(const Font& font);
 
-  virtual void Draw(Screen& screen, RenderState state) const override;
+  virtual void Draw(RenderTarget& target, RenderState state) const override;
 
   glm::vec2 ComputeDimensions() const;
 
