@@ -22,7 +22,6 @@ add_library(smk STATIC
   include/smk/Rectangle.hpp
   include/smk/RenderState.hpp
   include/smk/RenderTarget.hpp
-  include/smk/Screen.hpp
   include/smk/Shader.hpp
   include/smk/Shape.hpp
   include/smk/Sound.hpp
@@ -34,6 +33,7 @@ add_library(smk STATIC
   include/smk/Vertex.hpp
   include/smk/VertexArray.hpp
   include/smk/View.hpp
+  include/smk/Window.hpp
   src/smk/Audio.cpp
   src/smk/BlendMode.cpp
   src/smk/Color.cpp
@@ -41,7 +41,6 @@ add_library(smk STATIC
   src/smk/Framebuffer.cpp
   src/smk/Input.cpp
   src/smk/RenderTarget.cpp
-  src/smk/Screen.cpp
   src/smk/Shader.cpp
   src/smk/Shape.cpp
   src/smk/Sound.cpp
@@ -55,6 +54,7 @@ add_library(smk STATIC
   src/smk/Vertex.cpp
   src/smk/VertexArray.cpp
   src/smk/View.cpp
+  src/smk/Window.cpp
 )
 
 target_include_directories(smk

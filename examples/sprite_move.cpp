@@ -1,5 +1,5 @@
 #include <smk/Color.hpp>
-#include <smk/Screen.hpp>
+#include <smk/Window.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include "asset.hpp"
@@ -21,12 +21,12 @@ struct Player {
       dx = -dx;
   }
 
-  void Draw(smk::Screen& screen) {
+  void Draw(smk::Window& window) {
     smk::Sprite sprite(texture);
     sprite.SetPosition({x, y});
     sprite.SetCenter(texture.width / 2.0, 0.f);
     sprite.SetScale(dx > 0 ? 1.0 : -1.0, 1.0);
-    screen.Draw(sprite);
+    window.Draw(sprite);
   }
 
  private:
@@ -37,20 +37,20 @@ struct Player {
 smk::Texture Player::texture;
 
 int main() {
-  auto screen = smk::Screen(640, 32*3, "smk/example/sprite");
-  Player::texture = smk::Texture(asset::hero_png); // Defined after screen.
+  auto window = smk::Window(640, 32*3, "smk/example/sprite");
+  Player::texture = smk::Texture(asset::hero_png); // Defined after window.
 
   std::vector<Player> players = {Player(320, 0), Player(32, 32), Player(624, 64)};
 
-  ExecuteMainLoop(screen, [&] {
-    screen.PoolEvents();
+  ExecuteMainLoop(window, [&] {
+    window.PoolEvents();
     for (auto& player : players)
       player.Step();
 
-    screen.Clear(smk::Color::Black);
+    window.Clear(smk::Color::Black);
     for (auto& player : players)
-      player.Draw(screen);
-    screen.Display();
+      player.Draw(window);
+    window.Display();
   });
 
   return EXIT_SUCCESS;

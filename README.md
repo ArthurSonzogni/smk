@@ -22,17 +22,17 @@ the smk.
 
 ## Opening a new Window:
 ~~~cpp
-  auto screen = smk::Screen(640, 480, "Title");
+  auto window = smk::Window(640, 480, "Title");
 ~~~
 
 ## The main loop:
 ~~~cpp
   void loop() {
-    screen.Clear(smk::Color::Black);
+    window.Clear(smk::Color::Black);
 
     [...] // Draw stuff
 
-    screen.Display();
+    window.Display();
   }
 ~~~
 
@@ -47,7 +47,7 @@ Displaying images:
 ~~~cpp
   auto ball_sprite = smk::Sprite(ball_texture);
   ball_sprite.SetPosition({200,200});
-  screen.Draw(ball_sprite);
+  window.Draw(ball_sprite);
 ~~~
 
 ## Text
@@ -61,7 +61,7 @@ Displaying text:
 ~~~cpp
   auto text = smk::Text(font_arial, "hello world");
   text.SetPosition({200,200});
-  screen.Draw(text);
+  window.Draw(text);
 ~~~
 
 ## Sound
@@ -81,7 +81,7 @@ Playing sound:
   auto view = smk::View();
   view.SetCenter({200, 200});
   view.SetSize(320,240);
-  screen.SetView(view);
+  window.SetView(view);
 ~~~
 
 # Games made using SMK

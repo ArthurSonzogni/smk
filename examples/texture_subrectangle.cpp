@@ -1,5 +1,5 @@
 #include <smk/Color.hpp>
-#include <smk/Screen.hpp>
+#include <smk/Window.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include "asset.hpp"
@@ -8,7 +8,7 @@
 #include <iostream>
 
 int main() {
-  auto screen = smk::Screen(100, 100, "smk/example/texture_subrectangle");
+  auto window = smk::Window(100, 100, "smk/example/texture_subrectangle");
   auto texture = smk::Texture(asset::hero_png);
 
   auto sprite_full = smk::Sprite(texture);
@@ -16,12 +16,12 @@ int main() {
   sprite_subpart.SetTextureRectangle({5, 5, 25, 25});
   sprite_subpart.Move(35,5);
 
-  ExecuteMainLoop(screen, [&] {
-    screen.PoolEvents();
-    screen.Clear(smk::Color::Black);
-    screen.Draw(sprite_full);
-    screen.Draw(sprite_subpart);
-    screen.Display();
+  ExecuteMainLoop(window, [&] {
+    window.PoolEvents();
+    window.Clear(smk::Color::Black);
+    window.Draw(sprite_full);
+    window.Draw(sprite_subpart);
+    window.Display();
   });
 
   return EXIT_SUCCESS;

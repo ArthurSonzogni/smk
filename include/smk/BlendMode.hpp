@@ -11,7 +11,6 @@ namespace smk {
 
 // out = equation(A * B, C * D);
 struct BlendMode {
-
   // glBlendEquation
   GLenum equation_rgb = GL_FUNC_ADD;
   GLenum equation_alpha = GL_FUNC_ADD;

@@ -17,7 +17,7 @@
 namespace smk {
 
 void Input::Update(GLFWwindow* window) {
-  // get screen dimension
+  // Get window dimension.
   int width, height;
   glfwGetWindowSize(window, &width, &height);
 

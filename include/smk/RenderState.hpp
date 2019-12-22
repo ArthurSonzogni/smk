@@ -6,10 +6,10 @@
 #define SMK_RENDER_STATE_HPP
 
 #include <glm/glm.hpp>
-#include <smk/Texture.hpp>
-#include <smk/VertexArray.hpp>
 #include <smk/BlendMode.hpp>
 #include <smk/Shader.hpp>
+#include <smk/Texture.hpp>
+#include <smk/VertexArray.hpp>
 
 namespace smk {
 
@@ -22,6 +22,6 @@ struct RenderState {
   BlendMode blend_mode = BlendMode::Alpha;
 };
 
-} // namespace smk
+}  // namespace smk
 
 #endif /* end of include guard: SMK_RENDER_STATE_HPP */

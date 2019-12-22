@@ -8,7 +8,7 @@
 
 namespace smk {
 
-class Framebuffer : public RenderTarget{
+class Framebuffer : public RenderTarget {
  public:
   Framebuffer(int width, int height);
   Framebuffer(Framebuffer&&);

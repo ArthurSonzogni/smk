@@ -2,10 +2,10 @@
 #include <smk/Audio.hpp>
 #include <smk/Color.hpp>
 #include <smk/Font.hpp>
-#include <smk/Screen.hpp>
 #include <smk/Sound.hpp>
 #include <smk/SoundBuffer.hpp>
 #include <smk/Text.hpp>
+#include <smk/Window.hpp>
 #include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
@@ -13,11 +13,11 @@ int main() {
   // Init OpenAL.
   smk::Audio audio;
 
-  // Display a black screen with a "Click me" button.
-  auto screen = smk::Screen(160, 54, "Sound");
+  // Display a black window with a "Click me" button.
+  auto window = smk::Window(160, 54, "Sound");
   auto font = smk::Font(asset::arial_ttf, 34);
   auto text = smk::Text(font, "Click me");
-  text.SetPosition(10,10);
+  text.SetPosition(10, 10);
 
   // Load a sound file.
   auto sound_buffer = smk::SoundBuffer(asset::water_mp3);
@@ -25,11 +25,11 @@ int main() {
   // Create a sound source.
   auto sound = smk::Sound(sound_buffer);
 
-  ExecuteMainLoop(screen, [&] {
-    screen.PoolEvents();
+  ExecuteMainLoop(window, [&] {
+    window.PoolEvents();
 
     // Toggle sound.
-    if (screen.input().IsMouseReleased(GLFW_MOUSE_BUTTON_1)) {
+    if (window.input().IsMouseReleased(GLFW_MOUSE_BUTTON_1)) {
       if (sound.IsPlaying()) {
         sound.Stop();
       } else {
@@ -37,10 +37,10 @@ int main() {
       }
     }
 
-    screen.Clear(smk::Color::Black);
-    text.SetColor(sound.IsPlaying() ? smk::Color::White: smk::Color::Red);
-    screen.Draw(text);
-    screen.Display();
+    window.Clear(smk::Color::Black);
+    text.SetColor(sound.IsPlaying() ? smk::Color::White : smk::Color::Red);
+    window.Draw(text);
+    window.Display();
   });
 
   return EXIT_SUCCESS;

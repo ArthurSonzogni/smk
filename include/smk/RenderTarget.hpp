@@ -11,7 +11,7 @@
 namespace smk {
 
 class Drawable;
-class RenderState;
+struct RenderState;
 
 class RenderTarget {
  public:

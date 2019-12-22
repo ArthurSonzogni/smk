@@ -1,11 +1,11 @@
 #include <smk/Color.hpp>
-#include <smk/Screen.hpp>
 #include <smk/Shape.hpp>
+#include <smk/Window.hpp>
 #include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
   // Open a new window.
-  auto screen = smk::Screen(640, 480, "test");
+  auto window = smk::Window(640, 480, "test");
 
   // Create circle_red.
   auto circle_red = smk::Shape::Circle(200);
@@ -25,15 +25,15 @@ int main() {
   line.SetColor(smk::Color::Yellow);
   line.Move(200, 200);
 
-  ExecuteMainLoop(screen, [&] {
-    screen.PoolEvents();
-    screen.Clear(smk::Color::Black);
+  ExecuteMainLoop(window, [&] {
+    window.PoolEvents();
+    window.Clear(smk::Color::Black);
 
-    screen.Draw(circle_red);
-    screen.Draw(circle_blue);
-    screen.Draw(line);
+    window.Draw(circle_red);
+    window.Draw(circle_blue);
+    window.Draw(line);
 
-    screen.Display();
+    window.Display();
   });
   return EXIT_SUCCESS;
 }

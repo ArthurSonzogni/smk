@@ -40,10 +40,10 @@ Audio::Audio() {
     return;
   std::vector<std::string> devices;
   GetDevices(devices);
-  std::cerr << "Audio devices found " << devices.size() << ":" << std::endl;
+  std::cout << "Audio devices found " << devices.size() << ":" << std::endl;
   for (auto& it : devices)
-    std::cerr << "* " << it << std::endl;
-  std::cerr << std::endl;
+    std::cout << "* " << it << std::endl;
+  std::cout << std::endl;
 
   audioDevice = alcOpenDevice(devices[0].c_str());
   if (!audioDevice) {

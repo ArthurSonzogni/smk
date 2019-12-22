@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#ifndef SMK_SCREEN_HPP
-#define SMK_SCREEN_HPP
+#ifndef SMK_WINDOW_HPP
+#define SMK_WINDOW_HPP
 
 #include <functional>
 #include <string>
@@ -22,19 +22,24 @@ class View;
 class VertexArray;
 class Sprite;
 
-class Screen : public RenderTarget{
+// Represent a window.
+class Window : public RenderTarget {
  public:
-  Screen();
-  Screen(int width, int height, const std::string& title);
-  Screen(Screen&&);
-  Screen(const Screen&) = delete;
-  void operator=(Screen&&);
-  void operator=(const Screen&) = delete;
-  ~Screen();
+  Window();
+  Window(int width, int height, const std::string& title);
+  Window(Window&&);
+  Window(const Window&) = delete;
+  void operator=(Window&&);
+  void operator=(const Window&) = delete;
+  ~Window();
 
   // Various data about the current window.
+  // Nothing
   GLFWwindow* window() const { return window_; }
+
+  // The time of the current frame
   float time() const { return time_; }
+
   Input& input() { return input_; }
 
   // Pool new events. This update the |input()| element.
@@ -62,4 +67,4 @@ class Screen : public RenderTarget{
 
 }  // namespace smk
 
-#endif /* end of include guard: SMK_SCREEN_HPP */
+#endif /* end of include guard: SMK_WINDOW_HPP */

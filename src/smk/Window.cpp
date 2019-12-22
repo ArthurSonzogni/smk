@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Screen.hpp>
+#include <smk/Window.hpp>
 
 #include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,8 +24,8 @@
 
 namespace smk {
 
-Screen::Screen() {}
-Screen::Screen(int width, int height, const std::string& title) {
+Window::Window() {}
+Window::Window(int width, int height, const std::string& title) {
   width_ = width;
   height_ = height;
 
@@ -81,11 +81,11 @@ Screen::Screen(int width, int height, const std::string& title) {
   InitRenderTarget();
 }
 
-Screen::Screen(Screen&& screen) {
-  operator=(std::move(screen));
+Window::Window(Window&& window) {
+  operator=(std::move(window));
 }
 
-void Screen::operator=(Screen&& other) {
+void Window::operator=(Window&& other) {
   RenderTarget::operator=(std::move(other));
   std::swap(window_, other.window_);
   std::swap(time_, other.time_);
@@ -93,12 +93,12 @@ void Screen::operator=(Screen&& other) {
   std::swap(input_, other.input_);
 }
 
-void Screen::PoolEvents() {
+void Window::PoolEvents() {
   glfwPollEvents();
   input_.Update(window_);
 }
 
-void Screen::Display() {
+void Window::Display() {
   // Swap Front and Back buffers (double buffering)
   glfwSwapBuffers(window_);
 
@@ -108,11 +108,11 @@ void Screen::Display() {
   time_ = glfwGetTime();
 }
 
-Screen::~Screen() {
+Window::~Window() {
   // glfwTerminate(); // Needed? What about multiple windows?
 }
 
-void Screen::UpdateDimensions() {
+void Window::UpdateDimensions() {
   int width = width_;
   int height = height_;
 #ifdef __EMSCRIPTEN__
@@ -127,7 +127,7 @@ void Screen::UpdateDimensions() {
   }
 }
 
-void Screen::LimitFrameRate(float fps) {
+void Window::LimitFrameRate(float fps) {
   const float delta = glfwGetTime() - time_last_sleep_;
   const float target = 1.f / fps;
   float sleep_duration = target - delta;

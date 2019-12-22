@@ -5,8 +5,8 @@
 #ifndef SMK_INPUT_HPP
 #define SMK_INPUT_HPP
 
-#include <map>
 #include <glm/glm.hpp>
+#include <map>
 
 struct GLFWwindow;
 
