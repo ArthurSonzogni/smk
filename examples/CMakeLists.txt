@@ -22,7 +22,11 @@ function(add_example target input)
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=2")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s EXPORT_NAME='emscripten'")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s MODULARIZE=1")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s WASM=1")
+    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS " -s WASM=1")
+    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --js-opts 3")
+    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-lto 3")
+    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-opts 3")
+    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " -O3")
 
     # Allow some files to be fetched.
     file(GLOB_RECURSE files "./assets/*")

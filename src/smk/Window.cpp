@@ -24,6 +24,20 @@
 
 namespace smk {
 
+namespace {
+#ifdef __EMSCRIPTEN__
+
+EM_BOOL OnTouchEvent(int eventType,
+                     const EmscriptenTouchEvent* keyEvent,
+                     void* userData) {
+  auto input = (Input*)(userData);
+  input->OnTouchEvent(eventType, keyEvent);
+  return true;
+}
+
+#endif
+}  // namespace
+
 Window::Window() {}
 Window::Window(int width, int height, const std::string& title) {
   width_ = width;
@@ -79,6 +93,13 @@ Window::Window(int width, int height, const std::string& title) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   InitRenderTarget();
+
+#ifdef __EMSCRIPTEN__
+  emscripten_set_touchstart_callback("#canvas", &input_, true, OnTouchEvent);
+  emscripten_set_touchend_callback("#canvas", &input_, true, OnTouchEvent);
+  emscripten_set_touchmove_callback("#canvas", &input_, true, OnTouchEvent);
+  emscripten_set_touchcancel_callback("#canvas", &input_, true, OnTouchEvent);
+#endif
 }
 
 Window::Window(Window&& window) {
@@ -115,11 +136,11 @@ Window::~Window() {
 void Window::UpdateDimensions() {
   int width = width_;
   int height = height_;
-#ifdef __EMSCRIPTEN__
-  emscripten_get_canvas_element_size("canvas", &width_, &height_);
-#else
+  //#ifdef __EMSCRIPTEN__
+  // emscripten_get_canvas_element_size("canvas", &width_, &height_);
+  //#else
   glfwGetWindowSize(window_, &width_, &height_);
-#endif
+  //#endif
 
   if (width != width_ || height != height_) {
     glViewport(0, 0, width_, height_);
@@ -137,4 +158,4 @@ void Window::LimitFrameRate(float fps) {
   time_last_sleep_ = glfwGetTime();
 }
 
-} // namespace smk
+}  // namespace smk

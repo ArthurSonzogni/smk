@@ -5,8 +5,6 @@
 #include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
-#include <iostream>
-
 int main() {
   auto window = smk::Window(100, 100, "smk/example/sprite");
   auto texture = smk::Texture(asset::hero_png);

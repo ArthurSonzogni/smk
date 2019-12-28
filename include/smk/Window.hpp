@@ -49,8 +49,8 @@ class Window : public RenderTarget {
   // are swapped.
   void Display();
 
-  // Wait until the end of the frame to maintain a targetted frame per
-  // seconds. (optional).
+  // Wait until the end of the frame to maintain a targetted frame per seconds.
+  // (optional).
   void LimitFrameRate(float fps);
 
  private:

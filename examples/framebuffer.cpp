@@ -51,7 +51,7 @@ int main() {
     framebuffer_2.Draw(sprite);
 
     // Circle under user's mouse.
-    circle.SetPosition(window.input().mouse());
+    circle.SetPosition(window.input().cursor());
     framebuffer_2.Draw(circle);
 
     // -------------------------------------------------------------------------
