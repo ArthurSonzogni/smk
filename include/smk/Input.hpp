@@ -37,7 +37,8 @@ class Input {
   };
 
   int TouchCount();
-  Touch GetTouch(int i);
+  Touch* GetTouch(int index);
+  Touch* GetTouchById(int id);
 
 #ifdef __EMSCRIPTEN__
   void OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent);

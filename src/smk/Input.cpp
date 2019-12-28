@@ -42,7 +42,7 @@ void Input::Update(GLFWwindow* window) {
 
   cursor_press_previous_ = cursor_press_;
   if (TouchCount()) {
-    cursor_ = GetTouch(0).position;
+    cursor_ = GetTouch(0)->position;
     cursor_press_ = true;
   } else {
     cursor_ = mouse_;
@@ -113,8 +113,15 @@ int Input::TouchCount() {
   return touch_ids_.size();
 }
 
-Input::Touch Input::GetTouch(int i) {
-  return touch_[touch_ids_[i]];
+Input::Touch* Input::GetTouch(int index) {
+  return GetTouchById(touch_ids_[index]);
+}
+
+Input::Touch* Input::GetTouchById(int id) {
+  auto it = touch_.find(id);
+  if (it == touch_.end())
+    return nullptr;
+  return &(it->second);
 }
 
 bool Input::IsCursorHold() {
