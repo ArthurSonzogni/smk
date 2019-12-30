@@ -25,21 +25,33 @@
 namespace smk {
 
 namespace {
+
+int id = 0;
+std::map<int, Window*> window_by_id;
+
 #ifdef __EMSCRIPTEN__
 
 EM_BOOL OnTouchEvent(int eventType,
                      const EmscriptenTouchEvent* keyEvent,
                      void* userData) {
-  auto input = (Input*)(userData);
-  input->OnTouchEvent(eventType, keyEvent);
+  int id = (int)(userData);
+  Window* window = window_by_id[id];
+  if (window)
+    window->input().OnTouchEvent(eventType, keyEvent);
   return true;
 }
 
 #endif
 }  // namespace
 
-Window::Window() {}
+Window::Window() {
+  id_ = ++id;
+  window_by_id[id_] = this;
+}
+
 Window::Window(int width, int height, const std::string& title) {
+  id_ = ++id;
+  window_by_id[id_] = this;
   width_ = width;
   height_ = height;
 
@@ -95,10 +107,10 @@ Window::Window(int width, int height, const std::string& title) {
   InitRenderTarget();
 
 #ifdef __EMSCRIPTEN__
-  emscripten_set_touchstart_callback("#canvas", &input_, true, OnTouchEvent);
-  emscripten_set_touchend_callback("#canvas", &input_, true, OnTouchEvent);
-  emscripten_set_touchmove_callback("#canvas", &input_, true, OnTouchEvent);
-  emscripten_set_touchcancel_callback("#canvas", &input_, true, OnTouchEvent);
+  emscripten_set_touchstart_callback("#canvas", (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchend_callback("#canvas", (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchmove_callback("#canvas", (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchcancel_callback("#canvas", (void*)id_, true, OnTouchEvent);
 #endif
 }
 
@@ -112,6 +124,8 @@ void Window::operator=(Window&& other) {
   std::swap(time_, other.time_);
   std::swap(time_last_sleep_, other.time_last_sleep_);
   std::swap(input_, other.input_);
+  std::swap(id_, other.id_);
+  window_by_id[id_] = this;
 }
 
 void Window::PoolEvents() {
@@ -130,6 +144,7 @@ void Window::Display() {
 }
 
 Window::~Window() {
+  window_by_id.erase(id_);
   // glfwTerminate(); // Needed? What about multiple windows?
 }
 

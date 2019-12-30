@@ -18,16 +18,20 @@ function(add_example target input)
   if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") 
 
     # Release flags
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s ALLOW_MEMORY_GROWTH=1")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DEMANGLE_SUPPORT=1")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=2")
+    #set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s ALLOW_MEMORY_GROWTH=1")
+    #set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DEMANGLE_SUPPORT=1")
+    #set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=2")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s EXPORT_NAME='emscripten'")
     set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s MODULARIZE=1")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS " -s WASM=1")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --js-opts 3")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-lto 3")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-opts 3")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " -O3")
+    #set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS " -s WASM=1")
+    #set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --js-opts 3")
+    #set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-lto 3")
+    #set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-opts 3")
+    #set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " -O3")
+
+  set(CXX_FLAGS "CXX FLAGS EMCC_DEBUG=1 -g")
+  set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1")
+  set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS  " -s TOTAL_MEMORY=134217728")
 
     # Allow some files to be fetched.
     file(GLOB_RECURSE files "./assets/*")

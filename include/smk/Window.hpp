@@ -63,6 +63,7 @@ class Window : public RenderTarget {
   void UpdateDimensions();
 
   Input input_;
+  int id_;
 };
 
 }  // namespace smk
