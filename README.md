@@ -2,15 +2,7 @@
 
 ![header](./doc/header_logo.png)
 
-**Story**:
-~~~
-I needed to port several games made using the
-[SFML](https://www.sfml-dev.org/) to WebAssembly. SFML isn't supporting
-WebAssembly (yet), so I had to reimplement it myself. If you know the SFML, then
-SMK must be very familiar to you.
-~~~
-
-Features:
+#### Features:
   * Compatible with WebAssembly. One build for every platforms!
   * No dependencies, everything is fetched using cmake FetchContent.
   * Fast & simple.
@@ -89,6 +81,12 @@ Playing sound:
  * [IceMaze](https://github.com/ArthurSonzogni/IceMaze)
 
 (Feel free to add yours)
+
+# Story
+I needed to port several games made using the
+[SFML](https://www.sfml-dev.org/) to WebAssembly. SFML isn't supporting
+WebAssembly (yet), so I had to reimplement it myself. If you know the SFML, then
+SMK must be very familiar to you.
 
 # Thanks
 
