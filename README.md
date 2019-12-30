@@ -9,8 +9,9 @@
 
 [WebAssembly demo](http://arthursonzogni.github.io/smk/examples/) from the ./examples directory.
 
-Ready to start? See [tutorial](./doc/build_with_cmake.md) on how to depend on
-the smk.
+Ready to start?
+ * See [tutorial](./doc/build_with_cmake.md)
+ * See [starter project](https://github.com/ArthurSonzogni/smk-starter)
 
 ## Opening a new Window:
 ~~~cpp
