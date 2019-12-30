@@ -29,6 +29,7 @@ add_library(smk STATIC
   include/smk/Sprite.hpp
   include/smk/Text.hpp
   include/smk/Texture.hpp
+  include/smk/Touch.hpp
   include/smk/Transformable.hpp
   include/smk/Vertex.hpp
   include/smk/VertexArray.hpp
@@ -50,6 +51,7 @@ add_library(smk STATIC
   src/smk/StbImage.hpp
   src/smk/Text.cpp
   src/smk/Texture.cpp
+  src/smk/Touch.cpp
   src/smk/Transformable.cpp
   src/smk/Vertex.cpp
   src/smk/VertexArray.cpp

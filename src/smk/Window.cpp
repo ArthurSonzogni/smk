@@ -136,11 +136,11 @@ Window::~Window() {
 void Window::UpdateDimensions() {
   int width = width_;
   int height = height_;
-  //#ifdef __EMSCRIPTEN__
-  // emscripten_get_canvas_element_size("canvas", &width_, &height_);
-  //#else
-  glfwGetWindowSize(window_, &width_, &height_);
-  //#endif
+  #ifdef __EMSCRIPTEN__
+   emscripten_get_canvas_element_size("#canvas", &width_, &height_);
+  #else
+    glfwGetWindowSize(window_, &width_, &height_);
+  #endif
 
   if (width != width_ || height != height_) {
     glViewport(0, 0, width_, height_);

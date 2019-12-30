@@ -1,4 +1,3 @@
-#include <iostream>
 // Copyright 2019 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
@@ -41,8 +40,8 @@ void Input::Update(GLFWwindow* window) {
   mouse_ = glm::vec2(mouse_x, mouse_y);
 
   cursor_press_previous_ = cursor_press_;
-  if (TouchCount()) {
-    cursor_ = GetTouch(0)->position;
+  if (touches_.size()) {
+    cursor_ = touches_.begin()->second.position();
     cursor_press_ = true;
   } else {
     cursor_ = mouse_;
@@ -85,44 +84,22 @@ void Input::OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent) {
   for(int i = 0; i<keyEvent->numTouches; ++i) {
     const EmscriptenTouchPoint& touch = keyEvent->touches[i];
 
+    auto data = TouchDataPoint{glm::vec2(touch.targetX, touch.targetY), 0.f};
+
     if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART) {
-      touch_[touch.identifier] = Touch{
-          glm::vec2(touch.targetX, touch.targetY),
-          touch.identifier,
-      };
-      touch_ids_.push_back(touch.identifier);
-      return;
+      touches_[touch.identifier] = Touch{touch.identifier, {data}};
+      continue;
     }
 
     if (eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
-      touch_[touch.identifier] = Touch{
-          glm::vec2(touch.targetX, touch.targetY),
-          touch.identifier,
-      };
-      return;
+      touches_[touch.identifier].data_points.push_back(data);
+      continue;
     }
 
-    auto it =
-        std::find(touch_ids_.begin(), touch_ids_.end(), touch.identifier);
-    touch_ids_.erase(it);
+    touches_.erase(touches_.find(touch.identifier));
   }
 }
 #endif
-
-int Input::TouchCount() {
-  return touch_ids_.size();
-}
-
-Input::Touch* Input::GetTouch(int index) {
-  return GetTouchById(touch_ids_[index]);
-}
-
-Input::Touch* Input::GetTouchById(int id) {
-  auto it = touch_.find(id);
-  if (it == touch_.end())
-    return nullptr;
-  return &(it->second);
-}
 
 bool Input::IsCursorHold() {
   return cursor_press_ && cursor_press_previous_;

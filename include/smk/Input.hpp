@@ -7,6 +7,7 @@
 
 #include <glm/glm.hpp>
 #include <map>
+#include <smk/Touch.hpp>
 #include <vector>
 
 struct GLFWwindow;
@@ -18,6 +19,9 @@ class Input {
  public:
   // Update state.
   void Update(GLFWwindow* window);
+#ifdef __EMSCRIPTEN__
+  void OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent);
+#endif
 
   // Keyboard.
   bool IsKeyHold(int key);
@@ -31,20 +35,10 @@ class Input {
   glm::vec2 mouse() { return mouse_; }
 
   // Touch.
-  struct Touch {
-    glm::vec2 position;
-    int finger_id;
-  };
+  using FingerID = int;
+  const std::map<FingerID, Touch> touches() { return touches_; }
 
-  int TouchCount();
-  Touch* GetTouch(int index);
-  Touch* GetTouchById(int id);
-
-#ifdef __EMSCRIPTEN__
-  void OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent);
-#endif
-
-  // Cursor (= touch or mouse choosen smartly).
+  // A cursor is either the mouse or a touch. This is choosen smartly.
   bool IsCursorHold();
   bool IsCursorPressed();
   bool IsCursorReleased();
@@ -59,8 +53,7 @@ class Input {
   glm::vec2 mouse_;
 
   // Touch.
-  std::map<int, Touch> touch_;
-  std::vector<int> touch_ids_;
+  std::map<FingerID, Touch> touches_;
 
   // Cursor
   glm::vec2 cursor_;

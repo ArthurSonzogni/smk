@@ -5,6 +5,7 @@ if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$")
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/index.html
     ${CMAKE_CURRENT_BINARY_DIR}/index.html
+    COPYONLY
   )
 endif()
 
@@ -45,3 +46,4 @@ add_example(sprite_move sprite_move.cpp)
 add_example(text text.cpp)
 add_example(texture_subrectangle texture_subrectangle.cpp)
 add_example(framebuffer framebuffer.cpp)
+add_example(touch touch.cpp)

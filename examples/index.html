@@ -3,60 +3,118 @@
   <head>
     <meta charset="utf-8">
     <title>SMK examples</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
   </head>
   <body>
-    <script>
-      let example_list = [
-        "shape_2d.js",
-        "text.js",
-        "sprite.js",
-        "sprite_move.js",
-        "texture_subrectangle.js",
-        "shape_3d.js",
-        "framebuffer.js",
-        "sound.js",
-      ];
+    <style>
+      * {
+        margin:0;
+        padding:0;
+      }
+      #selector {
+        display:block;
+        width:100%;
+        height:15vh;
+      }
+      #selector2  {
+        padding:20px;
+      }
+      #exampleContainer {
+        display:block;
+        width:100%;
+        height:100%;
+        border: 0px;
+        height:85vh;
+        background-color:black;
+      }
+      button,select {
+        padding:5px;
+      }
+    </style>
+    <div id="selector">
+      <div id="selector2">
+        <h1> SMK examples </h1>
+        <label>Example:</label>
+        <select type=text id="selectBox" ></select>
+        <button id="previous">previous</button>
+        <button id="next">next</button>
+      </div>
+    </div>
 
-      let load_examples = async function() {
+    <iframe id="exampleContainer"></iframe>
+       
+    <script>
+      let main = async function() {
         // We are modifying the dom, so we need to wait until the document to be
         // ready
         await new Promise(resolve => {
           window.addEventListener("DOMContentLoaded", resolve)
         });
 
-        for(example of example_list) {
-          // Add the example title.
-          let h1 = document.createElement("h1");
-          h1.innerHTML = example;
-          document.body.appendChild(h1);
+        let exampleList = [
+          "shape_2d.js",
+          "text.js",
+          "sprite.js",
+          "sprite_move.js",
+          "texture_subrectangle.js",
+          "shape_3d.js",
+          "framebuffer.js",
+          "touch.js",
+          "sound.js",
+        ];
 
-          // Load the example script.
-          await new Promise(resolve => {
-            let script = document.createElement("script");
-            script.src = example;
-            script.addEventListener("load", resolve);
-            document.body.appendChild(script);
-          });
-
-          // Build a canvas to display the example
-          let canvas = document.createElement("canvas");
-          document.body.appendChild(canvas);
-
-          // Execute the example.
-          await new Promise(resolve => {
-            emscripten({
-              canvas: canvas,
-              print: console.log,
-              printErr: console.error,
-            }).then(function() {
-              console.log("loaded " + example);
-              resolve();
-            });
-          });
+        // Populate the example list.
+        let selectBox = document.querySelector("#selectBox");
+        for(let example of exampleList) {
+          let option = document.createElement("option");
+          option.innerText = example;
+          option.value = example;
+          selectBox.appendChild(option);
         }
+
+        let onchange = function() {
+          let exampleContainer = document.querySelector("#exampleContainer");
+          exampleContainer.srcdoc = `
+            <scr`+`ipt>
+              window.addEventListener("DOMContentLoaded", async function() {
+                // Build a canvas to display the example
+                let canvas = document.createElement("canvas");
+                document.body.appendChild(canvas);
+
+                // Load the example script.
+                await new Promise(resolve => {
+                  let script = document.createElement("script");
+                  script.src = '${selectBox.value}';
+                  script.addEventListener("load", resolve);
+                  document.body.appendChild(script);
+                });
+
+                emscripten({
+                  canvas: canvas,
+                  print: console.log,
+                  printErr: console.error,
+                }).then(console.log);
+              });
+            </scr`+`ipt>
+          `;
+        };
+        
+        let previous = document.querySelector("#previous");
+        let next = document.querySelector("#next");
+        previous.onclick = function() {
+          selectBox.selectedIndex -=1;
+          onchange();
+        }
+        next.onclick = function() {
+          selectBox.selectedIndex +=1;
+          onchange();
+        }
+        selectBox.onchange = onchange;
+
+        onchange();
       };
 
-      load_examples();
+      main();
     </script>
   </body>
 </html>

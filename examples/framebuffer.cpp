@@ -7,7 +7,7 @@
 #include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
-  int dim = 1024;
+  int dim = 512;
   int center = dim / 2;
   auto window = smk::Window(dim, dim, "Framebufer example");
 
