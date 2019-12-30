@@ -5,10 +5,10 @@
 #ifndef SMK_VERTEX_ARRAY_HPP
 #define SMK_VERTEX_ARRAY_HPP
 
+#include <initializer_list>
 #include <smk/OpenGL.hpp>
 #include <smk/Vertex.hpp>
 #include <vector>
-#include <initializer_list>
 
 namespace smk {
 
@@ -31,11 +31,10 @@ class VertexArray {
   VertexArray& operator=(VertexArray&&);
   VertexArray& operator=(const VertexArray&);
   // ---------------------------------------------------------------------------
-  
-  int size() const { return size_;} 
+
+  int size() const { return size_; }
 
  private:
-
   void Allocate(int element_size, void* data);
 
   GLuint vbo_ = 0;

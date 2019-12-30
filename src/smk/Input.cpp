@@ -82,7 +82,7 @@ bool Input::IsMouseHold(int key) {
 
 #ifdef __EMSCRIPTEN__
 void Input::OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent) {
-  for(int i = 0; i<keyEvent->numTouches; ++i) {
+  for (int i = 0; i < keyEvent->numTouches; ++i) {
     const EmscriptenTouchPoint& touch = keyEvent->touches[i];
 
     if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART ||

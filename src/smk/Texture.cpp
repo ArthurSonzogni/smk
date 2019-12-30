@@ -2,9 +2,9 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Texture.hpp>
 #include <cstdlib>
 #include <iostream>
+#include <smk/Texture.hpp>
 #include <vector>
 
 #include "StbImage.hpp"
@@ -59,7 +59,6 @@ Texture::Texture(const std::string& filename, Option option) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, option.wrap_t);
   glBindTexture(GL_TEXTURE_2D, GL_NONE);
   stbi_image_free(data);
-
 }
 
 Texture::Texture() = default;
@@ -90,4 +89,4 @@ void Texture::Bind(GLuint activetexture) const {
   glBindTexture(GL_TEXTURE_2D, id);
 }
 
-} // namespace smk
+}  // namespace smk

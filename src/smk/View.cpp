@@ -15,4 +15,4 @@ void View::SetSize(float width, float height) {
   height_ = height;
 }
 
-} // namespace smk
+}  // namespace smk

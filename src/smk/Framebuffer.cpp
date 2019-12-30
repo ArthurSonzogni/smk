@@ -1,7 +1,7 @@
-#include <smk/Framebuffer.hpp>
-#include <smk/RenderState.hpp>
 #include <smk/Color.hpp>
 #include <smk/Drawable.hpp>
+#include <smk/Framebuffer.hpp>
+#include <smk/RenderState.hpp>
 
 namespace smk {
 

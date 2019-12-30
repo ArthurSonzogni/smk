@@ -4,13 +4,13 @@
 
 #include <smk/Shader.hpp>
 
-#include <string>
 #include <cstdlib>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <streambuf>
+#include <string>
 #include <vector>
 
 namespace smk {
@@ -36,11 +36,11 @@ Shader Shader::FromFile(const std::string& filename, GLenum type) {
 }
 
 // static
-Shader Shader::FromString(const std::string &content, GLenum type) {
+Shader Shader::FromString(const std::string& content, GLenum type) {
   std::vector<char> buffer;
-  for (const auto &c : shader_header)
+  for (const auto& c : shader_header)
     buffer.push_back(c);
-  for (const auto &c : content)
+  for (const auto& c : content)
     buffer.push_back(c);
   buffer.push_back('\0');
   return Shader(std::move(buffer), type);
@@ -48,7 +48,6 @@ Shader Shader::FromString(const std::string &content, GLenum type) {
 
 Shader::Shader() = default;
 Shader::Shader(std::vector<char> content, GLenum type) {
-
   // creation
   handle_ = glCreateShader(type);
   if (handle_ == 0) {

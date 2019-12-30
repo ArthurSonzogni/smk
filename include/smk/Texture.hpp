@@ -41,6 +41,6 @@ struct Texture {
   // ---------------------------------------------------------------------------
 };
 
-} // namespace smk
+}  // namespace smk
 
 #endif  // SMK_TEXTURE_HPP

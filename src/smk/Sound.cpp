@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Sound.hpp>
 #include <smk/Audio.hpp>
+#include <smk/Sound.hpp>
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -97,4 +97,4 @@ void Sound::SetVolume(float volume) {
   alSourcef(source_, AL_GAIN, volume);
 }
 
-}  // namespace smk 
+}  // namespace smk

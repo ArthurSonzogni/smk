@@ -91,5 +91,4 @@ VertexArray::VertexArray(const std::vector<Vertex3D>& array) {
   Vertex3D::Bind();
 }
 
-
 }  // namespace smk.

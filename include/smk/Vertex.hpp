@@ -26,6 +26,6 @@ struct Vertex3D {
 
 using Vertex = Vertex2D;
 
-} // namespace smk.
+}  // namespace smk.
 
 #endif /* end of include guard: SMK_VERTEX_HPP */
