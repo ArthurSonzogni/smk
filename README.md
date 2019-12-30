@@ -4,16 +4,15 @@
 
 #### Features:
   * Compatible with WebAssembly. One build for every platforms!
-  * No dependencies, everything is fetched using cmake FetchContent.
   * Fast & simple.
-
+  * No dependencies: everything is fetched using cmake FetchContent.
 
 #### Ready to start?
  * See [WebAssembly demo](http://arthursonzogni.github.io/smk/examples/) from the ./examples directory.
  * See [tutorial](./doc/build_with_cmake.md)
  * See [starter project](https://github.com/ArthurSonzogni/smk-starter)
 
-## Opening a new Window:
+## Open a new Window:
 ~~~cpp
   auto window = smk::Window(640, 480, "Title");
 ~~~
@@ -31,12 +30,12 @@
 
 ## Images
 
-Loading textures:
+Load textures:
 ~~~cpp
   auto ball_texture = smk::Texture("./ball.png");
 ~~~
 
-Displaying images:
+Display images:
 ~~~cpp
   auto ball_sprite = smk::Sprite(ball_texture);
   ball_sprite.SetPosition({200,200});
@@ -45,12 +44,12 @@ Displaying images:
 
 ## Text
 
-Loading font:
+Load font:
 ~~~cpp
   auto font_arial = smk::Font("./arial.ttf", 32);
 ~~~
 
-Displaying text:
+Display text:
 ~~~cpp
   auto text = smk::Text(font_arial, "hello world");
   text.SetPosition({200,200});
@@ -58,18 +57,18 @@ Displaying text:
 ~~~
 
 ## Sound
-Loading sound:
+Load sound:
 ~~~cpp
   auto sound_buffer = smk:SoundBuffer("./boing.ogg");
 ~~~
 
-Playing sound:
+Play sound:
 ~~~cpp
   auto sound = smk::Sound(sound_buffer);
   sound.Play();
 ~~~
 
-## Transforming the view
+## Transform the view
 ~~~cpp
   auto view = smk::View();
   view.SetCenter({200, 200});
@@ -80,8 +79,9 @@ Playing sound:
 # Games made using SMK
  * [InTheCube](https://github.com/ArthurSonzogni/InTheCube)
  * [IceMaze](https://github.com/ArthurSonzogni/IceMaze)
+ * [pigami](https://github.com/ArthurSonzogni/pigam)
 
-(Feel free to add yours)
+Please add yours.
 
 # Story
 I needed to port several games made using the
@@ -101,7 +101,7 @@ SMK depends directly on many great projects listed below:
 - [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
 
 
-SMK is also made possible thanks to (indirectly dependencies, tools used, non-exhaustive):
+SMK is also made possible thanks to:
  * [CMake](https://cmake.org/)
  * [Emscripten](https://github.com/kripken/emscripten)
  * [FLAC](https://github.com/xiph/flac)
