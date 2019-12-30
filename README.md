@@ -7,9 +7,9 @@
   * No dependencies, everything is fetched using cmake FetchContent.
   * Fast & simple.
 
-[WebAssembly demo](http://arthursonzogni.github.io/smk/examples/) from the ./examples directory.
 
-Ready to start?
+#### Ready to start?
+ * See [WebAssembly demo](http://arthursonzogni.github.io/smk/examples/) from the ./examples directory.
  * See [tutorial](./doc/build_with_cmake.md)
  * See [starter project](https://github.com/ArthurSonzogni/smk-starter)
 
