@@ -1,5 +1,7 @@
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
+#include <smk/Transformable.hpp>
+#include <smk/VertexArray.hpp>
 #include <smk/Window.hpp>
 #include "./util.hpp"  // ExecuteMainLoop
 
@@ -11,13 +13,14 @@ int main() {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
 
-    for(const auto& it : window.input().touches()) {
+    // Draw traces.
+    for (const auto& it : window.input().touches()) {
       const auto& touch = it.second;
-      for(int i = 1; i<touch.data_points.size(); ++i) {
+      for (int i = 1; i < touch.data_points.size(); ++i) {
         glm::vec2 p1 = touch.data_points[i - 1].position;
         glm::vec2 p2 = touch.data_points[i - 0].position;
 
-        auto line = smk::Shape::Line(p1,p2,2);
+        auto line = smk::Shape::Line(p1, p2, 2);
         window.Draw(line);
       }
     }

@@ -15,7 +15,7 @@ struct Touch {
   int finger_id;
   std::vector<TouchDataPoint> data_points;
 
-  glm::vec2 position();
+  glm::vec2 position() const;
 };
 
 }  // namespace smk

@@ -29,7 +29,7 @@ int main() {
     window.PoolEvents();
 
     // Toggle sound.
-    if (window.input().IsMouseReleased(GLFW_MOUSE_BUTTON_1)) {
+    if (window.input().IsCursorReleased()) {
       if (sound.IsPlaying()) {
         sound.Stop();
       } else {

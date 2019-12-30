@@ -39,6 +39,7 @@ void Input::Update(GLFWwindow* window) {
   glfwGetCursorPos(window, &mouse_x, &mouse_y);
   mouse_ = glm::vec2(mouse_x, mouse_y);
 
+  // Update cursor.
   cursor_press_previous_ = cursor_press_;
   if (touches_.size()) {
     cursor_ = touches_.begin()->second.position();
@@ -84,19 +85,18 @@ void Input::OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent) {
   for(int i = 0; i<keyEvent->numTouches; ++i) {
     const EmscriptenTouchPoint& touch = keyEvent->touches[i];
 
-    auto data = TouchDataPoint{glm::vec2(touch.targetX, touch.targetY), 0.f};
-
-    if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART) {
-      touches_[touch.identifier] = Touch{touch.identifier, {data}};
+    if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART ||
+        eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
+      auto data = TouchDataPoint{glm::vec2(touch.targetX, touch.targetY), 0.f};
+      auto& internal_touch = touches_[touch.identifier];
+      internal_touch.finger_id = touch.identifier;
+      internal_touch.data_points.push_back(data);
       continue;
     }
 
-    if (eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
-      touches_[touch.identifier].data_points.push_back(data);
-      continue;
-    }
-
-    touches_.erase(touches_.find(touch.identifier));
+    auto it = touches_.find(touch.identifier);
+    if (it != touches_.end())
+      touches_.erase(it);
   }
 }
 #endif
