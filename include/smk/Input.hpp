@@ -36,7 +36,7 @@ class Input {
 
   // Touch.
   using FingerID = int;
-  const std::map<FingerID, Touch>& touches() { return touches_; }
+  std::map<FingerID, Touch>& touches() { return touches_; }
 
   // A cursor is either the mouse or a touch. This is choosen smartly.
   bool IsCursorHold();
