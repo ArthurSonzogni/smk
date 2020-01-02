@@ -33,6 +33,7 @@ add_library(smk STATIC
   include/smk/Transformable.hpp
   include/smk/Vertex.hpp
   include/smk/VertexArray.hpp
+  include/smk/Vibrate.hpp
   include/smk/View.hpp
   include/smk/Window.hpp
   src/smk/Audio.cpp
@@ -55,6 +56,7 @@ add_library(smk STATIC
   src/smk/Transformable.cpp
   src/smk/Vertex.cpp
   src/smk/VertexArray.cpp
+  src/smk/Vibrate.cpp
   src/smk/View.cpp
   src/smk/Window.cpp
 )
