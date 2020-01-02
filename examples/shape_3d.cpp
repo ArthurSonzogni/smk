@@ -1,3 +1,7 @@
+// Copyright 2019 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <smk/Color.hpp>
