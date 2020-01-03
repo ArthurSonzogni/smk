@@ -12,15 +12,13 @@
 int main() {
   auto window = smk::Window(640, 640, "smk/example/text");
   auto font = smk::Font(asset::arial_ttf, 34);
+  auto text = smk::Text(font, "The SMK library can display fonts!!!");
 
   float step = 0;
   ExecuteMainLoop(window, [&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
 
-    smk::Text text;
-    text.SetFont(font);
-    text.SetString("The SMK library can display fonts!!!");
     text.SetPosition(10,10);
     window.Draw(text);
 

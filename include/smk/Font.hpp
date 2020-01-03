@@ -11,6 +11,7 @@
 #include <smk/OpenGL.hpp>
 #include <smk/Texture.hpp>
 #include <string>
+#include <vector>
 
 namespace smk {
 
@@ -27,6 +28,7 @@ class Font {
     float advance;       // Offset to advance to next glyph
   };
   Character* GetCharacter(wchar_t) const;
+  void LoadCharacters(const std::vector<wchar_t>& chars);
 
   // --- Move only resource ----------------------------------------------------
   Font(Font&&) = default;
@@ -37,6 +39,7 @@ class Font {
 
  private:
   std::map<wchar_t, std::unique_ptr<Character>> characters_;
+  std::string filename_;
   int size_ = 0;
 };
 

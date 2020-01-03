@@ -17,15 +17,15 @@ std::wstring to_wstring(const std::string& s) {
   return converter.from_bytes(s);
 }
 
-Text::Text(const Font& font) {
+Text::Text(Font& font) {
   SetFont(font);
 }
 
-Text::Text(const Font& font, const std::string& text) : Text(font) {
+Text::Text(Font& font, const std::string& text) : Text(font) {
   SetString(text);
 }
 
-Text::Text(const Font& font, const std::wstring& text) : Text(font) {
+Text::Text(Font& font, const std::wstring& text) : Text(font) {
   SetString(text);
 }
 
@@ -37,7 +37,7 @@ void Text::SetString(const std::string& s) {
   string_ = to_wstring(s);
 }
 
-void Text::SetFont(const Font& font) {
+void Text::SetFont(Font& font) {
   font_ = &font;
 }
 
@@ -53,9 +53,14 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
       advance_y += font_->size();
       continue;
     }
+
     auto character = font_->GetCharacter(it);
-    if (!character)
-      continue;
+    if (!character) {
+      font_->LoadCharacters({it});
+      character = font_->GetCharacter(it);
+      if (!character)
+        continue;
+    }
 
     if (character->texture.id) {
       sprite.SetPosition(advance_x + character->bearing.x,

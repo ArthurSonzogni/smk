@@ -15,14 +15,14 @@ class Font;
 class Text : public Transformable {
  public:
   Text() = default;
-  Text(const Font& font);
-  Text(const Font& font, const std::string& text);
-  Text(const Font& font, const std::wstring& text);
+  Text(Font& font);
+  Text(Font& font, const std::string& text);
+  Text(Font& font, const std::wstring& text);
   virtual ~Text() = default;
 
   void SetString(const std::wstring&);
   void SetString(const std::string&);
-  void SetFont(const Font& font);
+  void SetFont(Font& font);
 
   virtual void Draw(RenderTarget& target, RenderState state) const override;
 
@@ -34,7 +34,7 @@ class Text : public Transformable {
   Text& operator=(const Text&) = default;
 
  public:
-  const Font* font_ = nullptr;
+  Font* font_ = nullptr;
   std::wstring string_;
 };
 

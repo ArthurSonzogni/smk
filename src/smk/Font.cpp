@@ -24,31 +24,40 @@ Font::Character* Font::GetCharacter(wchar_t c) const {
 void Font::operator=(Font&& other) {
   characters_.insert(std::make_move_iterator(begin(other.characters_)),
                      std::make_move_iterator(end(other.characters_)));
+  filename_ = other.filename_;
   size_ = other.size_;
 }
 
 // static
-Font::Font(const std::string& filename, int size) {
-  size_ = size;
+Font::Font(const std::string& filename, int size)
+    : filename_(filename), size_(size) {
+  std::vector<wchar_t> preloaded_characters;
+  for (wchar_t c = 0; c < 256; ++c)
+    preloaded_characters.push_back(c);
+  LoadCharacters(preloaded_characters);
+}
+
+void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
   FT_Library ft;
-  if (FT_Init_FreeType(&ft))
+  if (FT_Init_FreeType(&ft)) {
     std::cout << "ERROR::FREETYPE: Could not init FreeType Library"
               << std::endl;
+  }
 
   FT_Face face;
-  if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
-    std::cout << "ERROR::FREETYPE: Failed to load" << filename << std::endl;
+  if (FT_New_Face(ft, filename_.c_str(), 0, &face)) {
+    std::cout << "ERROR::FREETYPE: Failed to load" << filename_ << std::endl;
   }
 
   FT_Set_Pixel_Sizes(face, 0, size_ * super_resolution);
   if (FT_Load_Char(face, 'X', FT_LOAD_RENDER)) {
-    std::cout << "ERROR::FREETYTPE: Failed to load Glyph for file " << filename
+    std::cout << "ERROR::FREETYTPE: Failed to load Glyph for file " << filename_
               << std::endl;
   }
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Disable byte-alignment restriction
 
-  for (wchar_t c = 0; c < 256; c++) {
+  for (auto c : chars) {
     // Load character glyph
     if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
       std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
