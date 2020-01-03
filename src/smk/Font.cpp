@@ -13,12 +13,25 @@ namespace smk {
 
 const float super_resolution = 1.0;
 
-Font::Character* Font::GetCharacter(wchar_t c) const {
-  auto character = characters_.find(c);
-  if (character == characters_.end())
-    return nullptr;
-  else
-    return character->second.get();
+Font::Character* Font::GetCharacter(wchar_t c) {
+  // Load from cache.
+  {
+    auto character = characters_.find(c);
+    if (character != characters_.end())
+      return character->second.get();
+  }
+
+  // Load from file.
+  if (size_)
+  {
+    LoadCharacters({c});
+    auto character = characters_.find(c);
+    if (character != characters_.end())
+      return character->second.get();
+  }
+
+  // Fallback.
+  return nullptr;
 }
 
 void Font::operator=(Font&& other) {
@@ -28,7 +41,6 @@ void Font::operator=(Font&& other) {
   size_ = other.size_;
 }
 
-// static
 Font::Font(const std::string& filename, int size)
     : filename_(filename), size_(size) {
   std::vector<wchar_t> preloaded_characters;
@@ -40,18 +52,18 @@ Font::Font(const std::string& filename, int size)
 void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
   FT_Library ft;
   if (FT_Init_FreeType(&ft)) {
-    std::cout << "ERROR::FREETYPE: Could not init FreeType Library"
+    std::cerr << "SMK > FreeType: Could not init FreeType Library"
               << std::endl;
   }
 
   FT_Face face;
   if (FT_New_Face(ft, filename_.c_str(), 0, &face)) {
-    std::cout << "ERROR::FREETYPE: Failed to load" << filename_ << std::endl;
+    std::cerr << "SMK > FreeType: Failed to load" << filename_ << std::endl;
   }
 
   FT_Set_Pixel_Sizes(face, 0, size_ * super_resolution);
   if (FT_Load_Char(face, 'X', FT_LOAD_RENDER)) {
-    std::cout << "ERROR::FREETYTPE: Failed to load Glyph for file " << filename_
+    std::cerr << "ERROR::FREETYTPE: Failed to load Glyph for file " << filename_
               << std::endl;
   }
 
@@ -60,7 +72,8 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
   for (auto c : chars) {
     // Load character glyph
     if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-      std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+      std::wcout << L"SMK > FreeType: Failed to load Glyph: \"" << c << "\""
+                 << std::endl;
       continue;
     }
 

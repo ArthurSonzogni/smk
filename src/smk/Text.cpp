@@ -55,12 +55,8 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
     }
 
     auto character = font_->GetCharacter(it);
-    if (!character) {
-      font_->LoadCharacters({it});
-      character = font_->GetCharacter(it);
-      if (!character)
+    if (!character)
         continue;
-    }
 
     if (character->texture.id) {
       sprite.SetPosition(advance_x + character->bearing.x,

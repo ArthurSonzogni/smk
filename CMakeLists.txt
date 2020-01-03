@@ -73,7 +73,7 @@ target_compile_options(smk
  PRIVATE
   -Wall
   #-Werror
-  #-pedantic-errors // TODO(arthursonzogni) enable this.
+  #-pedantic-errors
   -Wextra
 )
 

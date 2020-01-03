@@ -27,8 +27,7 @@ class Font {
     glm::ivec2 bearing;  // Offset from baseline to left/top of glyph
     float advance;       // Offset to advance to next glyph
   };
-  Character* GetCharacter(wchar_t) const;
-  void LoadCharacters(const std::vector<wchar_t>& chars);
+  Character* GetCharacter(wchar_t);
 
   // --- Move only resource ----------------------------------------------------
   Font(Font&&) = default;
@@ -38,6 +37,8 @@ class Font {
   // ---------------------------------------------------------------------------
 
  private:
+  void LoadCharacters(const std::vector<wchar_t>& chars);
+
   std::map<wchar_t, std::unique_ptr<Character>> characters_;
   std::string filename_;
   int size_ = 0;
