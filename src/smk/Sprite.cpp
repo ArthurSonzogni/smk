@@ -40,10 +40,10 @@ Sprite::Sprite(const Framebuffer& framebuffer) {
 }
 
 void Sprite::SetTextureRectangle(const Rectangle& rectangle) {
-  float l = (rectangle.left + 0.5) / texture()->width();
-  float r = (rectangle.right - 0.5) / texture()->width();
-  float t = (rectangle.top + 0.5) / texture()->height();
-  float b = (rectangle.bottom - 0.5) / texture()->height();
+  float l = (rectangle.left + 0.5) / texture().width();
+  float r = (rectangle.right - 0.5) / texture().width();
+  float t = (rectangle.top + 0.5) / texture().height();
+  float b = (rectangle.bottom - 0.5) / texture().height();
   float www = rectangle.width();
   float hhh = rectangle.height();
   SetVertexArray(VertexArray(std::vector<Vertex>({

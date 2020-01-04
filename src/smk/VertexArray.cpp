@@ -24,12 +24,12 @@ VertexArray::~VertexArray() {
   GLuint vao = vao_;
   int* ref_count = ref_count_;
 
+  if (!vbo)
+    return;
+
   vbo_ = 0;
   vao_ = 0;
   ref_count_ = nullptr;
-
-  if (!vbo)
-    return;
 
   if (ref_count) {
     --(*ref_count);
@@ -94,6 +94,14 @@ VertexArray::VertexArray(const std::vector<Vertex3D>& array) {
   size_ = array.size();
   Allocate(sizeof(Vertex3D), (void*)array.data());
   Vertex3D::Bind();
+}
+
+bool VertexArray::operator==(const smk::VertexArray& other) const {
+  return vbo_ == other.vbo_;
+}
+
+bool VertexArray::operator!=(const smk::VertexArray& other) const {
+  return vbo_ != other.vbo_;
 }
 
 }  // namespace smk.

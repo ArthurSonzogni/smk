@@ -43,14 +43,14 @@ EM_BOOL OnTouchEvent(int eventType,
 
 #endif
 
-#ifndef NDEBUG
-void GLAPIENTRY OpenGLDebugMessageCallback(GLenum /*source*/,
-                                           GLenum type,
-                                           GLuint /*id*/,
-                                           GLenum /*severity*/,
-                                           GLsizei length,
-                                           const GLchar* message,
-                                           const void* /*userParam*/) {
+#if !defined NDEBUG && !defined __EMSCRIPTEN__
+void OpenGLDebugMessageCallback(GLenum /*source*/,
+                                GLenum type,
+                                GLuint /*id*/,
+                                GLenum /*severity*/,
+                                GLsizei length,
+                                const GLchar* message,
+                                const void* /*userParam*/) {
   if (type == GL_DEBUG_TYPE_OTHER)
     return;
   std::cerr << "SMK > OpenGL error: " << std::string(message, length)
@@ -110,7 +110,7 @@ Window::Window(int width, int height, const std::string& title) {
   }
 #endif
 
-#ifndef NDEBUG
+#if !defined NDEBUG && !defined __EMSCRIPTEN__
   glEnable(GL_DEBUG_OUTPUT);
   glDebugMessageCallback(OpenGLDebugMessageCallback, 0);
 #endif

@@ -31,6 +31,8 @@ class VertexArray {
   VertexArray& operator=(VertexArray&&);
   VertexArray& operator=(const VertexArray&);
   // ---------------------------------------------------------------------------
+  bool operator==(const smk::VertexArray&) const;
+  bool operator!=(const smk::VertexArray&) const;
 
   int size() const { return size_; }
 

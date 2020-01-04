@@ -8,16 +8,17 @@
 #include <smk/Texture.hpp>
 
 namespace smk {
+bool invalidate_texture = false;
 namespace {
 
 static smk::Texture white_texture;
 
-Texture* WhiteTexture() {
+Texture& WhiteTexture() {
   if (white_texture.id() == 0) {
     const uint8_t data[4] = {255, 255, 255, 255};
     white_texture = smk::Texture(data, 1, 1);
   }
-  return &white_texture;
+  return white_texture;
 }
 
 RenderTarget* render_target = nullptr;
@@ -190,8 +191,6 @@ void RenderTarget::Draw(const Drawable& drawable) {
   state.shader_program = shader_program_;
   state.view = glm::mat4(1.0);
   state.color = smk::Color::White;
-  state.vertex_array = nullptr;
-  state.texture = nullptr;
   state.blend_mode = smk::BlendMode::Alpha;
   drawable.Draw(*this, state);
 }
@@ -200,7 +199,7 @@ void RenderTarget::Draw(const RenderState& state) {
   // Vertex Array
   if (cached_render_state_.vertex_array != state.vertex_array) {
     cached_render_state_.vertex_array = state.vertex_array;
-    state.vertex_array->Bind();
+    state.vertex_array.Bind();
   }
 
   // Shader
@@ -220,12 +219,12 @@ void RenderTarget::Draw(const RenderState& state) {
   state.shader_program->SetUniform("view", state.view);
 
   // Texture
-  auto* texture = state.texture;
-  if (!texture)
-    texture = WhiteTexture();
-  if (cached_render_state_.texture != texture) {
+  auto& texture = state.texture.id() ?
+    state.texture : WhiteTexture();
+  if (cached_render_state_.texture != texture || invalidate_texture) {
     cached_render_state_.texture = texture;
-    texture->Bind();
+    texture.Bind();
+    invalidate_texture = false;
   }
 
   if (cached_render_state_.blend_mode != state.blend_mode) {
@@ -237,7 +236,7 @@ void RenderTarget::Draw(const RenderState& state) {
                         state.blend_mode.src_alpha, state.blend_mode.dst_alpha);
   }
 
-  glDrawArrays(GL_TRIANGLES, 0, state.vertex_array->size());
+  glDrawArrays(GL_TRIANGLES, 0, state.vertex_array.size());
 }
 
 void RenderTarget::SetView(const View& view) {

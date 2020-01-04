@@ -10,6 +10,7 @@
 #include "StbImage.hpp"
 
 namespace smk {
+extern bool invalidate_texture;
 
 int next_power_of_2(int v) {
   return v;
@@ -72,6 +73,7 @@ void Texture::Load(const uint8_t* data, int width, int height, Option option) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, option.wrap_s);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, option.wrap_t);
   glBindTexture(GL_TEXTURE_2D, GL_NONE);
+  invalidate_texture = true;
 }
 
 Texture::Texture(GLuint id, int width, int height)
@@ -102,6 +104,10 @@ Texture::Texture(Texture&& other) {
   operator=(std::move(other));
 }
 
+Texture::Texture(const Texture& other) {
+  operator=(other);
+}
+
 void Texture::operator=(Texture&& other) {
   this->~Texture();
   std::swap(id_, other.id_);
@@ -130,6 +136,14 @@ Texture& Texture::operator=(const Texture& other) {
 void Texture::Bind(GLuint activetexture) const {
   glActiveTexture(activetexture);
   glBindTexture(GL_TEXTURE_2D, id_);
+}
+
+bool Texture::operator==(const Texture& other) {
+  return id_ == other.id_;
+}
+
+bool Texture::operator!=(const Texture& other) {
+  return id_ != other.id_;
 }
 
 }  // namespace smk

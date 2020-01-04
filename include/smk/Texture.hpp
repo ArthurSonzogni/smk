@@ -40,6 +40,9 @@ struct Texture {
   Texture(const Texture&);
   void operator=(Texture&&);
   Texture& operator=(const Texture&);
+  //----------------------------------------------------------------------------
+  bool operator==(const Texture& other);
+  bool operator!=(const Texture& other);
 
  private:
   void Load(const uint8_t* data, int width, int height, Option option);

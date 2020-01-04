@@ -23,8 +23,8 @@ class TransformableBase : public Drawable {
   const glm::vec4& color() const { return color_; }
 
   // Texture
-  void SetTexture(const Texture& texture);
-  const Texture* texture() const { return texture_; }
+  void SetTexture(Texture texture);
+  const Texture& texture() const { return texture_; }
 
   // BlendMode
   void SetBlendMode(const BlendMode&);
@@ -32,7 +32,7 @@ class TransformableBase : public Drawable {
 
   // VertexArray
   void SetVertexArray(VertexArray vertex_array);
-  const VertexArray* vertex_array() const { return &vertex_array_; }
+  const VertexArray vertex_array() const { return vertex_array_; }
 
   // Drawable override
   virtual void Draw(RenderTarget& target, RenderState state) const override;
@@ -46,7 +46,7 @@ class TransformableBase : public Drawable {
 
  private:
   glm::vec4 color_ = {1.0, 1.0, 1.0, 1.0};
-  const Texture* texture_ = nullptr;
+  Texture texture_;
   BlendMode blend_mode_;
   VertexArray vertex_array_;
 };

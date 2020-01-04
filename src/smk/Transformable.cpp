@@ -79,8 +79,8 @@ void TransformableBase::SetBlendMode(const BlendMode& blend_mode) {
   blend_mode_ = blend_mode;
 }
 
-void TransformableBase::SetTexture(const Texture& texture) {
-  texture_ = &texture;
+void TransformableBase::SetTexture(Texture texture) {
+  texture_ = std::move(texture);
 }
 
 void TransformableBase::SetVertexArray(VertexArray vertex_array) {

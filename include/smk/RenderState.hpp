@@ -15,8 +15,8 @@ namespace smk {
 
 struct RenderState {
   ShaderProgram* shader_program = nullptr;
-  const Texture* texture = nullptr;
-  const VertexArray* vertex_array = nullptr;
+  Texture texture;
+  VertexArray vertex_array;
   glm::mat4 view;
   glm::vec4 color;
   BlendMode blend_mode = BlendMode::Alpha;
