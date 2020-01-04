@@ -11,8 +11,6 @@
 
 namespace smk {
 
-const float super_resolution = 1.0;
-
 Font::Character* Font::GetCharacter(wchar_t c) {
   // Load from cache.
   {
@@ -61,7 +59,7 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
     std::cerr << "SMK > FreeType: Failed to load" << filename_ << std::endl;
   }
 
-  FT_Set_Pixel_Sizes(face, 0, size_ * super_resolution);
+  FT_Set_Pixel_Sizes(face, 0, size_);
   if (FT_Load_Char(face, 'X', FT_LOAD_RENDER)) {
     std::cerr << "ERROR::FREETYTPE: Failed to load Glyph for file " << filename_
               << std::endl;
@@ -80,12 +78,9 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
     int width = face->glyph->bitmap.width;
     int height = face->glyph->bitmap.rows;
     auto character = std::make_unique<Character>();
-    character->texture.width = width;
-    character->texture.height = height;
     character->bearing =
-        glm::ivec2(+face->glyph->bitmap_left / super_resolution,
-                   -face->glyph->bitmap_top / super_resolution);
-    character->advance = face->glyph->advance.x / (64.0f * super_resolution);
+        glm::ivec2(+face->glyph->bitmap_left, -face->glyph->bitmap_top);
+    character->advance = face->glyph->advance.x / (64.0f);
 
     if (width * height != 0) {
       std::vector<uint8_t> buffer_rgba(width * height * 4);
@@ -99,19 +94,7 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
           buffer_rgba[j++] = v;
         }
       }
-
-      // Generate texture
-      glGenTextures(1, &character->texture.id);
-      glBindTexture(GL_TEXTURE_2D, character->texture.id);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                   GL_UNSIGNED_BYTE, buffer_rgba.data());
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-      character->texture.width /= super_resolution;
-      character->texture.height /= super_resolution;
+      character->texture = smk::Texture(buffer_rgba.data(), width, height);
     }
 
     characters_[c] = std::move(character);

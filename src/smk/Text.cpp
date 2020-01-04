@@ -56,12 +56,12 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
 
     auto character = font_->GetCharacter(it);
     if (!character)
-        continue;
+      continue;
 
-    if (character->texture.id) {
+    if (character->texture.id()) {
+      auto sprite = smk::Sprite(character->texture);
       sprite.SetPosition(advance_x + character->bearing.x,
                          advance_y + character->bearing.y);
-      sprite.SetTexture(character->texture);
       sprite.Draw(target, state);
     }
     advance_x += character->advance;

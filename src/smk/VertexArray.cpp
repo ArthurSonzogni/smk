@@ -20,22 +20,27 @@ void VertexArray::Allocate(int element_size, void* data) {
 }
 
 VertexArray::~VertexArray() {
-  if (!vbo_)
+  GLuint vbo = vbo_;
+  GLuint vao = vao_;
+  int* ref_count = ref_count_;
+
+  vbo_ = 0;
+  vao_ = 0;
+  ref_count_ = nullptr;
+
+  if (!vbo)
     return;
 
-  if (ref_count_) {
-    --(*ref_count_);
-    if (*ref_count_)
+  if (ref_count) {
+    --(*ref_count);
+    if (*ref_count)
       return;
-    delete ref_count_;
-    ref_count_ = nullptr;
+    delete ref_count;
+    ref_count = nullptr;
   }
 
-  glDeleteBuffers(1, &vbo_);
-  vbo_ = 0;
-
-  glDeleteVertexArrays(1, &vao_);
-  vao_ = 0;
+  glDeleteBuffers(1, &vbo);
+  glDeleteVertexArrays(1, &vao);
 }
 
 void VertexArray::Bind() const {

@@ -3,11 +3,11 @@
 // the LICENSE file.
 
 #include <smk/Color.hpp>
-#include <smk/Window.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
-#include "asset.hpp"
+#include <smk/Window.hpp>
 #include "./util.hpp"  // ExecuteMainLoop
+#include "asset.hpp"
 
 #include <iostream>
 
@@ -16,9 +16,8 @@ int main() {
   auto texture = smk::Texture(asset::hero_png);
 
   auto sprite_full = smk::Sprite(texture);
-  auto sprite_subpart = smk::Sprite(texture);
-  sprite_subpart.SetTextureRectangle({5, 5, 25, 25});
-  sprite_subpart.Move(35,5);
+  auto sprite_subpart = smk::Sprite(texture, {5, 5, 25, 25});
+  sprite_subpart.Move(35, 5);
 
   ExecuteMainLoop(window, [&] {
     window.PoolEvents();

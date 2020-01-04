@@ -12,17 +12,15 @@ namespace smk {
 Framebuffer::Framebuffer(int width, int height) {
   width_ = width;
   height_ = height;
-
-  color_texture.width = width_;
-  color_texture.height = height_;
+  GLuint id;
 
   // The frame buffer.
   glGenFramebuffers(1, &frame_buffer_);
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
 
   // The color buffer.
-  glGenTextures(1, &(color_texture.id));
-  glBindTexture(GL_TEXTURE_2D, color_texture.id);
+  glGenTextures(1, &id);
+  glBindTexture(GL_TEXTURE_2D, id);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB,
                GL_UNSIGNED_BYTE, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -31,7 +29,7 @@ Framebuffer::Framebuffer(int width, int height) {
 
   // Attach the texture to the framebuffer.
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                         color_texture.id, 0);
+                         id, 0);
 
   // The render buffer.
   glGenRenderbuffers(1, &render_buffer_);
@@ -51,6 +49,8 @@ Framebuffer::Framebuffer(int width, int height) {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   InitRenderTarget();
+
+  color_texture = smk::Texture(id, width_, height_);
 }
 
 Framebuffer::~Framebuffer() {

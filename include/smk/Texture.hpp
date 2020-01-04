@@ -22,23 +22,34 @@ struct Texture {
   Texture();  // empty texture.
   Texture(const std::string& filename);
   Texture(const std::string& filename, Option option);
-
+  Texture(const uint8_t* data, int width, int height);
+  Texture(const uint8_t* data, int width, int height, Option option);
+  Texture(GLuint id, int width, int height);
   ~Texture();
 
   void Bind(GLuint active_texture = GL_TEXTURE0) const;
 
-  GLuint id = 0;
-  int width = -1;
-  int height = -1;
+  int width() const { return width_; }
+  int height() const { return height_; }
+  GLuint id() const { return id_; }
 
-  operator bool() const { return id != 0; }
+  operator bool() const { return id_ != 0; }
 
-  // --- Move only resource ----------------------------------------------------
+  // --- Copyable Movable resource ---------------------------------------------
   Texture(Texture&&);
-  Texture(const Texture&) = delete;
+  Texture(const Texture&);
   void operator=(Texture&&);
-  void operator=(const Texture&) = delete;
-  // ---------------------------------------------------------------------------
+  Texture& operator=(const Texture&);
+
+ private:
+  void Load(const uint8_t* data, int width, int height, Option option);
+  GLuint id_ = 0;
+  int width_ = -1;
+  int height_ = -1;
+
+  // Used to support copy. Nullptr as long as this class is not copied.
+  // Otherwise an integer counting how many instances shares this resource.
+  mutable int* ref_count_ = nullptr;
 };
 
 }  // namespace smk

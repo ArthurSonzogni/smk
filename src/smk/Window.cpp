@@ -42,6 +42,22 @@ EM_BOOL OnTouchEvent(int eventType,
 }
 
 #endif
+
+#ifndef NDEBUG
+void GLAPIENTRY OpenGLDebugMessageCallback(GLenum /*source*/,
+                                           GLenum type,
+                                           GLuint /*id*/,
+                                           GLenum /*severity*/,
+                                           GLsizei length,
+                                           const GLchar* message,
+                                           const void* /*userParam*/) {
+  if (type == GL_DEBUG_TYPE_OTHER)
+    return;
+  std::cerr << "SMK > OpenGL error: " << std::string(message, length)
+            << std::endl;
+}
+#endif
+
 }  // namespace
 
 Window::Window() {
@@ -94,6 +110,11 @@ Window::Window(int width, int height, const std::string& title) {
   }
 #endif
 
+#ifndef NDEBUG
+  glEnable(GL_DEBUG_OUTPUT);
+  glDebugMessageCallback(OpenGLDebugMessageCallback, 0);
+#endif
+
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER);
   const GLubyte* version = glGetString(GL_VERSION);
@@ -110,7 +131,8 @@ Window::Window(int width, int height, const std::string& title) {
   emscripten_set_touchstart_callback("#canvas", (void*)id_, true, OnTouchEvent);
   emscripten_set_touchend_callback("#canvas", (void*)id_, true, OnTouchEvent);
   emscripten_set_touchmove_callback("#canvas", (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchcancel_callback("#canvas", (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchcancel_callback("#canvas", (void*)id_, true,
+                                      OnTouchEvent);
 #endif
 }
 

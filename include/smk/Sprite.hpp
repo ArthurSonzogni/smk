@@ -19,18 +19,18 @@ class Sprite : public Transformable {
  public:
   Sprite() = default;
   Sprite(const Texture& texture);
+  Sprite(const Texture& texture, const Rectangle rectangle);
   Sprite(const Framebuffer& framebuffer);
 
-  void SetTexture(const Texture& texture);
-  void SetFramebuffer(const Framebuffer& framebuffer);
-
-  // Useful to display a sub part of the texture.
-  void SetTextureRectangle(const Rectangle& rectangle);
-
+  // Movable only.
   Sprite(Sprite&&) = default;
   Sprite(const Sprite&) = default;
   Sprite& operator=(Sprite&&) = default;
   Sprite& operator=(const Sprite&) = default;
+
+ private:
+  void SetTextureRectangle(const Rectangle& rectangle);
+  void SetTexture(const Texture& texture) = delete;
 };
 
 }  // namespace smk

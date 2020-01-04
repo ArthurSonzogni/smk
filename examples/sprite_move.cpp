@@ -19,16 +19,16 @@ struct Player {
     x += dx;
 
     // Bounce against the walls.
-    if (x >= 640 - texture.width / 2)
+    if (x >= 640 - texture.width() / 2)
       dx = -dx;
-    if (x <= texture.width / 2)
+    if (x <= texture.width() / 2)
       dx = -dx;
   }
 
   void Draw(smk::Window& window) {
     smk::Sprite sprite(texture);
     sprite.SetPosition({x, y});
-    sprite.SetCenter(texture.width / 2.0, 0.f);
+    sprite.SetCenter(texture.width() / 2.0, 0.f);
     sprite.SetScale(dx > 0 ? 1.0 : -1.0, 1.0);
     window.Draw(sprite);
   }

@@ -13,15 +13,9 @@ namespace {
 static smk::Texture white_texture;
 
 Texture* WhiteTexture() {
-  if (white_texture.id == 0) {
-    white_texture.width = 1;
-    white_texture.height = 1;
+  if (white_texture.id() == 0) {
     const uint8_t data[4] = {255, 255, 255, 255};
-    glGenTextures(1, &white_texture.id);
-    glBindTexture(GL_TEXTURE_2D, white_texture.id);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, white_texture.width,
-                 white_texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glBindTexture(GL_TEXTURE_2D, GL_NONE);
+    white_texture = smk::Texture(data, 1, 1);
   }
   return &white_texture;
 }
