@@ -13,6 +13,23 @@ class Sound;
 // Please make sure to init OpenAL in main() before loading any file. You can
 // initialize the "empty" version first and then std::move the one associated
 // with a file.
+//
+
+/// @brief A sound file loaded in memory.
+/// @see Sound
+///
+/// Example
+/// -------
+/// ~~~cpp
+/// // Load a sound file.
+/// auto sound_buffer = smk::SoundBuffer(asset::water_mp3);
+///
+/// // Create a sound source.
+/// auto sound = smk::Sound(sound_buffer);
+///
+/// // Start playing.
+/// sound.Play()
+/// ~~~
 class SoundBuffer {
  public:
   SoundBuffer();  // Empty sound buffer

@@ -15,6 +15,16 @@ struct EmscriptenTouchEvent;
 
 namespace smk {
 
+/// @brief A class for querying input state (keyboard, mouse, touch).
+/// The Input class is tied to a smk::Window. You need to call regularly
+/// smk::Screen::PoolEvent to update the input state.
+///
+/// To know keyboard and mouse buttons identifer you need to refer to the GLFW
+/// definitions:
+/// * [keyboard buttons](https://www.glfw.org/docs/latest/group__keys.html)
+/// * [mouse buttons](https://www.glfw.org/docs/latest/group__buttons.html)
+///
+/// @see smk::Window::PoolEvents()
 class Input {
  public:
   // Update state.
@@ -32,11 +42,11 @@ class Input {
   bool IsMouseHold(int key);
   bool IsMousePressed(int key);
   bool IsMouseReleased(int key);
-  glm::vec2 mouse() { return mouse_; }
+  glm::vec2 mouse();
 
   // Touch.
   using FingerID = int;
-  std::map<FingerID, Touch>& touches() { return touches_; }
+  std::map<FingerID, Touch>& touches();
 
   // A cursor is either the mouse or a touch. This is choosen smartly.
   bool IsCursorHold();

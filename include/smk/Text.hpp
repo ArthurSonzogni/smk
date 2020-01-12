@@ -12,9 +12,31 @@
 namespace smk {
 class Font;
 
+/// @example text.cpp
+
+/// @brief A class for displaying text.
+///
+/// A Text uses the Font's glyphs and displays them to the screen. A Text is a
+/// Transformable object, so you can  move/rotate/scale/colorize it.
+///
+/// Example:
+/// -------
+///
+/// ~~~cpp
+/// auto font = smk::Font("./arial.ttf", 32);
+///
+/// [...]
+///
+/// auto text = smk::Text(font, "The SMK library can draw text");
+///
+/// text.SetPosition(300,300);
+/// text.SetColor(smk::Color::White);
+///
+/// window.Draw(text);
+/// ~~~
 class Text : public Transformable {
  public:
-  Text() = default;
+  Text();
   Text(Font& font);
   Text(Font& font, const std::string& text);
   Text(Font& font, const std::wstring& text);

@@ -84,6 +84,7 @@ Audio::~Audio() {
 }
 
 // static
+/// @return true if there is at least one Audio class instanciated.
 bool Audio::Initialized() {
   return ref_count;
 }

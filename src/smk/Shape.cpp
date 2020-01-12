@@ -6,18 +6,21 @@
 #include <smk/Shape.hpp>
 
 namespace smk {
-namespace Shape {
 
-Transformable Shape(VertexArray vertex_array) {
+Transformable Shape::FromVertexArray(VertexArray vertex_array) {
   Transformable drawable;
   drawable.SetVertexArray(std::move(vertex_array));
   return drawable;
 }
 
-Transformable Line(glm::vec2 a, glm::vec2 b, float thickness) {
+/// @brief Return a line with a given thickness
+/// @param a The first end.
+/// @param b Second end.
+/// @param thickness This line thickness.
+Transformable Shape::Line(glm::vec2 a, glm::vec2 b, float thickness) {
   glm::vec2 dt =
       glm::normalize(glm::vec2(b.y - a.y, -b.x + a.x)) * thickness * 0.5f;
-  return Shape(VertexArray({
+  return FromVertexArray(VertexArray({
       {a + dt, {0.f, 0.f}},
       {b + dt, {1.f, 0.f}},
       {b - dt, {1.f, 1.f}},
@@ -27,7 +30,8 @@ Transformable Line(glm::vec2 a, glm::vec2 b, float thickness) {
   }));
 }
 
-Transformable Square() {
+/// @brief Return the square [0,1]x[0,1]
+Transformable Shape::Square() {
   static VertexArray vertex_array;
   if (!vertex_array.size()) {
     vertex_array = VertexArray({
@@ -40,14 +44,19 @@ Transformable Square() {
     });
   }
 
-  return Shape(VertexArray(vertex_array));
+  return FromVertexArray(VertexArray(vertex_array));
 }
 
-Transformable Circle(float radius) {
+/// @brief Return a circle.
+/// @param radius The circle'radius.
+Transformable Shape::Circle(float radius) {
   return Circle(radius, 16 + radius * 0.9);
 }
 
-Transformable Circle(float radius, int subdivisions) {
+/// @brief Return a circle.
+/// @param radius The circle'radius.
+/// @param subdivisions The number of triangles used for drawing the circle.
+Transformable Shape::Circle(float radius, int subdivisions) {
   std::vector<Vertex> v;
   glm::vec2 p1 = glm::vec2(1.0f, 0.0f);
   glm::vec2 t1 = glm::vec2(0.5f, 0.5f) + 0.5f * p1;
@@ -64,10 +73,11 @@ Transformable Circle(float radius, int subdivisions) {
     t1 = t2;
   }
 
-  return Shape(VertexArray(std::move(v)));
+  return FromVertexArray(VertexArray(std::move(v)));
 }
 
-Transformable3D Cube() {
+/// @brief Return a centered 1x1x1 3D cube
+Transformable3D Shape::Cube() {
   constexpr float m = -0.5f;
   constexpr float z = +0.f;
   constexpr float p = +0.5f;
@@ -104,22 +114,19 @@ Transformable3D Cube() {
   return transformable;
 }
 
-Transformable3D IcoSphere(int iteration) {
+/// @brief A centered sphere
+/// @param iteration
+///   Control the number of triangle used to make the sphere. It will contain
+///   \f$ 8 \time 3^iteration\f$ triangles.
+Transformable3D Shape::IcoSphere(int iteration) {
   std::vector<glm::vec3> out = {
       {+1.f, +0.f, +0.f}, {+0.f, +1.f, +0.f}, {+0.f, +0.f, +1.f},
-
       {-1.f, +0.f, +0.f}, {+0.f, +0.f, -1.f}, {+0.f, -1.f, +0.f},
-
       {+0.f, -1.f, +0.f}, {+1.f, +0.f, +0.f}, {+0.f, +0.f, +1.f},
-
       {+0.f, +1.f, +0.f}, {+0.f, +0.f, -1.f}, {-1.f, +0.f, +0.f},
-
       {-1.f, +0.f, +0.f}, {+0.f, -1.f, +0.f}, {+0.f, +0.f, +1.f},
-
       {+1.f, +0.f, +0.f}, {+0.f, +0.f, -1.f}, {+0.f, +1.f, +0.f},
-
       {+0.f, +1.f, +0.f}, {-1.f, +0.f, +0.f}, {+0.f, +0.f, +1.f},
-
       {+0.f, -1.f, +0.f}, {+0.f, +0.f, -1.f}, {+1.f, +0.f, +0.f},
   };
 
@@ -147,7 +154,8 @@ Transformable3D IcoSphere(int iteration) {
   return transformable;
 }
 
-Transformable3D Plane() {
+/// @brief Return a centered 1x1 square in a 3D space.
+Transformable3D Shape::Plane() {
   constexpr float m = -0.5f;
   constexpr float z = +0.f;
   constexpr float p = +0.5f;
@@ -167,5 +175,4 @@ Transformable3D Plane() {
   return transformable;
 }
 
-}  // namespace Shape
 }  // namespace smk

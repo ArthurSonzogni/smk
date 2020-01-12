@@ -22,7 +22,7 @@ int main() {
     window.Draw(text);
     window.Display();
 
-    // Toggle sound.
+    // Vibrate on cursor released.
     if (window.input().IsCursorReleased())
       smk::Vibrate(30 /* ms */);
   });

@@ -9,6 +9,9 @@
 
 namespace smk {
 
+/// @brief Construct a Framebuffer of a give dimensions.
+/// @param width The width of the drawing surface.
+/// @param height The width of the drawing surface.
 Framebuffer::Framebuffer(int width, int height) {
   width_ = width;
   height_ = height;

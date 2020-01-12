@@ -17,6 +17,11 @@ namespace smk {
 class Drawable;
 struct RenderState;
 
+/// A texture where things can be / a smk::Drawable can be drawn on.
+/// 
+/// Implementated by:
+///  * Window
+///  * Framebuffer.
 class RenderTarget {
  public:
   RenderTarget();
@@ -31,20 +36,21 @@ class RenderTarget {
   // 1. Set the view
   void SetView(const View& view);
   void SetView(const glm::mat4& mat);
-  const View& GetView() const { return view_; }
+  const View& GetView() const;
 
   // 2. Set a shader to render elements.
   void SetShaderProgram(ShaderProgram* shader_program);
-  ShaderProgram* shader_program_2d() { return shader_program_2d_.get(); };
-  ShaderProgram* shader_program_3d() { return shader_program_3d_.get(); };
+  ShaderProgram* shader_program_2d();
+  ShaderProgram* shader_program_3d();
 
   // 3. Draw some stuff.
   virtual void Draw(const Drawable&);
   virtual void Draw(const RenderState&);
 
-  int height() const { return height_; }
-  int width() const { return width_; }
-  glm::vec2 dimension() const { return glm::vec2(width_, height_); }
+  // Surface dimensions:
+  glm::vec2 dimension() const;
+  int width() const;
+  int height() const;
 
  protected:
   void InitRenderTarget();

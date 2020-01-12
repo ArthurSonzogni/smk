@@ -24,7 +24,13 @@ int next_power_of_2(int v) {
   return v;
 }
 
+/// @brief Load a texture from a file.
+/// @param filename: The file name of the image to be loaded
 Texture::Texture(const std::string& filename) : Texture(filename, Option()) {}
+
+/// @brief Load a texture from a file.
+/// @param filename The file name of the image to be loaded.
+/// @param option Additionnal option (texture wrap, min filter, mag filter, ...)
 Texture::Texture(const std::string& filename, Option option) {
   FILE* file = fopen(filename.c_str(), "rb");
   if (!file) {
@@ -52,9 +58,18 @@ Texture::Texture(const std::string& filename, Option option) {
   stbi_image_free(data);
 }
 
+/// @brief Load a texture from memory (RAM)
+/// @param data The memory area to read the image from.
+/// @param width the image's with.
+/// @param height the image's height.
 Texture::Texture(const uint8_t* data, int width, int height)
     : Texture(data, width, height, Option()) {}
 
+/// @brief Load a texture from memory (RAM)
+/// @param data The memory area to read the image from.
+/// @param width the image's with.
+/// @param height the image's height.
+/// @param option Additionnal option (texture wrap, min filter, mag filter, ...)
 Texture::Texture(const uint8_t* data, int width, int height, Option option)
     : Texture() {
   width_ = width;
@@ -76,9 +91,14 @@ void Texture::Load(const uint8_t* data, int width, int height, Option option) {
   invalidate_texture = true;
 }
 
+/// @brief Import an already loaded texture. Useful
+/// @param id The OpenGL identifier of the loaded texture.
+/// @param width the image's with.
+/// @param height the image's height.
 Texture::Texture(GLuint id, int width, int height)
     : id_(id), width_(width), height_(height) {}
 
+/// @brief The null texture.
 Texture::Texture() = default;
 Texture::~Texture() {
   int* ref_count = ref_count_;
@@ -107,6 +127,7 @@ Texture::Texture(Texture&& other) {
 Texture::Texture(const Texture& other) {
   operator=(other);
 }
+
 
 void Texture::operator=(Texture&& other) {
   this->~Texture();
@@ -145,5 +166,17 @@ bool Texture::operator==(const Texture& other) {
 bool Texture::operator!=(const Texture& other) {
   return id_ != other.id_;
 }
+
+/// @brief Access the width of the texture
+/// @return The texture's width in pixel
+int Texture::width() const { return width_; }
+
+/// @brief Access the height of the texture
+/// @return The texture's height in pixel
+int Texture::height() const { return height_; }
+
+/// @brief Access the ID of the texture
+/// @return The texture's ID.
+GLuint Texture::id() const { return id_; }
 
 }  // namespace smk

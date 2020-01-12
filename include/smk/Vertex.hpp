@@ -9,6 +9,7 @@
 
 namespace smk {
 
+/// The vertex structure suitable for a 2D shader.
 struct Vertex2D {
   glm::vec2 space_position;
   glm::vec2 texture_position;
@@ -16,6 +17,7 @@ struct Vertex2D {
   static void Bind();
 };
 
+/// The vertex structure suitable for a 2D shader.
 struct Vertex3D {
   glm::vec3 space_position;
   glm::vec3 normal;

@@ -12,12 +12,17 @@
 
 namespace smk {
 
+/// @example framebuffer.cpp
+
+/// An off-screen drawable area. You can also draw it later in a smk::Sprite.
 class Framebuffer : public RenderTarget {
  public:
   Framebuffer(int width, int height);
+  ~Framebuffer();
+
+  // Move only ressource.
   Framebuffer(Framebuffer&&);
   Framebuffer(const Framebuffer&) = delete;
-  ~Framebuffer();
   void operator=(Framebuffer&&);
   void operator=(const Framebuffer&) = delete;
 

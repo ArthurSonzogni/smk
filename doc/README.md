@@ -1,7 +1,7 @@
 SMK (Simple multimedia kit)
 ----------------------------
 
-![header](./doc/header_logo.png)
+![header](header_logo.png)
 
 #### Features:
 
@@ -84,46 +84,21 @@ Play sound:
   window.SetView(view);
 ~~~
 
+### Examples:
+ * [framebuffer.cpp](@ref framebuffer.cpp)
+ * [shape_2d.cpp](@ref shape_2d.cpp)
+ * [shape_3d.cpp](@ref shape_3d.cpp)
+ * [sound.cpp](@ref sound.cpp)
+ * [sprite.cpp](@ref sprite.cpp)
+ * [sprite_move.cpp](@ref sprite_move.cpp)
+ * [text.cpp](@ref text.cpp)
+ * [texture_subrectangle.cpp](@ref texture_subrectangle.cpp)
+ * [touch.cpp](@ref touch.cpp)
+ * [util.hpp](@ref util.hpp)
+ * [vibrate.cpp](@ref vibrate.cpp)
+
 ## Games made using SMK
 
  * [InTheCube](https://github.com/ArthurSonzogni/InTheCube)
  * [IceMaze](https://github.com/ArthurSonzogni/IceMaze)
  * [pigami](https://github.com/ArthurSonzogni/pigami)
-
-Please add yours.
-
-## Story
-
-I needed to port several games made using the
-[SFML](https://www.sfml-dev.org/) to WebAssembly. SFML isn't supporting
-WebAssembly (yet), so I had to reimplement it myself. If you know the SFML, then
-SMK must be very familiar to you.
-
-## Thanks
-
-SMK depends directly on many great projects listed below:
-- [Freetype](https://github.com/aseprite/freetype2)
-- [GLEW](https://github.com/nigels-com/glew)
-- [GLFW](https://github.com/glfw/glfw)
-- [GLM](https://github.com/g-truc/glm)
-- [OpenAL-soft](https://github.com/kcat/openal-soft)
-- [libnyquist](https://github.com/ddiakopoulos/libnyquist)
-- [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
-
-
-SMK is also made possible thanks to:
- * [CMake](https://cmake.org/)
- * [Emscripten](https://github.com/kripken/emscripten)
- * [FLAC](https://github.com/xiph/flac)
- * [Git](https://git-scm.com/)
- * [LLVM](https://llvm.org/)
- * [NeoVim](https://neovim.io/)
- * [OpenGL](https://www.opengl.org/)
- * [WebAssembly](https://webassembly.org/)
- * [libogg](https://xiph.org/ogg/)
- * [libvorbis](https://www.xiph.org/vorbis/)
- * [minimp3](https://github.com/lieff/minimp3)
- * [musepack](https://github.com/ralph-irving/musepack)
- * [opus](https://github.com/xiph/opus)
- * [rtaudio](https://github.com/thestk/rtaudio)
- * [wabpack](dbry/WavPack)

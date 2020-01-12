@@ -7,15 +7,17 @@
 
 namespace smk {
 
+/// Represent the area in the game to be drawn on the screen. To preserve the
+/// screen ratio, the view ratio must be the same.
 class View {
  public:
   void SetCenter(float x, float y);
   void SetSize(float width, float height);
 
-  float Left() const { return x_ - width_ / 2; };
-  float Right() const { return x_ + width_ / 2; };
-  float Top() const { return y_ - height_ / 2; };
-  float Bottom() const { return y_ + height_ / 2; };
+  float Left() const { return x_ - width_ / 2; };     /// <
+  float Right() const { return x_ + width_ / 2; };    /// <
+  float Top() const { return y_ - height_ / 2; };     /// <
+  float Bottom() const { return y_ + height_ / 2; };  /// <
 
  public:
   float x_ = 0;

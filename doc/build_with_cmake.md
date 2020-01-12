@@ -1,5 +1,38 @@
-# CMakeLists.txt
-~~~bash
+Use SMK with CMake
+==================
+
+Add the files.
+--------------
+
+Start with a main.cpp and CMakeLists.txt files:
+
+### main.cpp
+
+~~~cpp
+#include <smk/Color.hpp>
+#include <smk/Shape.hpp>
+#include <smk/Window.hpp>
+
+int main() {
+  auto window = smk::Window(640, 480, "test");
+  auto circle = smk::Shape::Circle(200);
+  circle.SetColor(smk::Color::Red);
+  circle.SetPosition(320,240);
+
+  while (!window.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+    window.PoolEvents();
+    window.Clear(smk::Color::Black);
+    window.Draw(circle);
+    window.Display();
+    window.LimitFrameRate(60 /* fps */);
+  }
+  return 0;
+}
+~~~
+
+### CMakeLists.txt
+
+~~~cmake
 cmake_minimum_required (VERSION 3.11)
 
 FetchContent_Declare(smk GIT_REPOSITORY git@github.com:arthursonzogni/smk)
@@ -18,31 +51,10 @@ add_executable(main main.cpp)
 target_link_libraries(main smk)
 ~~~
 
-# main.cpp
-~~~cpp
-#include <smk/Color.hpp>
-#include <smk/Screen.hpp>
-#include <smk/Shape.hpp>
+Build for the desktop.
+----------------------
 
-int main() {
-  auto screen = smk::Screen(640, 480, "test");
-  auto circle = smk::Shape::Circle(200);
-  circle.SetColor(smk::Color::Red);
-  circle.SetPosition(320,240);
-
-  while (!screen.input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
-    screen.PoolEvents();
-    screen.Clear(smk::Color::Black);
-    screen.Draw(circle);
-    screen.Display();
-    screen.LimitFrameRate(60 /* fps */);
-  }
-  return 0;
-}
-~~~
-
-# Build for the desktop.
-~~~
+~~~bash
 mkdir build
 cd build
 cmake ..
@@ -50,8 +62,10 @@ make -j
 ./main
 ~~~
 
-# Build for the Web.
-~~~
+Build for the Web.
+------------------
+
+~~~bash
 mkdir build
 cd build
 emcmake cmake ..

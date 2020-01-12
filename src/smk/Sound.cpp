@@ -30,10 +30,12 @@ void Sound::EnsureSourceIsCreated() {
   alGenSources(1, &source_);
 }
 
+/// @brief Create an null Sound.
 Sound::Sound() {}
-Sound::Sound(const SoundBuffer& buffer) : Sound() {
-  SetBuffer(buffer);
-}
+
+/// @brief Create a sound reading data from a SoundBuffer
+/// @param buffer The SoundBuffer to read the data from.
+Sound::Sound(const SoundBuffer& buffer) : buffer_(&buffer) {}
 
 Sound::~Sound() {
   Stop();
@@ -41,14 +43,7 @@ Sound::~Sound() {
     alDeleteSources(1, &source_);
 }
 
-void Sound::SetBuffer(const SoundBuffer& buffer) {
-  if (buffer_ == &buffer)
-    return;
-  EnsureSourceIsCreated();
-  Stop();
-  buffer_ = &buffer;
-}
-
+/// @brief Start playing the sound.
 void Sound::Play() {
   if (!source_ || !buffer_ || !buffer_->buffer)
     return;
@@ -59,6 +54,7 @@ void Sound::Play() {
   is_playing_ = true;
 }
 
+/// @brief Stop playing the sound.
 void Sound::Stop() {
   if (!source_ || !buffer_ || !is_playing_)
     return;
@@ -67,11 +63,14 @@ void Sound::Stop() {
   is_playing_ = false;
 }
 
+/// @brief Specify whether the sound must restart when it has reached the end.
+/// @param looping whether the sound must restart when it has reached the end.
 void Sound::SetLoop(bool looping) {
   EnsureSourceIsCreated();
   alSourcei(source_, AL_LOOPING, looping);
 }
 
+/// @return return whether the sound is currently playing something or not.
 bool Sound::IsPlaying() {
   if (!source_)
     return false;

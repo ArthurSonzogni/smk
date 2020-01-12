@@ -11,16 +11,23 @@
 
 namespace smk {
 
+/// @brief A Sprite for drawing a texture.
+/// @param texture The Texture to be displayed.
 Sprite::Sprite(const Texture& texture) : Sprite() {
   Transformable::SetTexture(texture);
   SetTextureRectangle({0.f, 0.f, float(texture.width()), float(texture.height())});
 }
 
+/// @brief A Sprite for drawing a part of a Texture.
+/// @param texture The Texture to be displayed.
+/// @param rectangle A rectangle in the texture to be used.
 Sprite::Sprite(const Texture& texture, const Rectangle rectangle) {
   Transformable::SetTexture(texture);
   SetTextureRectangle(rectangle);
 }
 
+/// @brief A sprite for drawing the content of a Framebuffer.
+/// @param framebuffer The framebuffer to be used.
 Sprite::Sprite(const Framebuffer& framebuffer) {
   Transformable::SetTexture(framebuffer.color_texture);
   float l = 0.f;

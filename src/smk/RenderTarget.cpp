@@ -34,12 +34,16 @@ void RenderTarget::Bind(RenderTarget* target) {
   glViewport(0, 0, render_target->width_, render_target->height_);
 }
 
+/// @brief Build an invalid RenderTarget.
+/// It can be replaced later by using the move operator.
 RenderTarget::RenderTarget() {}
 
+/// @brief Constructor from temporary.
 RenderTarget::RenderTarget(RenderTarget&& other) {
   operator=(std::move(other));
 }
 
+/// @brief Move operator.
 void RenderTarget::operator=(RenderTarget&& other) {
   std::swap(width_, other.width_);
   std::swap(height_, other.height_);
@@ -55,12 +59,177 @@ void RenderTarget::operator=(RenderTarget&& other) {
   std::swap(frame_buffer_, other.frame_buffer_);
 }
 
+/// @brief Clear the surface with a single color.
+/// @param color: An opaque color to fill the surface.
 void RenderTarget::Clear(const glm::vec4& color) {
   Bind(this);
   glClearColor(color.r, color.g, color.b, color.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
+}
+
+/// @brief Set the View to use.
+/// @param view: The view to use.
+void RenderTarget::SetView(const View& view) {
+  view_ = view;
+  float z_x = +2.0 / view.width_;   // [0, width]  -> [-1,1]
+  float z_y = -2.0 / view.height_;  // [0, height] -> [-1,1]
+  float t_x = -view.x_ * z_x;
+  float t_y = -view.y_ * z_y;
+  SetView(glm::mat4(z_x, 0.0, 0.0, 0.0,    //
+                    0.0, z_y, 0.0, 0.0,    //
+                    0.0, 0.0, 1.0, 0.0,    //
+                    t_x, t_y, 0.0, 1.0));  //
+}
+
+/// @brief Set the View to use.
+/// @param mat: The matrix to transform from/to the OpenGL space [-1,1]^3 to the
+///             screen space.
+void RenderTarget::SetView(const glm::mat4& mat) {
+  projection_matrix_ = mat;
+}
+
+/// @brief Return the View currently assigned to this RenderTarget.
+const View& RenderTarget::GetView() const {
+  return view_;
+}
+
+/// @brief Set the ShaderProgram to be used.
+/// @param shader_program: The ShaderProgram to be used.
+///
+/// ## Example:
+///
+/// ~~~cpp
+/// auto shader_vertex = Shader::FromString(R"(
+///   layout(location = 0) in vec2 space_position;
+///   layout(location = 1) in vec2 texture_position;
+/// 
+///   uniform mat4 projection;
+///   uniform mat4 view;
+/// 
+///   out vec2 f_texture_position;
+/// 
+///   void main() {
+///     f_texture_position = texture_position;
+///     gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
+///   }
+/// )", GL_VERTEX_SHADER);
+/// 
+/// fragment_shader_2d_ = Shader::FromString(R"(
+///   in vec2 f_texture_position;
+///   uniform sampler2D texture_0;
+///   uniform vec4 color;
+///   out vec4 out_color;
+/// 
+///   void main() {
+///     vec4 inverted_color = vec4(1.0) - color;
+///     out_color = texture(texture_0, f_texture_position) * inverted_color.
+///   }
+/// )";
+/// 
+/// auto shader_program = smk::ShaderProgram>();
+/// shader_program.AddShader(vertex_shader_2d_);
+/// shader_program.AddShader(fragment_shader_2d_);
+/// shader_program.Link();
+///
+/// window.SetShaderProgram(&shader_program);
+/// ~~~
+void RenderTarget::SetShaderProgram(ShaderProgram* shader_program) {
+  shader_program_ = shader_program;
+  shader_program_->Use();
+  shader_program_->SetUniform("texture_0", 0);
+  shader_program_->SetUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  shader_program_->SetUniform("projection", glm::mat4(1.0));
+  shader_program_->SetUniform("view", glm::mat4(1.0));
+}
+
+
+/// @brief Return the default predefined 2D shader program. It is bound by
+/// default.
+ShaderProgram* RenderTarget::shader_program_2d() {
+  return shader_program_2d_.get();
+};
+
+/// @brief Return the default predefined 3D shader program.
+ShaderProgram* RenderTarget::shader_program_3d() {
+  return shader_program_3d_.get();
+};
+
+/// @brief Draw on the surface
+/// @param drawable: The object to be drawn on the surface.
+void RenderTarget::Draw(const Drawable& drawable) {
+  Bind(this);
+  RenderState state;
+  state.shader_program = shader_program_;
+  state.view = glm::mat4(1.0);
+  state.color = smk::Color::White;
+  state.blend_mode = smk::BlendMode::Alpha;
+  drawable.Draw(*this, state);
+}
+
+/// @brief Draw on the surface
+/// @param state: The RenderState to be usd for drawing.
+void RenderTarget::Draw(const RenderState& state) {
+  // Vertex Array
+  if (cached_render_state_.vertex_array != state.vertex_array) {
+    cached_render_state_.vertex_array = state.vertex_array;
+    state.vertex_array.Bind();
+  }
+
+  // Shader
+  if (cached_render_state_.shader_program != state.shader_program) {
+    cached_render_state_.shader_program = state.shader_program;
+    cached_render_state_.shader_program->Use();
+  }
+
+  // Color
+  if (cached_render_state_.color != state.color) {
+    cached_render_state_.color = state.color;
+    cached_render_state_.shader_program->SetUniform("color", state.color);
+  }
+
+  // View (not cached)
+  state.shader_program->SetUniform("projection", projection_matrix_);
+  state.shader_program->SetUniform("view", state.view);
+
+  // Texture
+  auto& texture = state.texture.id() ?
+    state.texture : WhiteTexture();
+  if (cached_render_state_.texture != texture || invalidate_texture) {
+    cached_render_state_.texture = texture;
+    texture.Bind();
+    invalidate_texture = false;
+  }
+
+  if (cached_render_state_.blend_mode != state.blend_mode) {
+    cached_render_state_.blend_mode = state.blend_mode;
+    glEnable(GL_BLEND);
+    glBlendEquationSeparate(state.blend_mode.equation_rgb,
+                            state.blend_mode.equation_alpha);
+    glBlendFuncSeparate(state.blend_mode.src_rgb, state.blend_mode.dst_rgb,
+                        state.blend_mode.src_alpha, state.blend_mode.dst_alpha);
+  }
+
+  glDrawArrays(GL_TRIANGLES, 0, state.vertex_array.size());
+}
+
+/// @brief the dimension (width, height) of the drawing area.
+/// @return the dimensions in (pixels, pixels) of the surface.
+glm::vec2 RenderTarget::dimension() const {
+  return glm::vec2(width_, height_);
+}
+
+/// @brief the width of the surface.
+/// @return the height of the surface.
+int RenderTarget::width() const {
+  return width_;
+}
+
+/// @brief the height of the surface.
+/// @return the height in pixels of the surface.
+int RenderTarget::height() const {
+  return height_;
 }
 
 void RenderTarget::InitRenderTarget() {
@@ -174,85 +343,6 @@ void RenderTarget::InitRenderTarget() {
   shader_program_3d_->SetUniform("specular_power", 4.0f);
 
   SetShaderProgram(shader_program_2d_.get());
-}
-
-void RenderTarget::SetShaderProgram(ShaderProgram* shader_program) {
-  shader_program_ = shader_program;
-  shader_program_->Use();
-  shader_program_->SetUniform("texture_0", 0);
-  shader_program_->SetUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  shader_program_->SetUniform("projection", glm::mat4(1.0));
-  shader_program_->SetUniform("view", glm::mat4(1.0));
-}
-
-void RenderTarget::Draw(const Drawable& drawable) {
-  Bind(this);
-  RenderState state;
-  state.shader_program = shader_program_;
-  state.view = glm::mat4(1.0);
-  state.color = smk::Color::White;
-  state.blend_mode = smk::BlendMode::Alpha;
-  drawable.Draw(*this, state);
-}
-
-void RenderTarget::Draw(const RenderState& state) {
-  // Vertex Array
-  if (cached_render_state_.vertex_array != state.vertex_array) {
-    cached_render_state_.vertex_array = state.vertex_array;
-    state.vertex_array.Bind();
-  }
-
-  // Shader
-  if (cached_render_state_.shader_program != state.shader_program) {
-    cached_render_state_.shader_program = state.shader_program;
-    cached_render_state_.shader_program->Use();
-  }
-
-  // Color
-  if (cached_render_state_.color != state.color) {
-    cached_render_state_.color = state.color;
-    cached_render_state_.shader_program->SetUniform("color", state.color);
-  }
-
-  // View (not cached)
-  state.shader_program->SetUniform("projection", projection_matrix_);
-  state.shader_program->SetUniform("view", state.view);
-
-  // Texture
-  auto& texture = state.texture.id() ?
-    state.texture : WhiteTexture();
-  if (cached_render_state_.texture != texture || invalidate_texture) {
-    cached_render_state_.texture = texture;
-    texture.Bind();
-    invalidate_texture = false;
-  }
-
-  if (cached_render_state_.blend_mode != state.blend_mode) {
-    cached_render_state_.blend_mode = state.blend_mode;
-    glEnable(GL_BLEND);
-    glBlendEquationSeparate(state.blend_mode.equation_rgb,
-                            state.blend_mode.equation_alpha);
-    glBlendFuncSeparate(state.blend_mode.src_rgb, state.blend_mode.dst_rgb,
-                        state.blend_mode.src_alpha, state.blend_mode.dst_alpha);
-  }
-
-  glDrawArrays(GL_TRIANGLES, 0, state.vertex_array.size());
-}
-
-void RenderTarget::SetView(const View& view) {
-  view_ = view;
-  float z_x = +2.0 / view.width_;   // [0, width]  -> [-1,1]
-  float z_y = -2.0 / view.height_;  // [0, height] -> [-1,1]
-  float t_x = -view.x_ * z_x;
-  float t_y = -view.y_ * z_y;
-  SetView(glm::mat4(z_x, 0.0, 0.0, 0.0,    //
-                    0.0, z_y, 0.0, 0.0,    //
-                    0.0, 0.0, 1.0, 0.0,    //
-                    t_x, t_y, 0.0, 1.0));  //
-}
-
-void RenderTarget::SetView(const glm::mat4& mat) {
-  projection_matrix_ = mat;
 }
 
 }  // namespace smk

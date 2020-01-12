@@ -13,12 +13,17 @@ struct Texture;
 class RenderTarget;
 class VertexArray;
 
+/// A Drawable object supporting several transformations:
+/// - Translation
+/// - Rotation.
+/// - Color filtering.
+/// - Modify blending mode. @see smk::BlendMode.
 class TransformableBase : public Drawable {
  public:
   // Tranformation.
   virtual glm::mat4 Transformation() const = 0;
 
-  // Color
+  /// Color
   void SetColor(const glm::vec4& color);
   const glm::vec4& color() const { return color_; }
 
@@ -51,6 +56,11 @@ class TransformableBase : public Drawable {
   VertexArray vertex_array_;
 };
 
+/// A 2D Drawable object supporting several transformations:
+/// - Translation
+/// - Rotation.
+/// - Color filtering.
+/// - Modify blending mode. @see smk::BlendMode.
 class Transformable : public TransformableBase {
  public:
   virtual ~Transformable() = default;
@@ -61,8 +71,8 @@ class Transformable : public TransformableBase {
 
   // Position
   void Move(glm::vec2 move);
-  void Move(float move_x, float move_y);
-  void SetPosition(float position_x, float position_y);
+  void Move(float x, float y);
+  void SetPosition(float x, float y);
   void SetPosition(glm::vec2 position);
 
   // Rotation
@@ -70,6 +80,7 @@ class Transformable : public TransformableBase {
   void SetRotation(float rotation);
 
   // Scale
+  void SetScale(float scale);
   void SetScale(glm::vec2 scale);
   void SetScale(float scale_x, float scale_y);
   void SetScaleX(float scale_x);
@@ -92,6 +103,11 @@ class Transformable : public TransformableBase {
   glm::vec2 scale_ = {1.0, 1.0};
 };
 
+/// A 2D Drawable object supporting several transformations:
+/// - Translation
+/// - Rotation.
+/// - Color filtering.
+/// - Modify blending mode. @see smk::BlendMode.
 class Transformable3D : public TransformableBase {
  public:
   virtual ~Transformable3D() = default;

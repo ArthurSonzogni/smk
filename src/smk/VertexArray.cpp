@@ -84,17 +84,25 @@ VertexArray& VertexArray::operator=(VertexArray&& other) {
   return *this;
 }
 
+/// Constructor for a vector of 2D vertices.
+/// @param array A set of 2D triangles.
 VertexArray::VertexArray(const std::vector<Vertex2D>& array) {
   size_ = array.size();
   Allocate(sizeof(Vertex2D), (void*)array.data());
   Vertex2D::Bind();
 }
 
+/// Constructor for a vector of 3D vertices.
+/// @param array A set of 3D triangles.
 VertexArray::VertexArray(const std::vector<Vertex3D>& array) {
   size_ = array.size();
   Allocate(sizeof(Vertex3D), (void*)array.data());
   Vertex3D::Bind();
 }
+
+/// @brief The size of the GPU array.
+/// @return the number of vertices in the GPU array.
+int VertexArray::size() const { return size_; }
 
 bool VertexArray::operator==(const smk::VertexArray& other) const {
   return vbo_ == other.vbo_;

@@ -12,11 +12,14 @@
 
 namespace smk {
 
-// An array of smk::Vertex moved to the GPU memory.
+/// @brief An array of smk::Vertex moved to the GPU memory. This represent a set
+/// of triangles to be drawn by the GPU.
+///
+/// This class is movable and copyable. It is refcounted. The GPU data is
+/// automatically released when the last smk::VertextArray is deleted.
 class VertexArray {
  public:
-  VertexArray();  // The invalidVertexArray.
-
+  VertexArray();  // The null VertexArray.
   VertexArray(const std::vector<Vertex2D>& array);
   VertexArray(const std::vector<Vertex3D>& array);
 
@@ -34,7 +37,7 @@ class VertexArray {
   bool operator==(const smk::VertexArray&) const;
   bool operator!=(const smk::VertexArray&) const;
 
-  int size() const { return size_; }
+  int size() const;
 
  private:
   void Allocate(int element_size, void* data);

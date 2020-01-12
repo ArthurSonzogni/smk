@@ -6,14 +6,17 @@
 
 namespace smk {
 
+/// @brief destination = source.
 const BlendMode BlendMode::Replace = {
     GL_FUNC_ADD, GL_FUNC_ADD, GL_ONE, GL_ZERO, GL_ONE, GL_ZERO,
 };
 
+/// @brief destination += source.
 const BlendMode BlendMode::Add = {
     GL_FUNC_ADD, GL_FUNC_ADD, GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE,
 };
 
+/// @brief destination -= source.
 const BlendMode BlendMode::Substract = {
     GL_FUNC_REVERSE_SUBTRACT,
     GL_FUNC_REVERSE_SUBTRACT,
@@ -23,16 +26,19 @@ const BlendMode BlendMode::Substract = {
     GL_ONE,
 };
 
+/// @brief destination = source * source.a + destination * (1 - souce.a)
 const BlendMode BlendMode::Alpha{
     GL_FUNC_ADD,  GL_FUNC_ADD,
     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
 };
 
+/// @brief destination *= source
 const BlendMode BlendMode::Multiply = {
     GL_FUNC_ADD, GL_FUNC_ADD, GL_DST_COLOR, GL_ZERO, GL_DST_ALPHA, GL_ZERO,
 };
 
+/// @brief destination = 1 - destination
 const BlendMode BlendMode::Invert = {
     GL_FUNC_ADD,
     GL_FUNC_ADD,

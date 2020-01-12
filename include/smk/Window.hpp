@@ -22,25 +22,21 @@ class View;
 class VertexArray;
 class Sprite;
 
-// Represent a window.
+/// @brief A window. You can draw objects on the window.
+///
+/// Example:
+/// --------cpp
+/// auto window = smk::Window(640, 480, "Window title");
+/// --------
 class Window : public RenderTarget {
  public:
   Window();
   Window(int width, int height, const std::string& title);
-  Window(Window&&);
-  Window(const Window&) = delete;
-  void operator=(Window&&);
-  void operator=(const Window&) = delete;
   ~Window();
 
-  // Various data about the current window.
-  // Nothing
-  GLFWwindow* window() const { return window_; }
-
-  // The time of the current frame
-  float time() const { return time_; }
-
-  Input& input() { return input_; }
+  GLFWwindow* window() const;
+  float time() const;
+  Input& input();
 
   // Pool new events. This update the |input()| element.
   void PoolEvents();
@@ -52,6 +48,12 @@ class Window : public RenderTarget {
   // Wait until the end of the frame to maintain a targetted frame per seconds.
   // (optional).
   void LimitFrameRate(float fps);
+
+  // Move-only ressource.
+  Window(Window&&);
+  Window(const Window&) = delete;
+  void operator=(Window&&);
+  void operator=(const Window&) = delete;
 
  private:
   GLFWwindow* window_ = nullptr;

@@ -10,6 +10,31 @@
 
 namespace smk {
 
+/// A texture loaded from a file into the GPU. This class support the move and
+/// copy operators. Its underlying GPU texture is refcounted and released when
+/// then last smk::Texture is deleted.
+///
+/// Example:
+/// --------
+///
+/// ~~~cpp
+/// auto texture = smk::Texture("./ball.png");
+/// ~~~
+///
+/// Supported image encoding:
+/// -------------------------
+///
+/// The SMK library uses the stb_image. So it supports the same image types:
+/// - JPEG baseline & progressive (12 bpc/arithmetic not supported, same as
+/// stock IJG lib)
+/// - PNG 1/2/4/8/16-bit-per-channel
+/// - TGA
+/// - BMP non-1bpp, non-RLE
+/// - PSD (composited view only, no extra channels, 8/16 bit-per-channel)
+/// - GIF
+/// - HDR (radiance rgbE format)
+/// - PIC (Softimage PIC)
+/// - PNM (PPM and PGM binary only)
 struct Texture {
  public:
   struct Option {
@@ -29,9 +54,9 @@ struct Texture {
 
   void Bind(GLuint active_texture = GL_TEXTURE0) const;
 
-  int width() const { return width_; }
-  int height() const { return height_; }
-  GLuint id() const { return id_; }
+  int width() const;
+  int height() const;
+  GLuint id() const;
 
   operator bool() const { return id_ != 0; }
 

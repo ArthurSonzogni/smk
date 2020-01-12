@@ -9,14 +9,30 @@
 
 namespace smk {
 
+/// @example sound.cpp
+
+/// @brief Represent a sound being played.
+/// @see SoundBuffer
+///
+/// Example
+/// -------
+/// ~~~cpp
+/// // Load a sound file.
+/// auto sound_buffer = smk::SoundBuffer(asset::water_mp3);
+///
+/// // Create a sound source.
+/// auto sound = smk::Sound(sound_buffer);
+///
+/// // Start playing.
+/// sound.Play()
+/// ~~~
+///
+/// Please make sure to init OpenAL in main() by creating a smk::Audio.
 class Sound {
  public:
-  // Please make sure to init OpenAL in main() by creating a smk::Audio.
   Sound();
   Sound(const SoundBuffer& buffer);
   ~Sound();
-  void SetBuffer(const SoundBuffer& buffer);
-  const SoundBuffer* buffer() { return buffer_; }
 
   void Play();
   void Stop();

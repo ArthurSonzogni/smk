@@ -17,7 +17,54 @@ namespace smk {
 class Shader;
 class ShaderProgram;
 
-// Loads a shader from a file into OpenGL.
+/// @brief A Shader is a little program that rest on the GPU. They are run on a
+/// specific section of the graphic pipeline.
+///
+/// This is a move-only ressource.
+///
+/// @see https://learnopengl.com/Getting-started/Shaders
+///
+/// This class is independant from SMK.
+///
+/// ## Example:
+///
+/// ~~~cpp
+/// auto shader_vertex = Shader::FromString(R"(
+///   layout(location = 0) in vec2 space_position;
+///   layout(location = 1) in vec2 texture_position;
+/// 
+///   uniform mat4 projection;
+///   uniform mat4 view;
+/// 
+///   out vec2 f_texture_position;
+/// 
+///   void main() {
+///     f_texture_position = texture_position;
+///     gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
+///   }
+/// )", GL_VERTEX_SHADER);
+/// 
+/// fragment_shader_2d_ = Shader::FromString(R"(
+///   in vec2 f_texture_position;
+///   uniform sampler2D texture_0;
+///   uniform vec4 color;
+///   out vec4 out_color;
+/// 
+///   void main() {
+///     vec4 inverted_color = vec4(1.0) - color;
+///     out_color = texture(texture_0, f_texture_position) * inverted_color.
+///   }
+/// )";
+/// 
+/// auto shader_program = smk::ShaderProgram>();
+/// shader_program.AddShader(vertex_shader_2d_);
+/// shader_program.AddShader(fragment_shader_2d_);
+/// shader_program.Link();
+///
+/// window.SetShaderProgram(&shader_program);
+/// ~~~
+//
+/// @see ShaderProgram
 class Shader {
  public:
   Shader();  // Invalid shader.
@@ -44,11 +91,15 @@ class Shader {
   friend class ShaderProgram;
 };
 
-// A shader program is a set of shader (for instance vertex shader + pixel
-// shader) defining the rendering pipeline.
-//
-// This class provide an interface to define the OpenGL uniforms and attributes
-// using GLM objects.
+/// @brief A shader program is a set of shader (for instance vertex shader +
+/// pixel shader) defining the rendering pipeline.
+///
+/// This is a move-only ressource.
+///
+/// This class provide an interface to define the OpenGL uniforms and attributes
+/// using GLM objects.
+/// 
+/// @see Shader
 class ShaderProgram {
  public:
   ShaderProgram();

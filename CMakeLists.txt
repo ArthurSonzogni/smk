@@ -92,6 +92,5 @@ target_link_libraries(smk PUBLIC glm)
 target_link_libraries(smk PRIVATE freetype)
 target_link_libraries(smk PRIVATE libnyquist)
 
-set_property(TARGET libopus PROPERTY CXX_STANDARD 17)
-
 add_subdirectory(examples)
+add_subdirectory(doc)

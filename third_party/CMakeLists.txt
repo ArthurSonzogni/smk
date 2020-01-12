@@ -48,6 +48,7 @@ if(NOT libnyquist_POPULATED)
   FetchContent_Populate(libnyquist)
   set(LIBNYQUIST_PULSE TRUE)
   add_subdirectory(${libnyquist_SOURCE_DIR} ${libnyquist_BINARY_DIR} EXCLUDE_FROM_ALL)
+  set_property(TARGET libopus PROPERTY CXX_STANDARD 17)
 endif()
 
 FetchContent_GetProperties(glm)

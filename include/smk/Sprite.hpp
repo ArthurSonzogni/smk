@@ -14,7 +14,23 @@ namespace smk {
 
 class Framebuffer;
 
-// A Drawable specialised in displaying rectangular texture.
+/// @example sprite.cpp
+/// @example sprite_move.cpp
+/// @example texture_subrectangle.cpp
+
+/// A Drawable specialised in displaying rectangular texture.
+///
+/// Example:
+/// -------
+/// ~~~cpp
+/// auto sprite = smk::Sprite(texture_ball);
+///
+/// sprite.SetCenter(32,32);
+/// sprite.SetPosition(player.x, player.y);
+/// sprite.SetRotation(player.rotation);
+///
+/// window.Draw(sprite);
+/// ~~~
 class Sprite : public Transformable {
  public:
   Sprite() = default;

@@ -13,13 +13,14 @@
 
 namespace smk {
 
+/// Contain all the data needed to draw 
 struct RenderState {
-  ShaderProgram* shader_program = nullptr;
-  Texture texture;
-  VertexArray vertex_array;
-  glm::mat4 view;
-  glm::vec4 color;
-  BlendMode blend_mode = BlendMode::Alpha;
+  ShaderProgram* shader_program = nullptr;  ///< The shader used.
+  Texture texture;                          ///< The texture 0 bound.
+  VertexArray vertex_array;                 ///< The shape to to be drawn
+  glm::mat4 view;                           ///< The "view" transformation.
+  glm::vec4 color;                          ///< The masking color.
+  BlendMode blend_mode = BlendMode::Alpha;  ///< The OpenGL BlendMode
 };
 
 }  // namespace smk

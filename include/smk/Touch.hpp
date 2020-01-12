@@ -10,6 +10,8 @@
 
 namespace smk {
 
+/// @example touch.cpp
+
 struct TouchDataPoint {
   glm::vec2 position;
   float time;

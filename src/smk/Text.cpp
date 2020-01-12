@@ -17,30 +17,45 @@ std::wstring to_wstring(const std::string& s) {
   return converter.from_bytes(s);
 }
 
+/// Construct a null Text. It can't be drawn.
+Text::Text() {}
+
+/// @brief Constructor.
+/// @param font The Font to be used for drawing glyphs.
 Text::Text(Font& font) {
   SetFont(font);
 }
 
+/// @brief Constructor.
+/// @param font The Font to be used for drawing glyphs.
+/// @param text The character string to be drawn.
 Text::Text(Font& font, const std::string& text) : Text(font) {
   SetString(text);
 }
 
+/// @brief Constructor.
+/// @param font The Font to be used for drawing glyphs.
+/// @param text The character string to be drawn.
 Text::Text(Font& font, const std::wstring& text) : Text(font) {
   SetString(text);
 }
 
+/// Update the text to be drawn.
 void Text::SetString(const std::wstring& s) {
   string_ = s;
 }
 
+/// Update the text to be drawn.
 void Text::SetString(const std::string& s) {
   string_ = to_wstring(s);
 }
 
+/// Update the Font to be used.
 void Text::SetFont(Font& font) {
   font_ = &font;
 }
 
+/// Draw the Text to the screen.
 void Text::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
   state.view *= Transformation();
@@ -68,6 +83,8 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
   }
 }
 
+/// Compute the dimension of the text when drawn to the screen.
+/// @return a tuple (width,height).
 glm::vec2 Text::ComputeDimensions() const {
   glm::vec2 dimension(0.f, 0.f);
   float advance_x = 0.f;

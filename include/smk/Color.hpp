@@ -13,6 +13,7 @@ namespace Color {
 glm::vec4 RGBA(float red, float green, float blue, float alpha);
 glm::vec4 RGB(float red, float green, float blue);
 
+// Predefined colors.
 extern glm::vec4 White;
 extern glm::vec4 Black;
 extern glm::vec4 Red;

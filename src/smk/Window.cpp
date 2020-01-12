@@ -60,11 +60,16 @@ void OpenGLDebugMessageCallback(GLenum /*source*/,
 
 }  // namespace
 
+/// @brief A null window.
 Window::Window() {
   id_ = ++id;
   window_by_id[id_] = this;
 }
 
+/// @brief The window construtor.
+/// @param width The desired width of the window.
+/// @param height The desired height of the window.
+/// @param title The window's title.
 Window::Window(int width, int height, const std::string& title) {
   id_ = ++id;
   window_by_id[id_] = this;
@@ -150,11 +155,13 @@ void Window::operator=(Window&& other) {
   window_by_id[id_] = this;
 }
 
+/// @brief Handle all the new input events. This update the input() object.
 void Window::PoolEvents() {
   glfwPollEvents();
   input_.Update(window_);
 }
 
+/// @brief Present what has been draw to the screen.
 void Window::Display() {
   // Swap Front and Back buffers (double buffering)
   glfwSwapBuffers(window_);
@@ -169,6 +176,15 @@ Window::~Window() {
   window_by_id.erase(id_);
   // glfwTerminate(); // Needed? What about multiple windows?
 }
+
+/// The window handle.
+GLFWwindow* Window::window() const { return window_; }
+
+/// The last time Window::PoolEvent() was called.
+float Window::time() const { return time_; }
+
+/// Return an object for querying the input state.
+Input& Window::input() { return input_; }
 
 void Window::UpdateDimensions() {
   int width = width_;
@@ -185,6 +201,8 @@ void Window::UpdateDimensions() {
   }
 }
 
+/// If needed, insert pause in the execution to maintain a given framerate.
+/// @param fps the desired frame rate.
 void Window::LimitFrameRate(float fps) {
   const float delta = glfwGetTime() - time_last_sleep_;
   const float target = 1.f / fps;

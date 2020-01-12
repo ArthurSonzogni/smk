@@ -17,6 +17,7 @@
 
 namespace smk {
 
+/// Called by smk::Window. This update the keyboard and mouse state.
 void Input::Update(GLFWwindow* window) {
   // Get window dimension.
   int width, height;
@@ -50,31 +51,61 @@ void Input::Update(GLFWwindow* window) {
   }
 }
 
+/// @brief Whether a keyboard button is pressed or not.
+/// @return true whenever a keyboard button is pressed.
+/// @param key The keyboard button.
 bool Input::IsKeyPressed(int key) {
   auto p = key_state_[key];
   return ((p.first == GLFW_PRESS) && (p.second == GLFW_RELEASE));
 }
 
+/// @brief Whether a keyboard button is released or not.
+/// @return true whenever a keyboard button is released
+/// @param key The keyboard button.
 bool Input::IsKeyReleased(int key) {
   auto p = key_state_[key];
   return ((p.first == GLFW_RELEASE) && (p.second == GLFW_PRESS));
 }
 
+/// @brief Whether a keyboard button is down or not.
+/// @return true whenever a keyboard button is hold.
+/// @param key The keyboard button.
 bool Input::IsKeyHold(int key) {
   auto p = key_state_[key];
   return (p.first == GLFW_PRESS);
 }
 
+/// @brief Whether a mouse button is pressed or not.
+/// @return true whenever a mouse button is pressed.
+/// @param key The mouse button.
 bool Input::IsMousePressed(int key) {
   auto p = mouse_state_[key];
   return ((p.first == GLFW_PRESS) && (p.second == GLFW_RELEASE));
 }
 
+/// @brief Whether a mouse button is released or not.
+/// @return true whenever a mouse button is released
+/// @param key The mouse button.
 bool Input::IsMouseReleased(int key) {
   auto p = mouse_state_[key];
   return ((p.first == GLFW_RELEASE) && (p.second == GLFW_PRESS));
 }
 
+/// @brief The mouse position.
+/// @return the mouse position.
+glm::vec2 Input::mouse() {
+  return mouse_;
+}
+
+/// @brief The touch states.
+/// @return the touches states.
+std::map<Input::FingerID, Touch>& Input::touches() {
+  return touches_;
+}
+
+/// @brief Whether a mouse button is down or not.
+/// @return true whenever a mouse button is hold.
+/// @param key The mouse button.
 bool Input::IsMouseHold(int key) {
   auto p = mouse_state_[key];
   return (p.first == GLFW_PRESS);
@@ -101,18 +132,27 @@ void Input::OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent) {
 }
 #endif
 
+
+/// @brief Whether the cursor is down or not.
+/// @return true whenever the cursor is down.
 bool Input::IsCursorHold() {
   return cursor_press_ && cursor_press_previous_;
 }
 
+/// @brief Whether the cursor is pressed or not
+/// @return true whenever the cursor is pressed.
 bool Input::IsCursorPressed() {
   return cursor_press_ && !cursor_press_previous_;
 }
 
+/// @brief Whether the cursor is released or not
+/// @return true whenever the cursor is released.
 bool Input::IsCursorReleased() {
   return !cursor_press_ && cursor_press_previous_;
 }
 
+/// @brief The cursor position.
+/// @return the cursor position.
 glm::vec2 Input::cursor() {
   return cursor_;
 }

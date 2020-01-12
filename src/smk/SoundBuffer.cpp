@@ -15,6 +15,7 @@ namespace smk {
 
 SoundBuffer::SoundBuffer() {}
 
+/// @brief Load a sound resource into memory from a file.
 SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
   if (!Audio::Initialized()) {
     static bool once = true;
