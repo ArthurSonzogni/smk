@@ -14,7 +14,6 @@ SMK (Simple multimedia kit)
  * [WebAssembly demo](https://arthursonzogni.github.io/smk/examples/) from the ./examples directory.
  * [documentation](https://arthursonzogni.com/SMK/doc/)
  * [starter project](https://github.com/ArthurSonzogni/smk-starter)
- * [tutorial](./doc/build_with_cmake.md)
 
 ### Open a new Window:
 

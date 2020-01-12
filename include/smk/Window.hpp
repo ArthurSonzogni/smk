@@ -25,9 +25,10 @@ class Sprite;
 /// @brief A window. You can draw objects on the window.
 ///
 /// Example:
-/// --------cpp
-/// auto window = smk::Window(640, 480, "Window title");
 /// --------
+/// ~~~cpp
+/// auto window = smk::Window(640, 480, "Window title");
+/// ~~~
 class Window : public RenderTarget {
  public:
   Window();
