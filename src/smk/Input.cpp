@@ -45,10 +45,15 @@ void Input::Update(GLFWwindow* window) {
   if (touches_.size()) {
     cursor_ = touches_.begin()->second.position();
     cursor_press_ = true;
+    touching_ = true;
+  } else if (touching_) {
+    touching_ = false;
+    cursor_press_ = false;
   } else {
     cursor_ = mouse_;
     cursor_press_ = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1);
   }
+}
 }
 
 /// @brief Whether a keyboard button is pressed or not.

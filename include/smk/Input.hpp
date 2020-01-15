@@ -69,6 +69,7 @@ class Input {
   glm::vec2 cursor_;
   bool cursor_press_ = false;
   bool cursor_press_previous_ = false;
+  bool touching_ = true;
 };
 
 }  // namespace smk

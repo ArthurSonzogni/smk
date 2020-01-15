@@ -52,10 +52,12 @@ class RenderTarget {
   int width() const;
   int height() const;
 
+  // Bind the OpenGL RenderFrame. This function is useless, because it is called
+  // automatically for you. Use this only when you use direct OpenGL call.
+  static void Bind(RenderTarget*);
+
  protected:
   void InitRenderTarget();
-
-  static void Bind(RenderTarget*);
 
   int width_ = 0;
   int height_ = 0;
