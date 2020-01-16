@@ -54,7 +54,6 @@ void Input::Update(GLFWwindow* window) {
     cursor_press_ = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1);
   }
 }
-}
 
 /// @brief Whether a keyboard button is pressed or not.
 /// @return true whenever a keyboard button is pressed.

@@ -6,8 +6,9 @@
 #include <iostream>
 #include <locale>
 #include <smk/Font.hpp>
-#include <smk/Sprite.hpp>
+#include <smk/RenderTarget.hpp>
 #include <smk/Text.hpp>
+#include <smk/VertexArray.hpp>
 #include <vector>
 
 namespace smk {
@@ -58,10 +59,19 @@ void Text::SetFont(Font& font) {
 /// Draw the Text to the screen.
 void Text::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
-  state.view *= Transformation();
-  Sprite sprite;
+  glm::mat4 transformation = state.view * Transformation();
   float advance_x = 0.f;
   float advance_y = font_->size();
+
+  state.vertex_array = VertexArray(std::vector<Vertex>({
+      {{0.f, 0.f}, {0.f, 0.f}},
+      {{0.f, 1.f}, {0.f, 1.f}},
+      {{1.f, 1.f}, {1.f, 1.f}},
+      {{0.f, 0.f}, {0.f, 0.f}},
+      {{1.f, 1.f}, {1.f, 1.f}},
+      {{1.f, 0.f}, {1.f, 0.f}},
+  }));
+
   for (const auto& it : string_) {
     if (it == U'\n') {
       advance_x = 0.f;
@@ -74,10 +84,18 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
       continue;
 
     if (character->texture.id()) {
-      auto sprite = smk::Sprite(character->texture);
-      sprite.SetPosition(advance_x + character->bearing.x,
-                         advance_y + character->bearing.y);
-      sprite.Draw(target, state);
+      const float x = advance_x + character->bearing.x;
+      const float y = advance_y + character->bearing.y;
+      const float w = character->texture.width();
+      const float h = character->texture.height();
+      state.texture = character->texture;
+      state.view = transformation * glm::mat4(w, 0.f, 0.f, 0.f,    //
+                                              0.f, h, 0.f, 0.f,    //
+                                              0.f, 0.f, 1.f, 0.f,  //
+                                              x, y, 0.f, 1.f       //
+                                    );
+
+      target.Draw(state);
     }
     advance_x += character->advance;
   }

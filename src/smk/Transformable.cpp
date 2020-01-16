@@ -109,7 +109,9 @@ void Transformable::SetScaleY(float scale_y) {
 glm::mat4 Transformable::Transformation() const {
   glm::mat4 ret = glm::mat4(1.0);
   ret = glm::translate(ret, {position_.x, position_.y, 0.0});
-  ret = glm::rotate(ret, -rotation_ * (2.f * 3.1415f / 360.f), {0.0, 0.0, 1.0});
+  if (rotation_ != 0.f)
+    ret =
+        glm::rotate(ret, -rotation_ * (2.f * 3.1415f / 360.f), {0.0, 0.0, 1.0});
   ret =
       glm::translate(ret, {-center_.x * scale_.x, -center_.y * scale_.y, 0.f});
   ret = glm::scale(ret, {scale_.x, scale_.y, 1.0});
