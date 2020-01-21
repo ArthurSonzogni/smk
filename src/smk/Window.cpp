@@ -207,9 +207,11 @@ void Window::LimitFrameRate(float fps) {
   const float delta = glfwGetTime() - time_last_sleep_;
   const float target = 1.f / fps;
   float sleep_duration = target - delta;
-  sleep_duration = std::max(0.f, std::min(target, sleep_duration));
-  std::this_thread::sleep_for(
-      std::chrono::microseconds(int(sleep_duration * 1'000'000)));
+  sleep_duration = std::min(target, sleep_duration);
+  if (sleep_duration > 0.f) {
+    std::this_thread::sleep_for(
+        std::chrono::microseconds(int(sleep_duration * 1'000'000)));
+  }
   time_last_sleep_ = glfwGetTime();
 }
 

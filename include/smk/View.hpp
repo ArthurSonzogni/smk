@@ -5,6 +5,8 @@
 #ifndef SMK_VIEW_HPP
 #define SMK_VIEW_HPP
 
+#include <glm/glm.hpp>
+
 namespace smk {
 
 /// Represent the area in the game to be drawn on the screen. To preserve the
@@ -12,7 +14,9 @@ namespace smk {
 class View {
  public:
   void SetCenter(float x, float y);
+  void SetCenter(glm::vec2 center);
   void SetSize(float width, float height);
+  void SetSize(glm::vec2 size);
 
   float Left() const { return x_ - width_ / 2; };     /// <
   float Right() const { return x_ + width_ / 2; };    /// <

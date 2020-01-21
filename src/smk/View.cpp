@@ -14,12 +14,24 @@ void View::SetCenter(float x, float y) {
   y_ = y;
 }
 
+/// @brief Set the center position of the in-game view.
+/// param center The center of the view.
+void View::SetCenter(glm::vec2 center) {
+  SetCenter(center.x, center.y);
+}
+
 /// @brief Set the size of the in-game view.
 /// param width The size of the view along the horizontal axis.
 /// param height The size of the view along the vertical axis.
 void View::SetSize(float width, float height) {
   width_ = width;
   height_ = height;
+}
+
+/// @brief Set the size of the in-game view.
+/// param center The size of the view.
+void View::SetSize(glm::vec2 size) {
+  SetSize(size.x, size.y);
 }
 
 }  // namespace smk
