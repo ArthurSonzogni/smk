@@ -14,8 +14,7 @@ namespace smk {
 /// @brief A Sprite for drawing a texture.
 /// @param texture The Texture to be displayed.
 Sprite::Sprite(const Texture& texture) : Sprite() {
-  Transformable::SetTexture(texture);
-  SetTextureRectangle({0.f, 0.f, float(texture.width()), float(texture.height())});
+  SetTexture(texture);
 }
 
 /// @brief A Sprite for drawing a part of a Texture.
@@ -46,6 +45,17 @@ Sprite::Sprite(const Framebuffer& framebuffer) {
   })));
 }
 
+/// @brief Update the sprite's texture.
+/// @param texture The Texture to be displayed.
+void Sprite::SetTexture(const Texture& texture) {
+  Transformable::SetTexture(texture);
+  SetTextureRectangle(
+      {0.f, 0.f, float(texture.width()), float(texture.height())});
+}
+
+/// @brief Update the sprite texture area.
+/// @param texture The Texture to be displayed.
+/// @param rectangle A rectangle in the texture to be used.
 void Sprite::SetTextureRectangle(const Rectangle& rectangle) {
   float l = (rectangle.left + 0.5) / texture().width();
   float r = (rectangle.right - 0.5) / texture().width();

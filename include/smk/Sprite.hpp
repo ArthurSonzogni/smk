@@ -38,15 +38,15 @@ class Sprite : public Transformable {
   Sprite(const Texture& texture, const Rectangle rectangle);
   Sprite(const Framebuffer& framebuffer);
 
-  // Movable only.
+  // Movable and copyable.
   Sprite(Sprite&&) = default;
   Sprite(const Sprite&) = default;
   Sprite& operator=(Sprite&&) = default;
   Sprite& operator=(const Sprite&) = default;
 
- private:
+  // Modify the sprite.
+  void SetTexture(const Texture& texture);
   void SetTextureRectangle(const Rectangle& rectangle);
-  void SetTexture(const Texture& texture) = delete;
 };
 
 }  // namespace smk
