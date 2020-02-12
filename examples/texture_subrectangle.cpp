@@ -6,7 +6,6 @@
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
 #include <iostream>
@@ -19,7 +18,7 @@ int main() {
   auto sprite_subpart = smk::Sprite(texture, {5, 5, 25, 25});
   sprite_subpart.Move(35, 5);
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
     window.Draw(sprite_full);

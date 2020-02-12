@@ -11,7 +11,6 @@
 #include <smk/Transformable.hpp>
 #include <smk/VertexArray.hpp>
 #include "asset.hpp"
-#include "./util.hpp" // ExecuteMainLoop
 
 int random(int& r, int modulo) {
   return (r = (r * 68152648) % 9876541) % modulo;
@@ -36,7 +35,7 @@ int main() {
   float animation_df = 0.2f;
   float time = 0.f;
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
     glEnable(GL_DEPTH_TEST);

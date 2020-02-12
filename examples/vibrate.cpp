@@ -7,7 +7,6 @@
 #include <smk/Text.hpp>
 #include <smk/Vibrate.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
 int main() {
@@ -16,7 +15,7 @@ int main() {
   auto text = smk::Text(font, "Touch to vibrate");
   text.SetPosition(10, 10);
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
     window.Draw(text);

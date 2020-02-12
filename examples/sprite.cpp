@@ -6,7 +6,6 @@
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
 int main() {
@@ -14,7 +13,7 @@ int main() {
   auto texture = smk::Texture(asset::hero_png);
   auto sprite = smk::Sprite(texture);
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
     window.Draw(sprite);

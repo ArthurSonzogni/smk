@@ -7,14 +7,13 @@
 #include <smk/Text.hpp>
 #include <smk/Font.hpp>
 #include "asset.hpp"
-#include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
   auto window = smk::Window(640, 640, "smk/example/text");
   auto font = smk::Font(asset::arial_ttf, 34);
 
   float step = 0;
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
 

@@ -41,6 +41,11 @@ EM_BOOL OnTouchEvent(int eventType,
   return true;
 }
 
+std::function<void(void)> main_loop;
+void MainLoop() {
+  return main_loop();
+}
+
 #endif
 
 #if !defined NDEBUG && !defined __EMSCRIPTEN__
@@ -139,6 +144,7 @@ Window::Window(int width, int height, const std::string& title) {
   emscripten_set_touchcancel_callback("#canvas", (void*)id_, true,
                                       OnTouchEvent);
 #endif
+
 }
 
 Window::Window(Window&& window) {
@@ -185,6 +191,40 @@ float Window::time() const { return time_; }
 
 /// Return an object for querying the input state.
 Input& Window::input() { return input_; }
+
+/// @brief Helper function. Execute the main loop of the application.
+/// On web based application: registers the loop in 'requestAnimationFrame'.
+/// On desktop based applications: This is a simple 'while' loop. The loop stops
+/// when the user presses the 'escape' button or when the |loop| function
+/// returns 'false'.
+/// @param loop The function to be called for each new frame.
+void Window::ExecuteMainLoop(std::function<bool(void)> loop) {
+#ifdef __EMSCRIPTEN__
+  main_loop = [my_loop = loop] { (void)my_loop(); };
+  emscripten_set_main_loop(&MainLoop, 0, 1);
+#else
+  while (loop())
+    LimitFrameRate(60.0f);
+#endif
+}
+
+/// @brief Helper function. Execute the main loop of the application.
+/// On web based application: registers the loop in 'requestAnimationFrame'.
+/// On desktop based applications: This is a simple 'while' loop. The loop stops
+/// when the user presses the 'escape' button or when the |loop| function
+/// returns 'false'.
+/// @param loop The function to be called for each new frame.
+void Window::ExecuteMainLoop(std::function<void(void)> loop) {
+#ifdef __EMSCRIPTEN__
+  main_loop = loop;
+  emscripten_set_main_loop(&MainLoop, 0, 1);
+#else
+  while (!input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+    loop();
+    LimitFrameRate(60.0f);
+  };
+#endif
+}
 
 void Window::UpdateDimensions() {
   int width = width_;

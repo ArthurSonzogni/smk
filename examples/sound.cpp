@@ -10,7 +10,6 @@
 #include <smk/SoundBuffer.hpp>
 #include <smk/Text.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 #include "asset.hpp"
 
 int main() {
@@ -29,7 +28,7 @@ int main() {
   // Create a sound source.
   auto sound = smk::Sound(sound_buffer);
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
 
     // Toggle sound.

@@ -7,13 +7,12 @@
 #include <smk/Transformable.hpp>
 #include <smk/VertexArray.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
   // Open a new window.
   auto window = smk::Window(640, 480, "test");
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
 

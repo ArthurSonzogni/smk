@@ -10,6 +10,7 @@
 
 #include <glm/glm.hpp>
 
+#include <functional>
 #include <memory>
 #include <smk/Input.hpp>
 #include <smk/RenderTarget.hpp>
@@ -38,6 +39,9 @@ class Window : public RenderTarget {
   GLFWwindow* window() const;
   float time() const;
   Input& input();
+
+  void ExecuteMainLoop(std::function<bool(void)> loop);
+  void ExecuteMainLoop(std::function<void(void)> loop);
 
   // Pool new events. This update the |input()| element.
   void PoolEvents();

@@ -29,36 +29,33 @@ class ShaderProgram;
 /// ## Example:
 ///
 /// ~~~cpp
-/// auto shader_vertex = Shader::FromString(R"(
+/// auto vertex_shader = smk::Shader::FromString(R"(
 ///   layout(location = 0) in vec2 space_position;
 ///   layout(location = 1) in vec2 texture_position;
-/// 
 ///   uniform mat4 projection;
 ///   uniform mat4 view;
-/// 
 ///   out vec2 f_texture_position;
-/// 
 ///   void main() {
 ///     f_texture_position = texture_position;
 ///     gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
 ///   }
 /// )", GL_VERTEX_SHADER);
-/// 
-/// fragment_shader_2d_ = Shader::FromString(R"(
+///
+/// auto fragment_shader = smk::Shader::FromString(R"(
 ///   in vec2 f_texture_position;
 ///   uniform sampler2D texture_0;
 ///   uniform vec4 color;
 ///   out vec4 out_color;
-/// 
 ///   void main() {
-///     vec4 inverted_color = vec4(1.0) - color;
-///     out_color = texture(texture_0, f_texture_position) * inverted_color.
+///     vec4 color = texture(texture_0, f_texture_position) * color;
+///     vec3 inverted_color = vec3(1.0) - color.rgb;
+///     out_color = vec4(inverted_color, color.a);
 ///   }
-/// )";
-/// 
-/// auto shader_program = smk::ShaderProgram>();
-/// shader_program.AddShader(vertex_shader_2d_);
-/// shader_program.AddShader(fragment_shader_2d_);
+/// )", GL_FRAGMENT_SHADER);
+///
+/// auto shader_program = smk::ShaderProgram();
+/// shader_program.AddShader(vertex_shader);
+/// shader_program.AddShader(fragment_shader);
 /// shader_program.Link();
 ///
 /// window.SetShaderProgram(&shader_program);

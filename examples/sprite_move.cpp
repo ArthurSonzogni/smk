@@ -7,7 +7,6 @@
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include "asset.hpp"
-#include "./util.hpp"  // ExecuteMainLoop
 
 #include <iostream>
 
@@ -46,7 +45,7 @@ int main() {
 
   std::vector<Player> players = {Player(320, 0), Player(32, 32), Player(624, 64)};
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     for (auto& player : players)
       player.Step();

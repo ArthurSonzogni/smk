@@ -8,7 +8,6 @@
 #include <smk/Shape.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
   int dim = 512;
@@ -23,7 +22,7 @@ int main() {
   // Draw a circle under user's mouse.
   auto circle = smk::Shape::Circle(dim * 0.15);
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
 
     // Use framebuffer_1 to draw into framebuffer_2 and the window -------------

@@ -5,7 +5,6 @@
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Window.hpp>
-#include "./util.hpp"  // ExecuteMainLoop
 
 int main() {
   // Open a new window.
@@ -29,7 +28,7 @@ int main() {
   line.SetColor(smk::Color::Yellow);
   line.Move(200, 200);
 
-  ExecuteMainLoop(window, [&] {
+  window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
 

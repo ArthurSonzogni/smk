@@ -25,13 +25,13 @@ SMK (Simple multimedia kit)
 ### The main loop:
 
 ~~~cpp
-  void loop() {
+  window.ExecuteMainLoop([&] {
     window.Clear(smk::Color::Black);
 
     [...] // Draw stuff
 
     window.Display();
-  }
+  });
 ~~~
 
 ### Images
