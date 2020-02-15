@@ -29,6 +29,14 @@ namespace {
 int id = 0;
 std::map<int, Window*> window_by_id;
 
+void GLFWErrorCallback(int error, const char* description) {
+  std::cerr << "GFLW error n°" << error << std::endl;;
+  std::cerr << "~~~" << std::endl;
+  std::cerr << description << std::endl;
+  std::cerr << "~~~" << std::endl;
+  fprintf(stderr, "Error: %s\n", description);
+}
+
 #ifdef __EMSCRIPTEN__
 
 EM_BOOL OnTouchEvent(int eventType,
@@ -81,6 +89,7 @@ Window::Window(int width, int height, const std::string& title) {
   width_ = width;
   height_ = height;
 
+  glfwSetErrorCallback(GLFWErrorCallback);
   // initialize the GLFW library
   if (!glfwInit()) {
     throw std::runtime_error("Couldn't init GLFW");
@@ -138,10 +147,10 @@ Window::Window(int width, int height, const std::string& title) {
   InitRenderTarget();
 
 #ifdef __EMSCRIPTEN__
-  emscripten_set_touchstart_callback("#canvas", (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchend_callback("#canvas", (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchmove_callback("#canvas", (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchcancel_callback("#canvas", (void*)id_, true,
+  emscripten_set_touchstart_callback(nullptr, (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchend_callback(nullptr, (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchmove_callback(nullptr, (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchcancel_callback(nullptr, (void*)id_, true,
                                       OnTouchEvent);
 #endif
 

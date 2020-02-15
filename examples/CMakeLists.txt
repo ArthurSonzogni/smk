@@ -40,6 +40,7 @@ endfunction(add_example)
 
 add_example(bezier bezier.cpp)
 add_example(framebuffer framebuffer.cpp)
+add_example(rounded_rectangle rounded_rectangle.cpp)
 add_example(shape_2d shape_2d.cpp)
 add_example(shape_3d shape_3d.cpp)
 add_example(sound sound.cpp)

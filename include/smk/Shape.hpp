@@ -12,6 +12,7 @@
 /// @example shape_2d.cpp
 /// @example shape_3d.cpp
 /// @example bezier.cpp
+/// @example rounded_rectangle.cpp
 
 namespace smk {
 
@@ -25,6 +26,9 @@ class Shape {
   static Transformable Circle(float radius, int subdivisions);
   static Transformable Path(const std::vector<glm::vec2>& points,
                             float thickness);
+  static Transformable RoundedRectangle(float width,
+                                        float height,
+                                        float radius);
   static Transformable3D Cube();
   static Transformable3D IcoSphere(int interation);
   static Transformable3D Plane();
