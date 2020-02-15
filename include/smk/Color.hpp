@@ -16,6 +16,7 @@ glm::vec4 RGB(float red, float green, float blue);
 // Predefined colors.
 extern glm::vec4 White;
 extern glm::vec4 Black;
+extern glm::vec4 Grey;
 extern glm::vec4 Red;
 extern glm::vec4 Green;
 extern glm::vec4 Blue;

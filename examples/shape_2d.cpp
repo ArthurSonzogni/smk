@@ -25,6 +25,7 @@ int main() {
                                {150, 100},  // end
                                10           // thickness)
   );
+
   line.SetColor(smk::Color::Yellow);
   line.Move(200, 200);
 

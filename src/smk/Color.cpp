@@ -30,6 +30,7 @@ glm::vec4 RGB(float red, float green, float blue) {
 // clang-format off
 glm::vec4 White       = glm::vec4(1.f, 1.f, 1.f, 1.f); ///< White
 glm::vec4 Black       = glm::vec4(0.f, 0.f, 0.f, 1.f); ///< Black
+glm::vec4 Grey        = glm::vec4(.5f, .5f, .5f, 1.f); ///< Grey
 glm::vec4 Red         = glm::vec4(1.f, 0.f, 0.f, 1.f); ///< Red
 glm::vec4 Green       = glm::vec4(0.f, 1.f, 0.f, 1.f); ///< Green
 glm::vec4 Blue        = glm::vec4(0.f, 0.f, 1.f, 1.f); ///< Blue
