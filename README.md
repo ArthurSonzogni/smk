@@ -99,6 +99,13 @@ I needed to port several games made using the
 WebAssembly (yet), so I had to reimplement it myself. If you know the SFML, then
 SMK must be very familiar to you.
 
+## Minimal package to install for building
+
+They should already be installed. If they aren't you need to execute:
+~~~bash
+sudo apt install xorg-dev libgl1-mesa-dev
+~~~
+
 ## Thanks
 
 SMK depends directly on many great projects listed below:

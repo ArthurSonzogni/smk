@@ -71,6 +71,8 @@ class Window : public RenderTarget {
 
   Input input_;
   int id_;
+
+  std::string module_canvas_selector_;
 };
 
 }  // namespace smk

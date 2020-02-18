@@ -54,6 +54,16 @@ void MainLoop() {
   return main_loop();
 }
 
+EM_JS(void, MakeCanvasSelectable, (int window_id), {
+  if (!Module)
+    return;
+
+  if (!Module['canvas'])
+    return;
+
+  Module['canvas'].setAttribute("smk", window_id);
+});
+
 #endif
 
 #if !defined NDEBUG && !defined __EMSCRIPTEN__
@@ -147,10 +157,15 @@ Window::Window(int width, int height, const std::string& title) {
   InitRenderTarget();
 
 #ifdef __EMSCRIPTEN__
-  emscripten_set_touchstart_callback(nullptr, (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchend_callback(nullptr, (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchmove_callback(nullptr, (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchcancel_callback(nullptr, (void*)id_, true,
+  MakeCanvasSelectable(id_);
+  module_canvas_selector_ = "[smk='" + std::to_string(id_) + "']";
+#endif
+
+#ifdef __EMSCRIPTEN__
+  emscripten_set_touchstart_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchend_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchmove_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchcancel_callback(module_canvas_selector_.c_str(), (void*)id_, true,
                                       OnTouchEvent);
 #endif
 
@@ -167,6 +182,7 @@ void Window::operator=(Window&& other) {
   std::swap(time_last_sleep_, other.time_last_sleep_);
   std::swap(input_, other.input_);
   std::swap(id_, other.id_);
+  std::swap(module_canvas_selector_, other.module_canvas_selector_);
   window_by_id[id_] = this;
 }
 
@@ -239,7 +255,7 @@ void Window::UpdateDimensions() {
   int width = width_;
   int height = height_;
 #ifdef __EMSCRIPTEN__
-  emscripten_get_canvas_element_size("#canvas", &width_, &height_);
+  emscripten_get_canvas_element_size(module_canvas_selector_.c_str(), &width_, &height_);
 #else
   glfwGetWindowSize(window_, &width_, &height_);
 #endif
