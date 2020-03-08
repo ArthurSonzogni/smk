@@ -29,6 +29,7 @@ class Input {
  public:
   // Update state.
   void Update(GLFWwindow* window);
+  void OnScrollEvent(glm::vec2 offset);
 #ifdef __EMSCRIPTEN__
   void OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent);
 #endif
@@ -54,6 +55,9 @@ class Input {
   bool IsCursorReleased();
   glm::vec2 cursor();
 
+  // Scroll
+  glm::vec2 ScrollOffset();
+
  private:
   // Keyboard.
   std::map<int, std::pair<int, int>> key_state_;
@@ -70,6 +74,10 @@ class Input {
   bool cursor_press_ = false;
   bool cursor_press_previous_ = false;
   bool touching_ = true;
+
+  // Scroll
+  glm::vec2 scroll_ = glm::vec2(0.f, 0.f);
+  glm::vec2 scroll_old_ = glm::vec2(0.f, 0.f);
 };
 
 }  // namespace smk

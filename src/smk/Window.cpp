@@ -28,6 +28,16 @@ namespace {
 
 int id = 0;
 std::map<int, Window*> window_by_id;
+std::map<GLFWwindow*, Window*> window_by_glfw_window;
+
+void GLFWScrollCallback(GLFWwindow* glfw_window,
+                        double xoffset,
+                        double yoffset) {
+  Window* window = window_by_glfw_window[glfw_window];
+  if (!window)
+    return;
+  window->input().OnScrollEvent({xoffset, yoffset});
+}
 
 void GLFWErrorCallback(int error, const char* description) {
   std::cerr << "GFLW error n°" << error << std::endl;;
@@ -125,6 +135,7 @@ Window::Window(int width, int height, const std::string& title) {
     glfwTerminate();
     throw std::runtime_error("Couldn't create a window_");
   }
+  window_by_glfw_window[window_] = this;
 
   glfwMakeContextCurrent(window_);
 
@@ -159,9 +170,7 @@ Window::Window(int width, int height, const std::string& title) {
 #ifdef __EMSCRIPTEN__
   MakeCanvasSelectable(id_);
   module_canvas_selector_ = "[smk='" + std::to_string(id_) + "']";
-#endif
 
-#ifdef __EMSCRIPTEN__
   emscripten_set_touchstart_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
   emscripten_set_touchend_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
   emscripten_set_touchmove_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
@@ -169,6 +178,7 @@ Window::Window(int width, int height, const std::string& title) {
                                       OnTouchEvent);
 #endif
 
+  glfwSetScrollCallback(window_, GLFWScrollCallback);
 }
 
 Window::Window(Window&& window) {
@@ -184,6 +194,7 @@ void Window::operator=(Window&& other) {
   std::swap(id_, other.id_);
   std::swap(module_canvas_selector_, other.module_canvas_selector_);
   window_by_id[id_] = this;
+  window_by_glfw_window[window_] = this;
 }
 
 /// @brief Handle all the new input events. This update the input() object.

@@ -53,6 +53,14 @@ void Input::Update(GLFWwindow* window) {
     cursor_ = mouse_;
     cursor_press_ = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1);
   }
+
+  // Update scroll.
+  scroll_old_ = scroll_;
+  scroll_ = glm::vec2(0.f, 0.f);
+}
+
+void Input::OnScrollEvent(glm::vec2 offset) {
+  scroll_ += offset;
 }
 
 /// @brief Whether a keyboard button is pressed or not.
@@ -159,6 +167,12 @@ bool Input::IsCursorReleased() {
 /// @return the cursor position.
 glm::vec2 Input::cursor() {
   return cursor_;
+}
+
+/// @brief The mouse/touchpad scrolling offset since the last frame.
+/// @return the scrolling offset.
+glm::vec2 Input::ScrollOffset() {
+  return scroll_old_;
 }
 
 }  // namespace smk
