@@ -1,6 +1,6 @@
 add_subdirectory(assets)
 
-if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") 
+if(EMSCRIPTEN)
   # Copy the index.html file.
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/index.html
@@ -10,31 +10,36 @@ if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$")
 endif()
 
 function(add_example target input)
-  add_executable(${target} ${input})
-  add_executable(smk::example::${target} ALIAS ${target})
-  target_link_libraries(${target} PRIVATE smk asset)
-  set_property(TARGET ${target} PROPERTY CXX_STANDARD 11)
+  set(ns_target smk_example_${target})
+  add_executable(${ns_target} ${input})
+  set_target_properties(${ns_target} PROPERTIES OUTPUT_NAME ${target})
+  target_link_libraries(${ns_target} PRIVATE smk smk_example_asset)
+  set_property(TARGET ${ns_target} PROPERTY CXX_STANDARD 11)
 
   # Detect emscripten is used.
-  if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") 
+  if(EMSCRIPTEN)
 
     # Release flags
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s ALLOW_MEMORY_GROWTH=1")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DEMANGLE_SUPPORT=1")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=2")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s EXPORT_NAME='emscripten'")
-    set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " -s MODULARIZE=1")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS " -s WASM=1")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --js-opts 3")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-lto 3")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " --llvm-opts 3")
-    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS  " -O3")
+    set_property(TARGET ${ns_target} APPEND_STRING PROPERTY LINK_FLAGS
+      " -s ALLOW_MEMORY_GROWTH=1"
+      " -s DEMANGLE_SUPPORT=1"
+      " -s DISABLE_EXCEPTION_CATCHING=2"
+      " -s EXPORT_NAME='emscripten'"
+      " -s MODULARIZE=1"
+    )
+    set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS
+      " -s WASM=1"
+      " --js-opts 3"
+      " --llvm-lto 3"
+      " --llvm-opts 3"
+      " -O3"
+    )
 
     # Allow some files to be fetched.
     file(GLOB_RECURSE files "./assets/*")
     foreach(file ${files})
       file(RELATIVE_PATH relative_file ${CMAKE_SOURCE_DIR} "${file}")
-      set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
+      set_property(TARGET ${ns_target} APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
     endforeach()
   endif()
 endfunction(add_example)
