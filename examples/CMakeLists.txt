@@ -24,8 +24,7 @@ function(add_example target input)
       " -s ALLOW_MEMORY_GROWTH=1"
       " -s DEMANGLE_SUPPORT=1"
       " -s DISABLE_EXCEPTION_CATCHING=2"
-      " -s EXPORT_NAME='emscripten'"
-      " -s MODULARIZE=1"
+      " -s EXPORT_NAME='main' -s MODULARIZE=1"
     )
     set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS
       " -s WASM=1"

@@ -77,7 +77,7 @@
         let onchange = function() {
           let exampleContainer = document.querySelector("#exampleContainer");
           exampleContainer.srcdoc = `
-            <scr`+`ipt>
+            <script>
               window.addEventListener("DOMContentLoaded", async function() {
                 // Build a canvas to display the example
                 let canvas = document.createElement("canvas");
@@ -91,7 +91,7 @@
                   document.body.appendChild(script);
                 });
 
-                emscripten({
+                main({
                   canvas: canvas,
                   print: console.log,
                   printErr: console.error,
