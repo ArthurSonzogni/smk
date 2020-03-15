@@ -11,6 +11,7 @@ endif()
 
 function(add_example target input)
   add_executable(${target} ${input})
+  add_executable(smk::example::${target} ALIAS ${target})
   target_link_libraries(${target} PRIVATE smk asset)
   set_property(TARGET ${target} PROPERTY CXX_STANDARD 11)
 

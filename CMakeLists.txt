@@ -60,6 +60,7 @@ add_library(smk STATIC
   src/smk/View.cpp
   src/smk/Window.cpp
 )
+add_library(smk::smk ALIAS smk)
 
 target_include_directories(smk
   PUBLIC
