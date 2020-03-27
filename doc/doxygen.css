@@ -2,7 +2,7 @@
 body {
     font-family: 'Ubuntu', 'Arial', sans-serif;
     line-height: 140%;
-    margin: 0 0 2em 0;
+    margin: 0 0 2em;
     padding: 0;
 }
 
@@ -125,7 +125,7 @@ div.contents ul {
 
 div.contents ul li {
     color: #333;
-    margin: 0 0 0.3em 0;
+    margin: 0 0 0.3em;
 }
 
 
@@ -156,7 +156,7 @@ div.contents ul li {
     height: 18px;
     margin-bottom: 4px;
     background-image: url('ftv2folderopen.png');
-    background-position: 0px -4px;
+    background-position: 0 -4px;
     background-repeat: repeat-y;
     vertical-align: top;
     display: inline-block;
@@ -167,7 +167,7 @@ div.contents ul li {
     height: 18px;
     margin-bottom: 4px;
     background-image: url('ftv2folderclosed.png');
-    background-position: 0px -4px;
+    background-position: 0 -4px;
     background-repeat: repeat-y;
     vertical-align: top;
     display: inline-block;
@@ -178,7 +178,7 @@ div.contents ul li {
     height: 18px;
     margin-bottom: 4px;
     background-image: url('ftv2doc.png');
-    background-position: 0px -4px;
+    background-position: 0 -4px;
     background-repeat: repeat-y;
     vertical-align: top;
     display: inline-block;
@@ -196,7 +196,7 @@ div.contents ul li {
     white-space: nowrap;
     background-color: white;
     border: 1px solid gray;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 4px;
     box-shadow: 1px 1px 7px gray;
     display: none;
     font-size: smaller;
@@ -225,8 +225,8 @@ div.contents ul li {
 }
 
 #powerTip div {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     font: 12px/16px Roboto, sans-serif;
 }
 
@@ -234,7 +234,7 @@ div.contents ul li {
 #powerTip:after {
     content: "";
     position: absolute;
-    margin: 0px;
+    margin: 0;
 }
 
 #powerTip.n:after,
@@ -296,13 +296,13 @@ div.contents ul li {
 #powerTip.nw:after {
     border-top-color: #ffffff;
     border-width: 10px;
-    margin: 0px -10px;
+    margin: 0 -10px;
 }
 
 #powerTip.n:before {
     border-top-color: #808080;
     border-width: 11px;
-    margin: 0px -11px;
+    margin: 0 -11px;
 }
 
 #powerTip.n:after,
@@ -334,7 +334,7 @@ div.contents ul li {
 #powerTip.sw:after {
     border-bottom-color: #ffffff;
     border-width: 10px;
-    margin: 0px -10px;
+    margin: 0 -10px;
 }
 
 #powerTip.s:before,
@@ -342,7 +342,7 @@ div.contents ul li {
 #powerTip.sw:before {
     border-bottom-color: #808080;
     border-width: 11px;
-    margin: 0px -11px;
+    margin: 0 -11px;
 }
 
 #powerTip.s:after,
