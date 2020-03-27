@@ -1,0 +1,31 @@
+sudo: false
+
+language:
+  - cpp
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
+
+notifications:
+  email: false
+
+jobs:
+  include:
+    # Ubuntu
+    - os: linux
+      dist: bionic
+      compiler: gcc
+
+    # Ubuntu
+    - os: linux
+      dist: bionic
+      compiler: clang
+
+    # OS X
+    - os: osx
+
+    # Windows
+    - os: windows
