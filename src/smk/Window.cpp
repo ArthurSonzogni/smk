@@ -93,7 +93,6 @@ void OpenGLDebugMessageCallback(GLenum /*source*/,
 #endif
 
 void GLFWCharCallback(GLFWwindow* glfw_window, unsigned int codepoint) {
-  std::cerr << "codepoint = " << codepoint << std::endl;
   Window* window = window_by_glfw_window[glfw_window];
   if (!window)
     return;
