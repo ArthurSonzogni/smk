@@ -6,6 +6,7 @@
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
 #include <smk/Window.hpp>
+
 #include "asset.hpp"
 
 int main() {

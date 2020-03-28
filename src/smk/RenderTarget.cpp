@@ -104,30 +104,30 @@ const View& RenderTarget::GetView() const {
 /// auto shader_vertex = Shader::FromString(R"(
 ///   layout(location = 0) in vec2 space_position;
 ///   layout(location = 1) in vec2 texture_position;
-/// 
+///
 ///   uniform mat4 projection;
 ///   uniform mat4 view;
-/// 
+///
 ///   out vec2 f_texture_position;
-/// 
+///
 ///   void main() {
 ///     f_texture_position = texture_position;
 ///     gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
 ///   }
 /// )", GL_VERTEX_SHADER);
-/// 
+///
 /// fragment_shader_2d_ = Shader::FromString(R"(
 ///   in vec2 f_texture_position;
 ///   uniform sampler2D texture_0;
 ///   uniform vec4 color;
 ///   out vec4 out_color;
-/// 
+///
 ///   void main() {
 ///     vec4 inverted_color = vec4(1.0) - color;
 ///     out_color = texture(texture_0, f_texture_position) * inverted_color.
 ///   }
 /// )";
-/// 
+///
 /// auto shader_program = smk::ShaderProgram>();
 /// shader_program.AddShader(vertex_shader_2d_);
 /// shader_program.AddShader(fragment_shader_2d_);
@@ -143,7 +143,6 @@ void RenderTarget::SetShaderProgram(ShaderProgram* shader_program) {
   shader_program_->SetUniform("projection", glm::mat4(1.0));
   shader_program_->SetUniform("view", glm::mat4(1.0));
 }
-
 
 /// @brief Return the default predefined 2D shader program. It is bound by
 /// default.
@@ -194,8 +193,7 @@ void RenderTarget::Draw(const RenderState& state) {
   state.shader_program->SetUniform("view", state.view);
 
   // Texture
-  auto& texture = state.texture.id() ?
-    state.texture : WhiteTexture();
+  auto& texture = state.texture.id() ? state.texture : WhiteTexture();
   if (cached_render_state_.texture != texture || invalidate_texture) {
     cached_render_state_.texture = texture;
     texture.Bind();

@@ -2,13 +2,13 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
+#include <iostream>
 #include <smk/Color.hpp>
-#include <smk/Window.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
-#include "asset.hpp"
+#include <smk/Window.hpp>
 
-#include <iostream>
+#include "asset.hpp"
 
 struct Player {
  public:
@@ -40,10 +40,11 @@ struct Player {
 smk::Texture Player::texture;
 
 int main() {
-  auto window = smk::Window(640, 32*3, "smk/example/sprite");
-  Player::texture = smk::Texture(asset::hero_png); // Defined after window.
+  auto window = smk::Window(640, 32 * 3, "smk/example/sprite");
+  Player::texture = smk::Texture(asset::hero_png);  // Defined after window.
 
-  std::vector<Player> players = {Player(320, 0), Player(32, 32), Player(624, 64)};
+  std::vector<Player> players = {Player(320, 0), Player(32, 32),
+                                 Player(624, 64)};
 
   window.ExecuteMainLoop([&] {
     window.PoolEvents();

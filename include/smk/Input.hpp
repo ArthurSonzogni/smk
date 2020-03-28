@@ -6,8 +6,8 @@
 #define SMK_INPUT_HPP
 
 #include <glm/glm.hpp>
-#include <memory>
 #include <map>
+#include <memory>
 #include <smk/Touch.hpp>
 #include <vector>
 

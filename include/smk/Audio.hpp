@@ -10,22 +10,22 @@ namespace smk {
 /// Used to Initialize OpenAL. It is required to use it in the main() function.
 /// Coucou
 ///
-/// ## Example 
+/// ## Example
 ///
 /// ~~~cpp
 /// int main() {
 ///   // Init OpenAL.
 ///   smk::Audio audio;
-/// 
+///
 ///   // Load a sound file.
 ///   auto sound_buffer = smk::SoundBuffer(asset::water_mp3);
-/// 
+///
 ///   // Create a sound source.
 ///   auto sound = smk::Sound(sound_buffer);
 ///
 ///   // Play the sound.
 ///   sound.Play();
-///   
+///
 ///   [...]
 /// }
 /// ~~~

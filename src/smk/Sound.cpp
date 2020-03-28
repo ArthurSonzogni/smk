@@ -2,12 +2,12 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Audio.hpp>
-#include <smk/Sound.hpp>
-
 #include <AL/al.h>
 #include <AL/alc.h>
+
 #include <iostream>
+#include <smk/Audio.hpp>
+#include <smk/Sound.hpp>
 
 namespace smk {
 

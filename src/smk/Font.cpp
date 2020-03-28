@@ -2,10 +2,10 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Font.hpp>
-
 #include <ft2build.h>
+
 #include <iostream>
+#include <smk/Font.hpp>
 #include <vector>
 #include FT_FREETYPE_H
 
@@ -20,8 +20,7 @@ Font::Character* Font::GetCharacter(wchar_t c) {
   }
 
   // Load from file.
-  if (size_)
-  {
+  if (size_) {
     LoadCharacters({c});
     auto character = characters_.find(c);
     if (character != characters_.end())
@@ -50,8 +49,7 @@ Font::Font(const std::string& filename, int size)
 void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
   FT_Library ft;
   if (FT_Init_FreeType(&ft)) {
-    std::cerr << "SMK > FreeType: Could not init FreeType Library"
-              << std::endl;
+    std::cerr << "SMK > FreeType: Could not init FreeType Library" << std::endl;
   }
 
   FT_Face face;

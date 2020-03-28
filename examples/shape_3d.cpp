@@ -2,14 +2,15 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 #include <smk/Color.hpp>
-#include <smk/Window.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Texture.hpp>
 #include <smk/Transformable.hpp>
 #include <smk/VertexArray.hpp>
+#include <smk/Window.hpp>
+
 #include "asset.hpp"
 
 int random(int& r, int modulo) {
@@ -29,7 +30,6 @@ int main() {
   auto texture = smk::Texture(asset::hero_png);
   cube.SetTexture(texture);
   sphere.SetTexture(texture);
-
 
   float animation = 0.f;
   float animation_df = 0.2f;

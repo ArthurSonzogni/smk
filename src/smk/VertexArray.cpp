@@ -102,7 +102,9 @@ VertexArray::VertexArray(const std::vector<Vertex3D>& array) {
 
 /// @brief The size of the GPU array.
 /// @return the number of vertices in the GPU array.
-int VertexArray::size() const { return size_; }
+int VertexArray::size() const {
+  return size_;
+}
 
 bool VertexArray::operator==(const smk::VertexArray& other) const {
   return vbo_ == other.vbo_;

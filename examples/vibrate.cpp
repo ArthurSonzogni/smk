@@ -4,10 +4,11 @@
 
 #include <smk/Color.hpp>
 #include <smk/Font.hpp>
+#include <smk/Input.hpp>
 #include <smk/Text.hpp>
 #include <smk/Vibrate.hpp>
 #include <smk/Window.hpp>
-#include <smk/Input.hpp>
+
 #include "asset.hpp"
 
 int main() {

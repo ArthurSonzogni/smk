@@ -18,7 +18,7 @@ class Drawable;
 struct RenderState;
 
 /// A texture where things can be / a smk::Drawable can be drawn on.
-/// 
+///
 /// Implementated by:
 ///  * Window
 ///  * Framebuffer.

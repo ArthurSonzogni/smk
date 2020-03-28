@@ -2,12 +2,11 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Shader.hpp>
-
 #include <cstdlib>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <smk/Shader.hpp>
 #include <stdexcept>
 #include <streambuf>
 #include <string>
@@ -33,7 +32,8 @@ const std::string shader_header =
 /// @param type
 ///   Either GL_VERTEX_SHADER or GL_FRAGMENT_SHADER. It can also be
 ///   any other shader type defined by OpenGL.
-///   See https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCreateShader.xhtml
+///   See
+///   https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCreateShader.xhtml
 //
 /// @see Shader::FromString
 /// @see Shader::FromFile
@@ -50,7 +50,8 @@ Shader Shader::FromFile(const std::string& filename, GLenum type) {
 /// @param type
 ///   Either GL_VERTEX_SHADER or GL_FRAGMENT_SHADER. It can also be
 ///   any other shader type defined by OpenGL.
-///   See https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCreateShader.xhtml
+///   See
+///   https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCreateShader.xhtml
 //
 /// @see Shader::FromString
 /// @see Shader::FromFile
@@ -69,7 +70,6 @@ Shader Shader::FromString(const std::string& content, GLenum type) {
 GLuint Shader::GetHandle() const {
   return handle_;
 }
-
 
 Shader::Shader() = default;
 Shader::Shader(std::vector<char> content, GLenum type) {
@@ -245,7 +245,7 @@ void ShaderProgram::SetAttribute(const std::string& name,
   SetAttribute(name, size, stride, offset, false, GL_FLOAT);
 }
 
-/// @brief Assign shader vec3 uniform 
+/// @brief Assign shader vec3 uniform
 /// @param x First vec3 component.
 /// @param y Second vec3 component.
 /// @param y Third vec3 component
@@ -257,42 +257,42 @@ void ShaderProgram::SetUniform(const std::string& name,
   glUniform3f(Uniform(name), x, y, z);
 }
 
-/// @brief Assign shader vec3 uniform 
+/// @brief Assign shader vec3 uniform
 /// @param v vec3 value
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name, const vec3& v) {
   glUniform3fv(Uniform(name), 1, value_ptr(v));
 }
 
-/// @brief Assign shader vec4 uniform 
+/// @brief Assign shader vec4 uniform
 /// @param v vec4 value
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name, const vec4& v) {
   glUniform4fv(Uniform(name), 1, value_ptr(v));
 }
 
-/// @brief Assign shader mat4 uniform 
+/// @brief Assign shader mat4 uniform
 /// @param m mat4 value
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name, const mat4& m) {
   glUniformMatrix4fv(Uniform(name), 1, GL_FALSE, value_ptr(m));
 }
 
-/// @brief Assign shader mat3 uniform 
+/// @brief Assign shader mat3 uniform
 /// @param m mat3 value
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name, const mat3& m) {
   glUniformMatrix3fv(Uniform(name), 1, GL_FALSE, value_ptr(m));
 }
 
-/// @brief Assign shader float uniform 
+/// @brief Assign shader float uniform
 /// @param val float value
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name, float val) {
   glUniform1f(Uniform(name), val);
 }
 
-/// @brief Assign shader int uniform 
+/// @brief Assign shader int uniform
 /// @param val int value
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name, int val) {

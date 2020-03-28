@@ -2,12 +2,13 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include "asset.hpp"
 #include <smk/Color.hpp>
 #include <smk/Font.hpp>
 #include <smk/Input.hpp>
 #include <smk/Text.hpp>
 #include <smk/Window.hpp>
+
+#include "asset.hpp"
 
 int main() {
   auto window = smk::Window(480, 96, "smk/example/scroll");

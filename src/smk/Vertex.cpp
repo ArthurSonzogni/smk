@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 #include "smk/Vertex.hpp"
+
 #include <smk/OpenGL.hpp>
 
 namespace smk {

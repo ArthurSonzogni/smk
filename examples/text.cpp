@@ -3,9 +3,10 @@
 // the LICENSE file.
 
 #include <smk/Color.hpp>
-#include <smk/Window.hpp>
-#include <smk/Text.hpp>
 #include <smk/Font.hpp>
+#include <smk/Text.hpp>
+#include <smk/Window.hpp>
+
 #include "asset.hpp"
 
 int main() {
@@ -18,13 +19,13 @@ int main() {
     window.Clear(smk::Color::Black);
 
     auto text = smk::Text(font, "The SMK library can display fonts!!!");
-    text.SetPosition(10,10);
+    text.SetPosition(10, 10);
     window.Draw(text);
 
     text = smk::Text(font, L"The SMK library can display fonts!!! ←↑→↓");
-    text.SetCenter(text.ComputeDimensions() * 0.5f); 
+    text.SetCenter(text.ComputeDimensions() * 0.5f);
     text.SetRotation(step++);
-    text.SetPosition({320.f,320.f});
+    text.SetPosition({320.f, 320.f});
     window.Draw(text);
 
     window.Display();

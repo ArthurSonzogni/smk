@@ -6,13 +6,10 @@
 #define SMK_WINDOW_HPP
 
 #include <functional>
-#include <string>
-
 #include <glm/glm.hpp>
-
-#include <functional>
 #include <memory>
 #include <smk/RenderTarget.hpp>
+#include <string>
 
 struct GLFWwindow;
 

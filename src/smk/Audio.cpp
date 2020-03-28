@@ -4,10 +4,10 @@
 
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <iostream>
-#include <smk/Audio.hpp>
 
 #include <cstring>
+#include <iostream>
+#include <smk/Audio.hpp>
 #include <string>
 #include <vector>
 namespace smk {

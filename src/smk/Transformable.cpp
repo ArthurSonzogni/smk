@@ -50,7 +50,7 @@ void Transformable::Move(glm::vec2 move) {
 /// @param x The increment of position along the horizontal axis.
 /// @param y The increment of position along the vertical axis.
 void Transformable::Move(float x, float y) {
-  Move({x,y});
+  Move({x, y});
 }
 
 /// @brief Set the center of the object. It is used as the rotation center. The
@@ -67,7 +67,7 @@ void Transformable::SetCenter(glm::vec2 center) {
 /// @param x The center position along the horizontal axis.
 /// @param y The center position along the vertical axis.
 void Transformable::SetCenter(float x, float y) {
-  SetCenter({x,y});
+  SetCenter({x, y});
 }
 
 /// @brief Increase or decrease the size of the object being drawn.

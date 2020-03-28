@@ -182,7 +182,7 @@ Transformable3D Shape::Plane() {
 /// @param subdivision The number of points in the output.
 // static
 std::vector<glm::vec2> Shape::Bezier(const std::vector<glm::vec2>& points,
-                              size_t subdivision) {
+                                     size_t subdivision) {
   std::vector<glm::vec2> path;
   for (size_t index = 0; index < subdivision + 1; ++index) {
     std::vector<glm::vec2> data = points;
@@ -213,8 +213,8 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
   // points[i] -- points[i+1]
 
   for (size_t i = 1; i < points.size(); ++i) {
-    glm::vec3 plane_left = cross(vec3(points[i - 1], 1.f), 
-                                 vec3(points[i - 0], 1.f));
+    glm::vec3 plane_left =
+        cross(vec3(points[i - 1], 1.f), vec3(points[i - 0], 1.f));
     glm::vec3 plane_right = plane_left;
     plane_left.z -= thickness * length(vec2(plane_left.x, plane_left.y));
     plane_right.z += thickness * length(vec2(plane_right.x, plane_right.y));
@@ -237,7 +237,7 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
 
   const float epsilon = 0.01;
   int i = 0;
-  for (size_t j = 1; j < points.size()-1; ++j) {
+  for (size_t j = 1; j < points.size() - 1; ++j) {
     vec3 intersection_left = cross(planes_left[i], planes_left[j]);
     vec3 intersection_right = cross(planes_right[i], planes_right[j]);
     if (abs(intersection_left.z) < epsilon ||
@@ -253,13 +253,11 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
 
   // Cap end.
   {
-    glm::vec2 direction =
-        normalize(points[points.size() - 2] - points.back());
+    glm::vec2 direction = normalize(points[points.size() - 2] - points.back());
     glm::vec2 normal = {direction.y, -direction.x};
     points_left.push_back(points.back() + normal * thickness);
     points_right.push_back(points.back() - normal * thickness);
   }
-
 
   std::vector<smk::Vertex> v;
 
@@ -269,8 +267,8 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
   //     | \| ...  C = points_left[i + 1]
   // ...-B--D-...  D = points_right[i + 1];
   for (size_t i = 1; i < points_left.size(); ++i) {
-    glm::vec2& A = points_left[i-1];
-    glm::vec2& B = points_right[i-1];
+    glm::vec2& A = points_left[i - 1];
+    glm::vec2& B = points_right[i - 1];
     glm::vec2& C = points_left[i];
     glm::vec2& D = points_right[i];
 
@@ -308,7 +306,7 @@ smk::Transformable Shape::RoundedRectangle(float width,
   v.push_back(p1);
   v.push_back(p2);
 
-  float angle_delta = 2.0*M_PI/40.f;//0.01f;//radius * 0.01f;
+  float angle_delta = 2.0 * M_PI / 40.f;  // 0.01f;//radius * 0.01f;
 
   auto center = glm::vec2(width, radius);
   for (float angle = 0.f; angle < 2.f * M_PI; angle += angle_delta) {

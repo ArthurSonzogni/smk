@@ -95,7 +95,7 @@ class Shader {
 ///
 /// This class provide an interface to define the OpenGL uniforms and attributes
 /// using GLM objects.
-/// 
+///
 /// @see Shader
 class ShaderProgram {
  public:

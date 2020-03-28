@@ -16,7 +16,7 @@ namespace smk {
 /// buffer.
 ///
 /// ## Commonly used BlendMode
-/// 
+///
 /// SMK provides 6 predefined common BlendMode:
 /// ~~~cpp
 /// smk::BlendMode::Replace;    // dst = src
@@ -60,7 +60,6 @@ namespace smk {
 /// sprite.SetBlendMode(blend_mode);
 /// ~~~
 struct BlendMode {
-
   // Preset of BlendMode:
   static const BlendMode Replace;    // dst = src
   static const BlendMode Add;        // dst += src

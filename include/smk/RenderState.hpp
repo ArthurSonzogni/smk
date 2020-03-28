@@ -13,7 +13,7 @@
 
 namespace smk {
 
-/// Contain all the data needed to draw 
+/// Contain all the data needed to draw
 struct RenderState {
   ShaderProgram* shader_program = nullptr;  ///< The shader used.
   Texture texture;                          ///< The texture 0 bound.

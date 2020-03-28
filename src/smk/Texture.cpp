@@ -128,7 +128,6 @@ Texture::Texture(const Texture& other) {
   operator=(other);
 }
 
-
 void Texture::operator=(Texture&& other) {
   this->~Texture();
   std::swap(id_, other.id_);
@@ -169,14 +168,20 @@ bool Texture::operator!=(const Texture& other) {
 
 /// @brief Access the width of the texture
 /// @return The texture's width in pixel
-int Texture::width() const { return width_; }
+int Texture::width() const {
+  return width_;
+}
 
 /// @brief Access the height of the texture
 /// @return The texture's height in pixel
-int Texture::height() const { return height_; }
+int Texture::height() const {
+  return height_;
+}
 
 /// @brief Access the ID of the texture
 /// @return The texture's ID.
-GLuint Texture::id() const { return id_; }
+GLuint Texture::id() const {
+  return id_;
+}
 
 }  // namespace smk

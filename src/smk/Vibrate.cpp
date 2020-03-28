@@ -5,7 +5,7 @@
 #include <smk/Vibrate.hpp>
 
 #ifdef __EMSCRIPTEN__
-#include <emscripten/html5.h>
+  #include <emscripten/html5.h>
 #endif
 
 namespace smk {
