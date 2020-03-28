@@ -6,10 +6,12 @@
 #include <smk/Audio.hpp>
 #include <smk/Color.hpp>
 #include <smk/Font.hpp>
+#include <smk/Input.hpp>
 #include <smk/Sound.hpp>
 #include <smk/SoundBuffer.hpp>
 #include <smk/Text.hpp>
 #include <smk/Window.hpp>
+
 #include "asset.hpp"
 
 int main() {

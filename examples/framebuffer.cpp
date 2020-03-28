@@ -5,6 +5,7 @@
 #include <smk/BlendMode.hpp>
 #include <smk/Color.hpp>
 #include <smk/Framebuffer.hpp>
+#include <smk/Input.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Window.hpp>

@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 #include <smk/Color.hpp>
+#include <smk/Input.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Transformable.hpp>
 #include <smk/VertexArray.hpp>

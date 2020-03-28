@@ -6,6 +6,7 @@
 #define SMK_INPUT_HPP
 
 #include <glm/glm.hpp>
+#include <memory>
 #include <map>
 #include <smk/Touch.hpp>
 #include <vector>
@@ -19,7 +20,7 @@ namespace smk {
 /// The Input class is tied to a smk::Window. You need to call regularly
 /// smk::Screen::PoolEvent to update the input state.
 ///
-/// To know keyboard and mouse buttons identifer you need to refer to the GLFW
+/// To know keyboard and mouse buttons identifer, you need to refer to the GLFW
 /// definitions:
 /// * [keyboard buttons](https://www.glfw.org/docs/latest/group__keys.html)
 /// * [mouse buttons](https://www.glfw.org/docs/latest/group__buttons.html)
@@ -27,57 +28,94 @@ namespace smk {
 /// @see smk::Window::PoolEvents()
 class Input {
  public:
-  // Update state.
-  void Update(GLFWwindow* window);
-  void OnScrollEvent(glm::vec2 offset);
-#ifdef __EMSCRIPTEN__
-  void OnTouchEvent(int eventType, const EmscriptenTouchEvent* keyEvent);
-#endif
+  virtual ~Input() {}
+  // Keyboard ------------------------------------------------------------------
 
-  // Keyboard.
-  bool IsKeyHold(int key);
-  bool IsKeyPressed(int key);
-  bool IsKeyReleased(int key);
+  /// @brief Whether a keyboard button is down or not.
+  /// @return true whenever a keyboard button is hold.
+  /// @param key The keyboard button.
+  virtual bool IsKeyHold(int key) = 0;
+  /// @brief Whether a keyboard button is pressed or not.
+  /// @return true whenever a keyboard button is pressed.
+  /// @param key The keyboard button.
+  virtual bool IsKeyPressed(int key) = 0;
+  /// @brief Whether a keyboard button is released or not.
+  /// @return true whenever a keyboard button is released
+  /// @param key The keyboard button.
+  virtual bool IsKeyReleased(int key) = 0;
 
-  // Mouse.
-  bool IsMouseHold(int key);
-  bool IsMousePressed(int key);
-  bool IsMouseReleased(int key);
-  glm::vec2 mouse();
+  // Mouse ---------------------------------------------------------------------
+
+  /// @brief Whether a mouse button is down or not.
+  /// @return true whenever a mouse button is hold.
+  /// @param key The mouse button.
+  virtual bool IsMouseHold(int key) = 0;
+  /// @brief Whether a mouse button is pressed or not.
+  /// @return true whenever a mouse button is pressed.
+  /// @param key The mouse button.
+  virtual bool IsMousePressed(int key) = 0;
+  /// @brief Whether a mouse button is released or not.
+  /// @return true whenever a mouse button is released
+  /// @param key The mouse button.
+  virtual bool IsMouseReleased(int key) = 0;
+  /// @brief The mouse position.
+  /// @return the mouse position.
+  virtual glm::vec2 mouse() = 0;
 
   // Touch.
   using FingerID = int;
-  std::map<FingerID, Touch>& touches();
+  /// @brief The touch states.
+  /// @return the touches states.
+  virtual std::map<FingerID, Touch>& touches() = 0;
 
+  // Cursor --------------------------------------------------------------------
   // A cursor is either the mouse or a touch. This is choosen smartly.
-  bool IsCursorHold();
-  bool IsCursorPressed();
-  bool IsCursorReleased();
-  glm::vec2 cursor();
 
-  // Scroll
-  glm::vec2 ScrollOffset();
+  /// @brief Whether the cursor is down or not.
+  /// @return true whenever the cursor is down.
+  virtual bool IsCursorHold() = 0;
+  /// @brief Whether the cursor is pressed or not
+  /// @return true whenever the cursor is pressed.
+  virtual bool IsCursorPressed() = 0;
+  /// @brief Whether the cursor is released or not
+  /// @return true whenever the cursor is released.
+  virtual bool IsCursorReleased() = 0;
+  /// @brief The cursor position.
+  /// @return the cursor position.
+  virtual glm::vec2 cursor() = 0;
 
- private:
-  // Keyboard.
-  std::map<int, std::pair<int, int>> key_state_;
+  // Scroll -------------------------------------------------------------------
 
-  // Mouse.
-  std::map<int, std::pair<int, int>> mouse_state_;
-  glm::vec2 mouse_;
+  /// @brief The mouse/touchpad scrolling offset since the last frame.
+  /// @return the scrolling offset.
+  virtual glm::vec2 ScrollOffset() = 0;
 
-  // Touch.
-  std::map<FingerID, Touch> touches_;
-
-  // Cursor
-  glm::vec2 cursor_;
-  bool cursor_press_ = false;
-  bool cursor_press_previous_ = false;
-  bool touching_ = true;
-
-  // Scroll
-  glm::vec2 scroll_ = glm::vec2(0.f, 0.f);
-  glm::vec2 scroll_old_ = glm::vec2(0.f, 0.f);
+  // Character listener --------------------------------------------------------
+  //
+  /// @brief Receive characters typed from the keyboard.
+  /// All the keyboard modifiers are applied (Shift, Ctrl, Alt, ...). Useful for
+  /// implementing input boxes.
+  ///
+  /// Usage:
+  /// -----
+  /// ~~~cpp
+  /// // Initialization
+  /// auto listener = input.MakeCharacterListener();
+  /// ~~~
+  ///
+  /// ~~~cpp
+  /// // Main loop.
+  /// wchar_t character;
+  /// while(listener->Receive(&character))
+  ///   character_typed += character;
+  /// ~~~
+  class CharacterListenerInterface {
+   public:
+    virtual bool Receive(wchar_t*) = 0;
+    virtual ~CharacterListenerInterface() = default;
+  };
+  using CharacterListener = std::unique_ptr<CharacterListenerInterface>;
+  virtual CharacterListener MakeCharacterListener() = 0;
 };
 
 }  // namespace smk

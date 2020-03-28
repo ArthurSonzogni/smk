@@ -12,7 +12,6 @@
 
 #include <functional>
 #include <memory>
-#include <smk/Input.hpp>
 #include <smk/RenderTarget.hpp>
 
 struct GLFWwindow;
@@ -22,6 +21,8 @@ namespace smk {
 class View;
 class VertexArray;
 class Sprite;
+class Input;
+class InputImpl;
 
 /// @brief A window. You can draw objects on the window.
 ///
@@ -69,7 +70,7 @@ class Window : public RenderTarget {
 
   void UpdateDimensions();
 
-  Input input_;
+  std::unique_ptr<InputImpl> input_;
   int id_;
 
   std::string module_canvas_selector_;

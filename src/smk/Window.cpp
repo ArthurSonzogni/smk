@@ -2,24 +2,23 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <smk/Window.hpp>
-
 #include <chrono>
+#include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <thread>
-#include <vector>
-
 #include <smk/Color.hpp>
 #include <smk/Drawable.hpp>
 #include <smk/Input.hpp>
+#include <smk/InputImpl.hpp>
 #include <smk/OpenGL.hpp>
 #include <smk/View.hpp>
+#include <smk/Window.hpp>
+#include <thread>
+#include <vector>
 
 #ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#include <emscripten/html5.h>
-#include <cmath>
+  #include <emscripten.h>
+  #include <emscripten/html5.h>
 #endif
 
 namespace smk {
@@ -36,11 +35,13 @@ void GLFWScrollCallback(GLFWwindow* glfw_window,
   Window* window = window_by_glfw_window[glfw_window];
   if (!window)
     return;
-  window->input().OnScrollEvent({xoffset, yoffset});
+  static_cast<InputImpl*>(&(window->input()))
+      ->OnScrollEvent({xoffset, yoffset});
 }
 
 void GLFWErrorCallback(int error, const char* description) {
-  std::cerr << "GFLW error n°" << error << std::endl;;
+  std::cerr << "GFLW error n°" << error << std::endl;
+  ;
   std::cerr << "~~~" << std::endl;
   std::cerr << description << std::endl;
   std::cerr << "~~~" << std::endl;
@@ -91,6 +92,15 @@ void OpenGLDebugMessageCallback(GLenum /*source*/,
 }
 #endif
 
+void GLFWCharCallback(GLFWwindow* glfw_window, unsigned int codepoint) {
+  std::cerr << "codepoint = " << codepoint << std::endl;
+  Window* window = window_by_glfw_window[glfw_window];
+  if (!window)
+    return;
+  static_cast<InputImpl*>(&(window->input()))
+      ->OnCharacterTyped((wchar_t)codepoint);
+}
+
 }  // namespace
 
 /// @brief A null window.
@@ -104,6 +114,7 @@ Window::Window() {
 /// @param height The desired height of the window.
 /// @param title The window's title.
 Window::Window(int width, int height, const std::string& title) {
+  input_ = std::make_unique<InputImpl>();
   id_ = ++id;
   window_by_id[id_] = this;
   width_ = width;
@@ -171,14 +182,17 @@ Window::Window(int width, int height, const std::string& title) {
   MakeCanvasSelectable(id_);
   module_canvas_selector_ = "[smk='" + std::to_string(id_) + "']";
 
-  emscripten_set_touchstart_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchend_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchmove_callback(module_canvas_selector_.c_str(), (void*)id_, true, OnTouchEvent);
-  emscripten_set_touchcancel_callback(module_canvas_selector_.c_str(), (void*)id_, true,
-                                      OnTouchEvent);
+  emscripten_set_touchstart_callback(module_canvas_selector_.c_str(),
+                                     (void*)id_, true, OnTouchEvent);
+  emscripten_set_touchend_callback(module_canvas_selector_.c_str(), (void*)id_,
+                                   true, OnTouchEvent);
+  emscripten_set_touchmove_callback(module_canvas_selector_.c_str(), (void*)id_,
+                                    true, OnTouchEvent);
+  emscripten_set_touchcancel_callback(module_canvas_selector_.c_str(),
+                                      (void*)id_, true, OnTouchEvent);
 #endif
-
   glfwSetScrollCallback(window_, GLFWScrollCallback);
+  glfwSetCharCallback(window_, GLFWCharCallback);
 }
 
 Window::Window(Window&& window) {
@@ -200,7 +214,7 @@ void Window::operator=(Window&& other) {
 /// @brief Handle all the new input events. This update the input() object.
 void Window::PoolEvents() {
   glfwPollEvents();
-  input_.Update(window_);
+  input_->Update(window_);
 }
 
 /// @brief Present what has been draw to the screen.
@@ -220,13 +234,19 @@ Window::~Window() {
 }
 
 /// The window handle.
-GLFWwindow* Window::window() const { return window_; }
+GLFWwindow* Window::window() const {
+  return window_;
+}
 
 /// The last time Window::PoolEvent() was called.
-float Window::time() const { return time_; }
+float Window::time() const {
+  return time_;
+}
 
 /// Return an object for querying the input state.
-Input& Window::input() { return input_; }
+Input& Window::input() {
+  return *(input_.get());
+}
 
 /// @brief Helper function. Execute the main loop of the application.
 /// On web based application: registers the loop in 'requestAnimationFrame'.
@@ -266,7 +286,8 @@ void Window::UpdateDimensions() {
   int width = width_;
   int height = height_;
 #ifdef __EMSCRIPTEN__
-  emscripten_get_canvas_element_size(module_canvas_selector_.c_str(), &width_, &height_);
+  emscripten_get_canvas_element_size(module_canvas_selector_.c_str(), &width_,
+                                     &height_);
 #else
   glfwGetWindowSize(window_, &width_, &height_);
 #endif

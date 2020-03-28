@@ -41,7 +41,8 @@ add_library(smk STATIC
   src/smk/Color.cpp
   src/smk/Font.cpp
   src/smk/Framebuffer.cpp
-  src/smk/Input.cpp
+  src/smk/InputImpl.cpp
+  src/smk/InputImpl.cpp
   src/smk/RenderTarget.cpp
   src/smk/Shader.cpp
   src/smk/Shape.cpp
