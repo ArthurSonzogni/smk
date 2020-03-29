@@ -55,8 +55,10 @@ EM_BOOL OnTouchEvent(int eventType,
                      void* userData) {
   int id = (int)(userData);
   Window* window = window_by_id[id];
-  if (window)
-    window->input().OnTouchEvent(eventType, keyEvent);
+  if (!window)
+    return false;
+  static_cast<InputImpl*>(&(window->input()))
+      ->OnTouchEvent(eventType, keyEvent);
   return true;
 }
 
