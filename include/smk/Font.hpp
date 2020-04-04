@@ -18,9 +18,10 @@ namespace smk {
 class Font {
  public:
   Font() = default;  // Empty font.
-  Font(const std::string& filename, int size);
+  Font(const std::string& filename, float line_height);
 
-  int size() const { return size_; }
+  float line_height() const { return line_height_; }
+  float baseline_position() const { return baseline_position_; }
 
   struct Character {
     smk::Texture texture;
@@ -41,7 +42,8 @@ class Font {
 
   std::map<wchar_t, std::unique_ptr<Character>> characters_;
   std::string filename_;
-  int size_ = 0;
+  float line_height_ = 0.f;
+  float baseline_position_ = 0.f;
 };
 
 }  // namespace smk

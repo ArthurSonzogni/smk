@@ -61,7 +61,7 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
   glm::mat4 transformation = state.view * Transformation();
   float advance_x = 0.f;
-  float advance_y = font_->size();
+  float advance_y = font_->baseline_position();
 
   state.vertex_array = VertexArray(std::vector<Vertex>({
       {{0.f, 0.f}, {0.f, 0.f}},
@@ -75,7 +75,7 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
   for (const auto& it : string_) {
     if (it == U'\n') {
       advance_x = 0.f;
-      advance_y += font_->size();
+      advance_y += font_->line_height();
       continue;
     }
 
@@ -106,13 +106,13 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
 glm::vec2 Text::ComputeDimensions() const {
   glm::vec2 dimension(0.f, 0.f);
   float advance_x = 0.f;
-  float advance_y = font_->size();
-  dimension.y += font_->size();
+  float advance_y = font_->line_height();
+  dimension.y += font_->line_height();
   for (const auto& it : string_) {
     if (it == U'\n') {
       advance_x = 0.f;
-      advance_y += font_->size();
-      dimension.y += font_->size();
+      advance_y += font_->line_height();
+      dimension.y += font_->line_height();
       continue;
     }
     auto character = font_->GetCharacter(it);

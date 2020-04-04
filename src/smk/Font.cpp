@@ -20,7 +20,7 @@ Font::Character* Font::GetCharacter(wchar_t c) {
   }
 
   // Load from file.
-  if (size_) {
+  if (line_height_) {
     LoadCharacters({c});
     auto character = characters_.find(c);
     if (character != characters_.end())
@@ -35,11 +35,12 @@ void Font::operator=(Font&& other) {
   characters_.insert(std::make_move_iterator(begin(other.characters_)),
                      std::make_move_iterator(end(other.characters_)));
   filename_ = other.filename_;
-  size_ = other.size_;
+  line_height_ = other.line_height_;
+  baseline_position_ = other.baseline_position_;
 }
 
-Font::Font(const std::string& filename, int size)
-    : filename_(filename), size_(size) {
+Font::Font(const std::string& filename, float line_height)
+    : filename_(filename), line_height_(line_height) {
   std::vector<wchar_t> preloaded_characters;
   for (wchar_t c = 0; c < 256; ++c)
     preloaded_characters.push_back(c);
@@ -57,7 +58,10 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
     std::cerr << "SMK > FreeType: Failed to load" << filename_ << std::endl;
   }
 
-  FT_Set_Pixel_Sizes(face, 0, size_);
+  baseline_position_ =
+      line_height_ *
+      ((float(face->ascender) / (face->ascender - face->descender)));
+  FT_Set_Pixel_Sizes(face, line_height_, line_height_);
   if (FT_Load_Char(face, 'X', FT_LOAD_RENDER)) {
     std::cerr << "ERROR::FREETYTPE: Failed to load Glyph for file " << filename_
               << std::endl;
