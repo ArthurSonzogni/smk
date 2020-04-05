@@ -12,6 +12,15 @@ script:
 notifications:
   email: false
 
+addons:
+  apt:
+    sources:
+    - sourceline: "deb http://archive.ubuntu.com/ubuntu/ xenial multiverse"
+    - sourceline: "deb http://archive.ubuntu.com/ubuntu/ xenial-backports universe"
+    packages:
+    - cmake
+    - libgl1-mesa-dev
+
 jobs:
   include:
     # Ubuntu
