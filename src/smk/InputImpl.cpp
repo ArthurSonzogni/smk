@@ -4,7 +4,6 @@
 
 #include <GLFW/glfw3.h>
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <queue>
 #include <smk/Input.hpp>
