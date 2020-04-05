@@ -71,13 +71,15 @@ target_include_directories(smk
     src/
 )
 
-target_compile_options(smk
- PRIVATE
-  -Wall
-  #-Werror
-  #-pedantic-errors
-  -Wextra
-)
+# Add as many warning as possible:
+if (MSVC)
+  target_compile_options(smk PRIVATE "/wd4244")
+  target_compile_options(smk PRIVATE "/wd4267")
+else()
+  target_compile_options(smk PRIVATE "-Wall")
+  target_compile_options(smk PRIVATE "-Werror")
+  target_compile_options(smk PRIVATE "-Wno-sign-compare")
+endif()
 
 set_property(TARGET smk PROPERTY CXX_STANDARD 17)
 
