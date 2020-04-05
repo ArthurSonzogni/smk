@@ -10,6 +10,7 @@
 #include <smk/Text.hpp>
 #include <smk/VertexArray.hpp>
 #include <vector>
+#include <algorithm>
 
 namespace smk {
 
