@@ -7,6 +7,7 @@
 #include <libnyquist/Decoders.h>
 
 #include <iostream>
+#include <algorithm>
 #include <smk/Audio.hpp>
 #include <smk/SoundBuffer.hpp>
 #include <vector>

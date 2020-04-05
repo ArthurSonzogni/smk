@@ -2,6 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
@@ -79,7 +80,7 @@ EM_JS(void, MakeCanvasSelectable, (int window_id), {
 
 #endif
 
-#if !defined NDEBUG && !defined __EMSCRIPTEN__
+#if !defined NDEBUG && !defined __EMSCRIPTEN__ && __linux__
 void OpenGLDebugMessageCallback(GLenum /*source*/,
                                 GLenum type,
                                 GLuint /*id*/,
@@ -162,7 +163,7 @@ Window::Window(int width, int height, const std::string& title) {
   }
 #endif
 
-#if !defined NDEBUG && !defined __EMSCRIPTEN__
+#if !defined NDEBUG && !defined __EMSCRIPTEN__ && __linux__
   glEnable(GL_DEBUG_OUTPUT);
   glDebugMessageCallback(OpenGLDebugMessageCallback, 0);
 #endif

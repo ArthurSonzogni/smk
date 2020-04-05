@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <smk/Shape.hpp>
+#include <algorithm>
 
 namespace smk {
 

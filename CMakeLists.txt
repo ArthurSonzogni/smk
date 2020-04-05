@@ -75,6 +75,8 @@ target_include_directories(smk
 if (MSVC)
   target_compile_options(smk PRIVATE "/wd4244")
   target_compile_options(smk PRIVATE "/wd4267")
+  target_compile_options(smk PRIVATE "/wd4996")
+  target_compile_options(smk PRIVATE "/wd4305")
 else()
   target_compile_options(smk PRIVATE "-Wall")
   target_compile_options(smk PRIVATE "-Werror")
