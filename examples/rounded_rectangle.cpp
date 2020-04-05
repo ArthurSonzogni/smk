@@ -5,6 +5,7 @@
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Window.hpp>
+#include <algorithm>
 
 int main() {
   auto window = smk::Window(640, 480, "test");
