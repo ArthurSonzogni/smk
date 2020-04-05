@@ -18,8 +18,9 @@ addons:
     - sourceline: "deb http://archive.ubuntu.com/ubuntu/ xenial multiverse"
     - sourceline: "deb http://archive.ubuntu.com/ubuntu/ xenial-backports universe"
     packages:
-    - cmake
+    - xorg-dev
     - libgl1-mesa-dev
+    - libpulse-dev
 
 jobs:
   include:
