@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <smk/Shape.hpp>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <algorithm>
 
