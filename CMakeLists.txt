@@ -91,7 +91,7 @@ if(EMSCRIPTEN)
 else()
   target_link_libraries(smk PUBLIC glfw)
   target_link_libraries(smk PUBLIC libglew_static)
-  target_link_libraries(smk PRIVATE OpenAL)
+  target_link_libraries(smk PUBLIC OpenAL)
 endif()
 
 target_link_libraries(smk PUBLIC glm)
