@@ -1,5 +1,9 @@
 SMK (Simple multimedia kit)
 ----------------------------
+![Travis (.com)](https://img.shields.io/travis/com/arthursonzogni/smk?logo=travis)
+![GitHub issues](https://img.shields.io/github/issues-raw/arthursonzogni/smk)
+![GitHub](https://img.shields.io/github/license/arthursonzogni/smk?color=black)
+![GitHub contributors](https://img.shields.io/github/contributors/arthursonzogni/smk?color=blue)
 
 ![header](./doc/header_logo.png)
 
