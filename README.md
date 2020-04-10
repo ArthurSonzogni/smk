@@ -1,9 +1,19 @@
 SMK (Simple multimedia kit)
 ----------------------------
-![Travis (.com)](https://img.shields.io/travis/com/arthursonzogni/smk?logo=travis)
-![GitHub issues](https://img.shields.io/github/issues-raw/arthursonzogni/smk)
-![GitHub](https://img.shields.io/github/license/arthursonzogni/smk?color=black)
-![GitHub contributors](https://img.shields.io/github/contributors/arthursonzogni/smk?color=blue)
+[![travis][badge.travis]][travis]
+[![issues][badge.issues]][issues]
+[![license][badge.license]][license]
+[![contributors][badge.contributors]][contributors]
+
+[badge.travis]: https://img.shields.io/travis/com/arthursonzogni/smk?logo=travis
+[badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/smk
+[badge.license]: https://img.shields.io/github/license/arthursonzogni/smk?color=black
+[badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/smk?color=blue
+
+[travis]: https://travis-ci.org/ArthurSonzogni/smk
+[issues]: https://github.com/ArthurSonzogni/smk/issues
+[license]: http://opensource.org/licenses/MIT
+[contributors]: https://github.com/ArthurSonzogni/smk/graphs/contributors
 
 ![header](./doc/header_logo.png)
 
