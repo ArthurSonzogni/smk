@@ -29,8 +29,7 @@ FetchContent_Declare(glfw
 
 FetchContent_Declare(openal
   GIT_REPOSITORY https://github.com/kcat/openal-soft
-  #GIT_REPOSITORY https://github.com/arthursonzogni/openal-soft
-  #GIT_TAG 5e2e4d50d324f713a7c39cdc71ce9050d2c34b5e
+  GIT_TAG 0dc9b03
 )
 
 FetchContent_GetProperties(freetype2)
@@ -74,5 +73,4 @@ if(NOT openal_POPULATED AND NOT EMSCRIPTEN)
   FetchContent_Populate(openal)
   set(LIBTYPE STATIC)
   add_subdirectory(${openal_SOURCE_DIR} ${openal_BINARY_DIR} EXCLUDE_FROM_ALL)
-  target_compile_definitions(OpenAL PUBLIC AL_LIBTYPE_STATIC)
 endif()
