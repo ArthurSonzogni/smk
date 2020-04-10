@@ -29,7 +29,7 @@ FetchContent_Declare(glfw
 
 FetchContent_Declare(openal
   GIT_REPOSITORY https://github.com/kcat/openal-soft
-  GIT_TAG 0dc9b03
+  GIT_TAG e123fa0ec349337ba4db00ebb2bbec1b7bee4cfa
 )
 
 FetchContent_GetProperties(freetype2)
