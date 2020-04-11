@@ -44,6 +44,7 @@ function(add_example target input)
 endfunction(add_example)
 
 add_example(bezier bezier.cpp)
+add_example(path path.cpp)
 add_example(framebuffer framebuffer.cpp)
 add_example(input_box input_box.cpp)
 add_example(rounded_rectangle rounded_rectangle.cpp)

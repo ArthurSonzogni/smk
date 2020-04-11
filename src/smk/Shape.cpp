@@ -241,19 +241,25 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
     points_right.push_back(points[0] + normal * thickness);
   }
 
-  const float epsilon = 0.01;
+  float epsilon = 0.01f;
   int i = 0;
   for (size_t j = 1; j < points.size() - 1; ++j) {
-    vec3 intersection_left = cross(planes_left[i], planes_left[j]);
-    vec3 intersection_right = cross(planes_right[i], planes_right[j]);
-    if (abs(intersection_left.z) < epsilon ||
-        abs(intersection_right.z) < epsilon) {
+    glm::vec3 intersection_left = cross(planes_left[i], planes_left[j]);
+    glm::vec3 intersection_right = cross(planes_right[i], planes_right[j]);
+    if (intersection_left.z * intersection_right.z < epsilon)
       continue;
-    }
     intersection_left /= intersection_left.z;
     intersection_right /= intersection_right.z;
-    points_left.push_back({intersection_left.x, intersection_left.y});
-    points_right.push_back({intersection_right.x, intersection_right.y});
+    glm::vec2 left = glm::vec2(intersection_left);
+    glm::vec2 right = glm::vec2(intersection_right);
+    if (glm::distance(left, right) > 10.f * thickness) {
+      glm::vec2 middle = glm::vec2(left + right) * 0.5f;
+      glm::vec2 dir = glm::normalize(glm::vec2(right - left)) * 5.f * thickness;
+      left = glm::vec3(middle - dir, 1.f);
+      right = glm::vec3(middle + dir, 1.f);
+    }
+    points_left.push_back(left);
+    points_right.push_back(right);
     i = j;
   }
 
