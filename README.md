@@ -98,6 +98,10 @@ Play sound:
   window.SetView(view);
 ~~~
 
+## Library made using SMK
+
+ * [smkflow](https://github.com/ArthurSonzogni/smkflow) => A node editor library.
+
 ## Games made using SMK
 
  * [InTheCube](https://github.com/ArthurSonzogni/InTheCube)
