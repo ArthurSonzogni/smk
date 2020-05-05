@@ -10,7 +10,7 @@ SMK (Simple multimedia kit)
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/smk?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/smk?color=blue
 
-[travis]: https://travis-ci.org/ArthurSonzogni/smk
+[travis]: https://travis-ci.com/ArthurSonzogni/smk
 [issues]: https://github.com/ArthurSonzogni/smk/issues
 [license]: http://opensource.org/licenses/MIT
 [contributors]: https://github.com/ArthurSonzogni/smk/graphs/contributors
