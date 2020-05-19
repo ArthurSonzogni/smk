@@ -86,22 +86,42 @@ Shader::Shader(std::vector<char> content, GLenum type) {
 
   // compilation
   glCompileShader(handle_);
+}
 
-  // compilation check
+/// @brief Check the status of a Shader.
+/// Linking shader is an asynchronous process. Using the shader can causes the
+/// CPU to wait until its completion. If you need to do some work before the
+/// completion, you can use this function and use the Shader only after it
+/// becomes ready.
+bool Shader::IsReady() {
+  if (GLEW_KHR_parallel_shader_compile) {
+    GLint completion_status;
+    glGetShaderiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
+    return completion_status == GL_TRUE;
+  }
+  
+  std::cerr << "Used bad path" << std::endl;
+  return true;
+}
+
+/// @brief Wait until the Shader to be ready.
+/// @return True if it suceeded, false otherwise.
+bool Shader::CompileStatus() {
   GLint compile_status;
   glGetShaderiv(handle_, GL_COMPILE_STATUS, &compile_status);
-  if (compile_status != GL_TRUE) {
-    GLsizei logsize = 0;
-    glGetShaderiv(handle_, GL_INFO_LOG_LENGTH, &logsize);
+  if (compile_status == GL_TRUE)
+    return true;
 
-    char* log = new char[logsize + 1];
-    glGetShaderInfoLog(handle_, logsize, &logsize, log);
+  GLsizei logsize = 0;
+  glGetShaderiv(handle_, GL_INFO_LOG_LENGTH, &logsize);
 
-    std::cout << "[Error] compilation error: " << std::endl;
-    std::cout << log << std::endl;
+  char* log = new char[logsize + 1];
+  glGetShaderInfoLog(handle_, logsize, &logsize, log);
 
-    exit(EXIT_FAILURE);
-  }
+  std::cout << "[Error] compilation error: " << std::endl;
+  std::cout << log << std::endl;
+
+  return false;
 }
 
 Shader::~Shader() {
@@ -139,19 +159,39 @@ void ShaderProgram::AddShader(const Shader& shader) {
 /// @brief Add a Shader to the program list.
 void ShaderProgram::Link() {
   glLinkProgram(handle_);
+}
+
+// Linking shader is an asynchronous process. Using the shader can causes the
+// CPU to wait until its completion. If you need to do some work before the
+// completion, you can use this function and use the Shader only after it
+// becomes ready.
+bool ShaderProgram::IsReady() {
+  if (GLEW_KHR_parallel_shader_compile) {
+    GLint completion_status;
+    glGetProgramiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
+    return completion_status == GL_TRUE;
+  }
+  
+  std::cerr << "Used bad path" << std::endl;
+  return true;
+}
+
+bool ShaderProgram::LinkStatus() {
   GLint result;
   glGetProgramiv(handle_, GL_LINK_STATUS, &result);
-  if (result != GL_TRUE) {
-    std::cout << "[Error] linkage error" << std::endl;
+  if (result == GL_TRUE)
+    return true;
 
-    GLsizei logsize = 0;
-    glGetProgramiv(handle_, GL_INFO_LOG_LENGTH, &logsize);
+  std::cout << "[Error] linkage error" << std::endl;
 
-    char* log = new char[logsize];
-    glGetProgramInfoLog(handle_, logsize, &logsize, log);
+  GLsizei logsize = 0;
+  glGetProgramiv(handle_, GL_INFO_LOG_LENGTH, &logsize);
 
-    std::cout << log << std::endl;
-  }
+  char* log = new char[logsize];
+  glGetProgramInfoLog(handle_, logsize, &logsize, log);
+
+  std::cout << log << std::endl;
+  return false;
 }
 
 /// @brief Return the uniform ID.

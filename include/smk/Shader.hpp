@@ -68,6 +68,15 @@ class Shader {
   static Shader FromFile(const std::string& filename, GLenum type);
   static Shader FromString(const std::string& content, GLenum type);
 
+  // Linking shader is an asynchronous process. Using the shader can causes the
+  // CPU to wait until its completion. If you need to do some work before the
+  // completion, you can use this function and use the Shader only after it
+  // becomes ready.
+  bool IsReady();
+
+  // Wait until the Shader to be ready. Return true if it suceeded.
+  bool CompileStatus();
+
   // provide opengl shader identifiant.
   GLuint GetHandle() const;
 
@@ -82,7 +91,7 @@ class Shader {
 
  private:
   Shader(std::vector<char> content, GLenum type);
-  // opengl program identifiant
+  // opengl program identifier.
   GLuint handle_ = 0;
 
   friend class ShaderProgram;
@@ -102,6 +111,15 @@ class ShaderProgram {
   ShaderProgram();
   void AddShader(const Shader& shader);
   void Link();
+
+  // Linking shader is an asynchronous process. Using the shader can causes the
+  // CPU to wait until its completion. If you need to do some work before the
+  // completion, you can use this function and use the Shader only after it
+  // becomes ready.
+  bool IsReady();
+
+  // Wait until the ShaderProgram to be ready. Return true if it suceeded.
+  bool LinkStatus();
 
   // bind the program
   void Use() const;

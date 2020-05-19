@@ -180,8 +180,14 @@ Window::Window(int width, int height, const std::string& title) {
 
   InitRenderTarget();
 
-#ifdef __EMSCRIPTEN__
+#ifndef __EMSCRIPTEN__
+  if (GLEW_KHR_parallel_shader_compile)
+    glMaxShaderCompilerThreadsKHR(4);
+#else
   MakeCanvasSelectable(id_);
+  emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),
+                                    "KHR_parallel_shader_compile");
+
   module_canvas_selector_ = "[smk='" + std::to_string(id_) + "']";
 
   emscripten_set_touchstart_callback(module_canvas_selector_.c_str(),
