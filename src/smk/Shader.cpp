@@ -99,7 +99,7 @@ bool Shader::IsReady() {
     glGetShaderiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
-  
+
   std::cerr << "Used bad path" << std::endl;
   return true;
 }
@@ -171,7 +171,7 @@ bool ShaderProgram::IsReady() {
     glGetProgramiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
-  
+
   std::cerr << "Used bad path" << std::endl;
   return true;
 }

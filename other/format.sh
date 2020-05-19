@@ -8,7 +8,7 @@ for file in $files
 do
   if ! grep -q Copyright $file
   then
-    cat license_headers.cpp $file >$file.new && mv $file.new $file
+    cat ./other/license_headers.cpp $file >$file.new && mv $file.new $file
   fi
 done
 

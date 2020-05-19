@@ -6,8 +6,8 @@
 #include <AL/alc.h>
 #include <libnyquist/Decoders.h>
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <smk/Audio.hpp>
 #include <smk/SoundBuffer.hpp>
 #include <vector>

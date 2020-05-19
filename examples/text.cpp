@@ -22,12 +22,12 @@ int main() {
 
     // Draw a fixed text.
     auto text = smk::Text(font, "The SMK library\ncan display fonts!!!");
-    text.SetPosition(margin,margin);
+    text.SetPosition(margin, margin);
     window.Draw(text);
 
     // Draw a rotating text.
     text = smk::Text(font, L"The SMK library\ncan display fonts!!! ←↑→↓");
-    text.SetCenter(text.ComputeDimensions() * 0.5f); // Center
+    text.SetCenter(text.ComputeDimensions() * 0.5f);  // Center
     text.SetPosition({320.f, 320.f});
     text.SetRotation(step++);
     window.Draw(text);

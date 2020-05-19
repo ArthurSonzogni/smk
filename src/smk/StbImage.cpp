@@ -954,8 +954,7 @@ static unsigned char* convert_format(unsigned char* data,
       CASE(2, 4) dest[0] = dest[1] = dest[2] = src[0], dest[3] = src[1];
       break;
       CASE(3, 4)
-      dest[0] = src[0],
-      dest[1] = src[1], dest[2] = src[2], dest[3] = 255;
+      dest[0] = src[0], dest[1] = src[1], dest[2] = src[2], dest[3] = 255;
       break;
       CASE(3, 1) dest[0] = compute_y(src[0], src[1], src[2]);
       break;

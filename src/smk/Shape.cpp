@@ -2,13 +2,12 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
+#include <algorithm>
 #include <cmath>
 #include <smk/Shape.hpp>
-#include <cmath>
-#include <algorithm>
 
 #ifndef M_PI
-    #define M_PI 3.14159265358979323846
+  #define M_PI 3.14159265358979323846
 #endif
 
 namespace smk {

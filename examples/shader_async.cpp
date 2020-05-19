@@ -105,7 +105,8 @@ int main() {
   };
 
   auto draw = [&] {
-    auto text = smk::Text(font, "Click to asynchronously\ncompile a new shader");
+    auto text =
+        smk::Text(font, "Click to asynchronously\ncompile a new shader");
     text.SetPosition(margin, margin);
     window.Draw(text);
   };

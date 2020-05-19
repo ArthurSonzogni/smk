@@ -2,6 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
+#include <algorithm>
 #include <codecvt>
 #include <iostream>
 #include <locale>
@@ -10,7 +11,6 @@
 #include <smk/Text.hpp>
 #include <smk/VertexArray.hpp>
 #include <vector>
-#include <algorithm>
 
 namespace smk {
 

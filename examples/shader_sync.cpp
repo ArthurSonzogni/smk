@@ -68,8 +68,7 @@ int main() {
       return;
 
     // Compile the shaders.
-    vertex_shader =
-        smk::Shader::FromString(kVertexShader, GL_VERTEX_SHADER);
+    vertex_shader = smk::Shader::FromString(kVertexShader, GL_VERTEX_SHADER);
 
     fragment_shader =
         smk::Shader::FromString(kFragmentShader, GL_FRAGMENT_SHADER);
