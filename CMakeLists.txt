@@ -81,6 +81,7 @@ else()
   target_compile_options(smk PRIVATE "-Wall")
   target_compile_options(smk PRIVATE "-Werror")
   target_compile_options(smk PRIVATE "-Wno-sign-compare")
+  target_compile_options(smk PRIVATE "-Wno-return-type");
 endif()
 
 set_property(TARGET smk PROPERTY CXX_STANDARD 17)
