@@ -14,6 +14,8 @@
 
 namespace smk {
 
+extern bool KHR_PARALLEL_SHADER;
+
 using namespace glm;
 
 const std::string shader_header =
@@ -94,7 +96,7 @@ Shader::Shader(std::vector<char> content, GLenum type) {
 /// completion, you can use this function and use the Shader only after it
 /// becomes ready.
 bool Shader::IsReady() {
-  if (GLEW_KHR_parallel_shader_compile) {
+  if (KHR_PARALLEL_SHADER) {
     GLint completion_status;
     glGetShaderiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
@@ -166,13 +168,14 @@ void ShaderProgram::Link() {
 // completion, you can use this function and use the Shader only after it
 // becomes ready.
 bool ShaderProgram::IsReady() {
-  if (GLEW_KHR_parallel_shader_compile) {
+  if (KHR_PARALLEL_SHADER) {
     GLint completion_status;
+    std::cerr << GL_COMPLETION_STATUS_KHR << std::endl;
+    std::cerr << handle_ << std::endl;
     glGetProgramiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
 
-  std::cerr << "Used bad path" << std::endl;
   return true;
 }
 
@@ -190,6 +193,7 @@ bool ShaderProgram::LinkStatus() {
   char* log = new char[logsize];
   glGetProgramInfoLog(handle_, logsize, &logsize, log);
 
+    std::cerr << __func__ << " " << __LINE__ << std::endl;
   std::cout << log << std::endl;
   return false;
 }

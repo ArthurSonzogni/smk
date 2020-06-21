@@ -1,3 +1,4 @@
+#include <iostream>
 // Copyright 2019 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
@@ -23,6 +24,8 @@
 #endif
 
 namespace smk {
+
+bool KHR_PARALLEL_SHADER = false;
 
 namespace {
 
@@ -69,6 +72,7 @@ void MainLoop() {
 }
 
 EM_JS(void, MakeCanvasSelectable, (int window_id), {
+    console.log(Module);
   if (!Module)
     return;
 
@@ -151,6 +155,11 @@ Window::Window(int width, int height, const std::string& title) {
   window_by_glfw_window[window_] = this;
 
   glfwMakeContextCurrent(window_);
+#ifdef __EMSCRIPTEN__
+  KHR_PARALLEL_SHADER = emscripten_webgl_enable_extension(
+      emscripten_webgl_get_current_context(), "KHR_parallel_shader_compile");
+  std::cerr << "enabled = " << KHR_PARALLEL_SHADER << std::endl;
+#endif
 
 #ifndef __EMSCRIPTEN__
   glewExperimental = GL_TRUE;
@@ -183,10 +192,15 @@ Window::Window(int width, int height, const std::string& title) {
 #ifndef __EMSCRIPTEN__
   if (GLEW_KHR_parallel_shader_compile)
     glMaxShaderCompilerThreadsKHR(4);
+    KHR_PARALLEL_SHADER = true;
 #else
+  KHR_PARALLEL_SHADER = emscripten_webgl_enable_extension(
+      emscripten_webgl_get_current_context(), "KHR_parallel_shader_compile");
+
+  std::cerr << "KHR_PARALLEL_SHADER" << std::endl;
+  std::cerr << KHR_PARALLEL_SHADER << std::endl;
+
   MakeCanvasSelectable(id_);
-  emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(),
-                                    "KHR_parallel_shader_compile");
 
   module_canvas_selector_ = "[smk='" + std::to_string(id_) + "']";
 
