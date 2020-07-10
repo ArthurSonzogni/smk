@@ -38,8 +38,8 @@ class Window : public RenderTarget {
   float time() const;
   Input& input();
 
-  void ExecuteMainLoop(std::function<bool(void)> loop);
   void ExecuteMainLoop(std::function<void(void)> loop);
+  void ExecuteMainLoopUntil(std::function<bool(void)> loop);
 
   // Pool new events. This update the |input()| element.
   void PoolEvents();
@@ -51,6 +51,9 @@ class Window : public RenderTarget {
   // Wait until the end of the frame to maintain a targetted frame per seconds.
   // (optional).
   void LimitFrameRate(float fps);
+
+  // Returns true when the user wants to close the window.
+  bool ShouldClose();
 
   // Move-only ressource.
   Window(Window&&);

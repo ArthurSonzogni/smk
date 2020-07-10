@@ -266,7 +266,7 @@ Input& Window::input() {
 /// when the user presses the 'escape' button or when the |loop| function
 /// returns 'false'.
 /// @param loop The function to be called for each new frame.
-void Window::ExecuteMainLoop(std::function<bool(void)> loop) {
+void Window::ExecuteMainLoopUntil(std::function<bool(void)> loop) {
 #ifdef __EMSCRIPTEN__
   main_loop = [my_loop = loop] { (void)my_loop(); };
   emscripten_set_main_loop(&MainLoop, 0, 1);
@@ -287,7 +287,7 @@ void Window::ExecuteMainLoop(std::function<void(void)> loop) {
   main_loop = loop;
   emscripten_set_main_loop(&MainLoop, 0, 1);
 #else
-  while (!input().IsKeyPressed(GLFW_KEY_ESCAPE)) {
+  while (!input().IsKeyPressed(GLFW_KEY_ESCAPE) && !ShouldClose()) {
     loop();
     LimitFrameRate(60.0f);
   };
@@ -322,6 +322,11 @@ void Window::LimitFrameRate(float fps) {
         std::chrono::microseconds(int(sleep_duration * 1'000'000)));
   }
   time_last_sleep_ = glfwGetTime();
+}
+
+/// Returns true when the user wants to close the window.
+bool Window::ShouldClose() {
+  return glfwWindowShouldClose(window_);
 }
 
 }  // namespace smk
