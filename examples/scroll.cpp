@@ -14,7 +14,7 @@ int main() {
   auto window = smk::Window(480, 96, "smk/example/scroll");
   auto font = smk::Font(asset::arial_ttf, 34);
 
-  glm::vec2 scroll_sum;
+  glm::vec2 scroll_sum{};
 
   window.ExecuteMainLoop([&] {
     window.PoolEvents();
