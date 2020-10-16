@@ -107,6 +107,11 @@ void GLFWCharCallback(GLFWwindow* glfw_window, unsigned int codepoint) {
 
 }  // namespace
 
+glm::vec2 smk::Window::ToScreenSpace(const glm::vec2& world) {
+  glm::vec2 factor = glm::vec2(initialSize_.x/width_, initialSize_.y/height_);
+  return glm::vec2(world.x*factor.x, world.y*factor.y);
+}
+
 /// @brief A null window.
 Window::Window() {
   id_ = ++id;
@@ -123,6 +128,7 @@ Window::Window(int width, int height, const std::string& title) {
   window_by_id[id_] = this;
   width_ = width;
   height_ = height;
+  initialSize_ = {width, height};
 
   glfwSetErrorCallback(GLFWErrorCallback);
   // initialize the GLFW library
@@ -219,6 +225,7 @@ void Window::operator=(Window&& other) {
   std::swap(input_, other.input_);
   std::swap(id_, other.id_);
   std::swap(module_canvas_selector_, other.module_canvas_selector_);
+  std::swap(initialSize_, other.initialSize_);
   window_by_id[id_] = this;
   window_by_glfw_window[window_] = this;
 }
