@@ -1,5 +1,7 @@
 include(FetchContent)
 
+SET(BUILD_SHARED_LIBS OFF CACHE BOOL "")
+
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(freetype2
   GIT_REPOSITORY https://github.com/aseprite/freetype2.git
@@ -48,6 +50,9 @@ if(NOT libnyquist_POPULATED)
   set(LIBNYQUIST_PULSE TRUE)
   add_subdirectory(${libnyquist_SOURCE_DIR} ${libnyquist_BINARY_DIR} EXCLUDE_FROM_ALL)
   set_property(TARGET libopus PROPERTY CXX_STANDARD 17)
+  target_compile_options(libnyquist PRIVATE "-w")
+  target_compile_options(libopus PRIVATE "-w")
+  target_compile_options(libwavpack PRIVATE "-w")
 endif()
 
 FetchContent_GetProperties(glm)
@@ -59,6 +64,8 @@ endif()
 FetchContent_GetProperties(glew)
 if(NOT glew_POPULATED AND NOT EMSCRIPTEN)
   FetchContent_Populate(glew)
+  option(glew-cmake_BUILD_SHARED "Build the shared glew library" OFF)
+  set(glew-cmake_BUILD_SHARED OFF)
   add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
@@ -66,6 +73,7 @@ FetchContent_GetProperties(glfw)
 if(NOT glfw_POPULATED AND NOT EMSCRIPTEN)
   FetchContent_Populate(glfw)
   add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR} EXCLUDE_FROM_ALL)
+  target_compile_options(glfw PRIVATE "-w")
 endif()
 
 FetchContent_GetProperties(openal)
@@ -73,4 +81,5 @@ if(NOT openal_POPULATED AND NOT EMSCRIPTEN)
   FetchContent_Populate(openal)
   set(LIBTYPE STATIC)
   add_subdirectory(${openal_SOURCE_DIR} ${openal_BINARY_DIR} EXCLUDE_FROM_ALL)
+  target_compile_options(OpenAL PRIVATE "-w")
 endif()
