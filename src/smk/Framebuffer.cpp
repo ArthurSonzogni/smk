@@ -53,7 +53,7 @@ Framebuffer::Framebuffer(int width, int height) {
 
   InitRenderTarget();
 
-  color_texture = smk::Texture(id, width_, height_);
+  color_texture_ = smk::Texture(id, width_, height_);
 }
 
 Framebuffer::~Framebuffer() {
@@ -68,14 +68,18 @@ Framebuffer::~Framebuffer() {
   }
 }
 
-Framebuffer::Framebuffer(Framebuffer&& other) {
+Framebuffer::Framebuffer(Framebuffer&& other) noexcept {
   this->operator=(std::move(other));
 }
 
-void Framebuffer::operator=(Framebuffer&& other) {
+void Framebuffer::operator=(Framebuffer&& other) noexcept {
   RenderTarget::operator=(std::move(other));
-  std::swap(color_texture, other.color_texture);
+  std::swap(color_texture_, other.color_texture_);
   std::swap(render_buffer_, other.render_buffer_);
+}
+
+smk::Texture& Framebuffer::color_texture() {
+  return color_texture_;
 }
 
 }  // namespace smk

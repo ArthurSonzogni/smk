@@ -11,19 +11,19 @@
 
 namespace smk {
 
-Font::Character* Font::GetCharacter(wchar_t c) {
+Font::Glyph* Font::FetchGlyph(wchar_t in) {
   // Load from cache.
   {
-    auto character = characters_.find(c);
-    if (character != characters_.end())
+    auto character = glyphs_.find(in);
+    if (character != glyphs_.end())
       return character->second.get();
   }
 
   // Load from file.
   if (line_height_) {
-    LoadCharacters({c});
-    auto character = characters_.find(c);
-    if (character != characters_.end())
+    LoadGlyphs({in});
+    auto character = glyphs_.find(in);
+    if (character != glyphs_.end())
       return character->second.get();
   }
 
@@ -31,9 +31,9 @@ Font::Character* Font::GetCharacter(wchar_t c) {
   return nullptr;
 }
 
-void Font::operator=(Font&& other) {
-  characters_.insert(std::make_move_iterator(begin(other.characters_)),
-                     std::make_move_iterator(end(other.characters_)));
+void Font::operator=(Font&& other) noexcept {
+  glyphs_.insert(std::make_move_iterator(begin(other.glyphs_)),
+                 std::make_move_iterator(end(other.glyphs_)));
   filename_ = other.filename_;
   line_height_ = other.line_height_;
   baseline_position_ = other.baseline_position_;
@@ -44,10 +44,10 @@ Font::Font(const std::string& filename, float line_height)
   std::vector<wchar_t> preloaded_characters;
   for (wchar_t c = 0; c < 256; ++c)
     preloaded_characters.push_back(c);
-  LoadCharacters(preloaded_characters);
+  LoadGlyphs(preloaded_characters);
 }
 
-void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
+void Font::LoadGlyphs(const std::vector<wchar_t>& chars) {
   FT_Library ft;
   if (FT_Init_FreeType(&ft)) {
     std::cerr << "SMK > FreeType: Could not init FreeType Library" << std::endl;
@@ -79,7 +79,7 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
 
     int width = face->glyph->bitmap.width;
     int height = face->glyph->bitmap.rows;
-    auto character = std::make_unique<Character>();
+    auto character = std::make_unique<Glyph>();
     character->bearing =
         glm::ivec2(+face->glyph->bitmap_left, -face->glyph->bitmap_top);
     character->advance = face->glyph->advance.x / (64.0f);
@@ -99,7 +99,7 @@ void Font::LoadCharacters(const std::vector<wchar_t>& chars) {
       character->texture = smk::Texture(buffer_rgba.data(), width, height);
     }
 
-    characters_[c] = std::move(character);
+    glyphs_[c] = std::move(character);
   }
 
   FT_Done_Face(face);

@@ -10,11 +10,10 @@ int main() {
   auto window = smk::Window(480, 96, "smk/example/scroll");
   auto font = smk::Font(asset::arial_ttf, 34);
 
-  glm::vec2 scroll_sum{};
-
+  auto scroll_sum = glm::vec2(0.f, 0.f);
   window.ExecuteMainLoop([&] {
     window.PoolEvents();
-    scroll_sum += window.input().ScrollOffset();
+    scroll_sum += window.input().scroll_offset();
 
     window.Clear(smk::Color::Black);
     std::string x_scroll = std::to_string(scroll_sum.x);

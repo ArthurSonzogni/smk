@@ -55,7 +55,7 @@ VertexArray::VertexArray(const VertexArray& other) {
   this->operator=(other);
 }
 
-VertexArray::VertexArray(VertexArray&& other) {
+VertexArray::VertexArray(VertexArray&& other) noexcept {
   this->operator=(std::move(other));
 }
 
@@ -76,7 +76,7 @@ VertexArray& VertexArray::operator=(const VertexArray& other) {
   return *this;
 }
 
-VertexArray& VertexArray::operator=(VertexArray&& other) {
+VertexArray& VertexArray::operator=(VertexArray&& other) noexcept {
   std::swap(vbo_, other.vbo_);
   std::swap(vao_, other.vao_);
   std::swap(size_, other.size_);
@@ -102,7 +102,7 @@ VertexArray::VertexArray(const std::vector<Vertex3D>& array) {
 
 /// @brief The size of the GPU array.
 /// @return the number of vertices in the GPU array.
-int VertexArray::size() const {
+size_t VertexArray::size() const {
   return size_;
 }
 

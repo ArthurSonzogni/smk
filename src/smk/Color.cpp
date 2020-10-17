@@ -28,16 +28,16 @@ glm::vec4 RGB(float red, float green, float blue) {
 }
 
 // clang-format off
-glm::vec4 White       = glm::vec4(1.f, 1.f, 1.f, 1.f); ///< White
-glm::vec4 Black       = glm::vec4(0.f, 0.f, 0.f, 1.f); ///< Black
-glm::vec4 Grey        = glm::vec4(.5f, .5f, .5f, 1.f); ///< Grey
-glm::vec4 Red         = glm::vec4(1.f, 0.f, 0.f, 1.f); ///< Red
-glm::vec4 Green       = glm::vec4(0.f, 1.f, 0.f, 1.f); ///< Green
-glm::vec4 Blue        = glm::vec4(0.f, 0.f, 1.f, 1.f); ///< Blue
-glm::vec4 Yellow      = glm::vec4(1.f, 1.f, 0.f, 1.f); ///< Yellow
-glm::vec4 Magenta     = glm::vec4(1.f, 0.f, 1.f, 1.f); ///< Magenta
-glm::vec4 Cyan        = glm::vec4(0.f, 1.f, 1.f, 1.f); ///< Cyan
-glm::vec4 Transparent = glm::vec4(0.f, 0.f, 0.f, 0.f); ///< Transparent
+const glm::vec4 White       = {1.f, 1.f, 1.f, 1.f}; ///< White
+const glm::vec4 Black       = {0.f, 0.f, 0.f, 1.f}; ///< Black
+const glm::vec4 Grey        = {.5f, .5f, .5f, 1.f}; ///< Grey
+const glm::vec4 Red         = {1.f, 0.f, 0.f, 1.f}; ///< Red
+const glm::vec4 Green       = {0.f, 1.f, 0.f, 1.f}; ///< Green
+const glm::vec4 Blue        = {0.f, 0.f, 1.f, 1.f}; ///< Blue
+const glm::vec4 Yellow      = {1.f, 1.f, 0.f, 1.f}; ///< Yellow
+const glm::vec4 Magenta     = {1.f, 0.f, 1.f, 1.f}; ///< Magenta
+const glm::vec4 Cyan        = {0.f, 1.f, 1.f, 1.f}; ///< Cyan
+const glm::vec4 Transparent = {0.f, 0.f, 0.f, 0.f}; ///< Transparent
 // clang-format on
 
 }  // namespace Color

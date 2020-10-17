@@ -10,7 +10,7 @@ int main() {
     window.PoolEvents();
     window.Clear(smk::Color::RGB(0.1f, 0.1f, 0.1f));
 
-    float y = 0.5 + 0.4 * sin(window.time());
+    float y = 0.5f + 0.4f * sin(window.time());
 
     // Draw a bezier path
     auto bezier = smk::Shape::Bezier(

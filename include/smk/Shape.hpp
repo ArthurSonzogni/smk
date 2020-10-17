@@ -20,7 +20,9 @@ namespace smk {
 class Shape {
  public:
   static Transformable FromVertexArray(VertexArray vertex_array);
-  static Transformable Line(glm::vec2 a, glm::vec2 b, float thickness);
+  static Transformable Line(const glm::vec2& a,
+                            const glm::vec2& b,
+                            float thickness);
   static Transformable Square();
   static Transformable Circle(float radius);
   static Transformable Circle(float radius, int subdivisions);

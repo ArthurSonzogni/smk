@@ -8,16 +8,15 @@
 #include <smk/Texture.hpp>
 
 namespace smk {
-bool invalidate_texture = false;
+bool g_invalidate_textures = false;
 namespace {
 
-static smk::Texture white_texture;
+const Texture& WhiteTexture() {
+  static const smk::Texture white_texture = [] {
+    static const uint8_t data[4] = {255, 255, 255, 255};
+    return smk::Texture(data, 1, 1);
+  }();
 
-Texture& WhiteTexture() {
-  if (white_texture.id() == 0) {
-    const uint8_t data[4] = {255, 255, 255, 255};
-    white_texture = smk::Texture(data, 1, 1);
-  }
   return white_texture;
 }
 
@@ -39,12 +38,12 @@ void RenderTarget::Bind(RenderTarget* target) {
 RenderTarget::RenderTarget() {}
 
 /// @brief Constructor from temporary.
-RenderTarget::RenderTarget(RenderTarget&& other) {
+RenderTarget::RenderTarget(RenderTarget&& other) noexcept {
   operator=(std::move(other));
 }
 
 /// @brief Move operator.
-void RenderTarget::operator=(RenderTarget&& other) {
+void RenderTarget::operator=(RenderTarget&& other) noexcept {
   std::swap(width_, other.width_);
   std::swap(height_, other.height_);
   std::swap(projection_matrix_, other.projection_matrix_);
@@ -91,7 +90,7 @@ void RenderTarget::SetView(const glm::mat4& mat) {
 }
 
 /// @brief Return the View currently assigned to this RenderTarget.
-const View& RenderTarget::GetView() const {
+const View& RenderTarget::view() const {
   return view_;
 }
 
@@ -146,12 +145,12 @@ void RenderTarget::SetShaderProgram(ShaderProgram* shader_program) {
 
 /// @brief Return the default predefined 2D shader program. It is bound by
 /// default.
-ShaderProgram* RenderTarget::shader_program_2d() {
+ShaderProgram* RenderTarget::shader_program_2d() const {
   return shader_program_2d_.get();
 };
 
 /// @brief Return the default predefined 3D shader program.
-ShaderProgram* RenderTarget::shader_program_3d() {
+ShaderProgram* RenderTarget::shader_program_3d() const {
   return shader_program_3d_.get();
 };
 
@@ -194,10 +193,10 @@ void RenderTarget::Draw(const RenderState& state) {
 
   // Texture
   auto& texture = state.texture.id() ? state.texture : WhiteTexture();
-  if (cached_render_state_.texture != texture || invalidate_texture) {
+  if (cached_render_state_.texture != texture || g_invalidate_textures) {
     cached_render_state_.texture = texture;
     texture.Bind();
-    invalidate_texture = false;
+    g_invalidate_textures = false;
   }
 
   if (cached_render_state_.blend_mode != state.blend_mode) {
@@ -214,7 +213,7 @@ void RenderTarget::Draw(const RenderState& state) {
 
 /// @brief the dimension (width, height) of the drawing area.
 /// @return the dimensions in (pixels, pixels) of the surface.
-glm::vec2 RenderTarget::dimension() const {
+glm::vec2 RenderTarget::dimensions() const {
   return glm::vec2(width_, height_);
 }
 

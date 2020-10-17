@@ -18,8 +18,8 @@ struct RenderState {
   ShaderProgram* shader_program = nullptr;  ///< The shader used.
   Texture texture;                          ///< The texture 0 bound.
   VertexArray vertex_array;                 ///< The shape to to be drawn
-  glm::mat4 view;                           ///< The "view" transformation.
-  glm::vec4 color;                          ///< The masking color.
+  glm::mat4 view = glm::mat4(1.f);          ///< The "view" transformation.
+  glm::vec4 color = glm::vec4(0.f);         ///< The masking color.
   BlendMode blend_mode = BlendMode::Alpha;  ///< The OpenGL BlendMode
 };
 

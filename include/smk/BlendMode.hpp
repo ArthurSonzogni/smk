@@ -19,12 +19,12 @@ namespace smk {
 ///
 /// SMK provides 6 predefined common BlendMode:
 /// ~~~cpp
-/// smk::BlendMode::Replace;    // dst = src
-/// smk::BlendMode::Add;        // dst += src
-/// smk::BlendMode::Substract;  // dst -= src
-/// smk::BlendMode::Multiply;   // dst *= src
-/// smk::BlendMode::Alpha;      // dst = src * a + dest * (1 - a)
-/// smk::BlendMode::Invert;     // dst = 1 - dst
+/// smk::BlendMode::Replace;   // dst = src
+/// smk::BlendMode::Add;       // dst += src
+/// smk::BlendMode::Subtract; // dst -= src
+/// smk::BlendMode::Multiply;  // dst *= src
+/// smk::BlendMode::Alpha;     // dst = src * a + dest * (1 - a)
+/// smk::BlendMode::Invert;    // dst = 1 - dst
 /// ~~~
 ///
 /// ### Example:
@@ -61,12 +61,12 @@ namespace smk {
 /// ~~~
 struct BlendMode {
   // Preset of BlendMode:
-  static const BlendMode Replace;    // dst = src
-  static const BlendMode Add;        // dst += src
-  static const BlendMode Substract;  // dst -= src
-  static const BlendMode Multiply;   // dst *= src
-  static const BlendMode Alpha;      // dst = src * a + dest * (1 - a)
-  static const BlendMode Invert;     // dst = 1 - dst
+  static const BlendMode Replace;  // dst = src
+  static const BlendMode Add;      // dst += src
+  static const BlendMode Subtract; // dst -= src
+  static const BlendMode Multiply; // dst *= src
+  static const BlendMode Alpha;    // dst = src * a + dest * (1 - a)
+  static const BlendMode Invert;   // dst = 1 - dst
 
   // glBlendEquation
   GLenum equation_rgb = GL_FUNC_ADD;

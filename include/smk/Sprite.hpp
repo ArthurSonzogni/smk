@@ -36,7 +36,7 @@ class Sprite : public Transformable {
   Sprite() = default;
   Sprite(const Texture& texture);
   Sprite(const Texture& texture, const Rectangle rectangle);
-  Sprite(const Framebuffer& framebuffer);
+  explicit Sprite(Framebuffer& framebuffer);
 
   // Movable and copyable.
   Sprite(Sprite&&) = default;

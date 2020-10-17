@@ -16,7 +16,7 @@ void View::SetCenter(float x, float y) {
 
 /// @brief Set the center position of the in-game view.
 /// param center The center of the view.
-void View::SetCenter(glm::vec2 center) {
+void View::SetCenter(const glm::vec2& center) {
   SetCenter(center.x, center.y);
 }
 
@@ -30,7 +30,7 @@ void View::SetSize(float width, float height) {
 
 /// @brief Set the size of the in-game view.
 /// param center The size of the view.
-void View::SetSize(glm::vec2 size) {
+void View::SetSize(const glm::vec2& size) {
   SetSize(size.x, size.y);
 }
 

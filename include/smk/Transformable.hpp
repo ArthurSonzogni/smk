@@ -21,7 +21,7 @@ class VertexArray;
 class TransformableBase : public Drawable {
  public:
   // Tranformation.
-  virtual glm::mat4 Transformation() const = 0;
+  virtual glm::mat4 transformation() const = 0;
 
   /// Color
   void SetColor(const glm::vec4& color);
@@ -37,22 +37,22 @@ class TransformableBase : public Drawable {
 
   // VertexArray
   void SetVertexArray(VertexArray vertex_array);
-  const VertexArray vertex_array() const { return vertex_array_; }
+  const VertexArray& vertex_array() const { return vertex_array_; }
 
   // Drawable override
-  virtual void Draw(RenderTarget& target, RenderState state) const override;
+  void Draw(RenderTarget& target, RenderState state) const override;
 
   // Movable-copyable class.
   TransformableBase() = default;
-  TransformableBase(TransformableBase&&) = default;
+  TransformableBase(TransformableBase&&) noexcept = default;
   TransformableBase(const TransformableBase&) = default;
-  TransformableBase& operator=(TransformableBase&&) = default;
+  TransformableBase& operator=(TransformableBase&&) noexcept = default;
   TransformableBase& operator=(const TransformableBase&) = default;
 
  private:
   glm::vec4 color_ = {1.0, 1.0, 1.0, 1.0};
   Texture texture_;
-  BlendMode blend_mode_;
+  BlendMode blend_mode_ = BlendMode::Alpha;
   VertexArray vertex_array_;
 };
 
@@ -67,13 +67,13 @@ class Transformable : public TransformableBase {
 
   // Center
   void SetCenter(float center_x, float center_y);
-  void SetCenter(glm::vec2);
+  void SetCenter(const glm::vec2& center);
 
   // Position
-  void Move(glm::vec2 move);
+  void Move(const glm::vec2& move);
   void Move(float x, float y);
   void SetPosition(float x, float y);
-  void SetPosition(glm::vec2 position);
+  void SetPosition(const glm::vec2& position);
 
   // Rotation
   void Rotate(float rotation);
@@ -81,17 +81,17 @@ class Transformable : public TransformableBase {
 
   // Scale
   void SetScale(float scale);
-  void SetScale(glm::vec2 scale);
+  void SetScale(const glm::vec2& scale);
   void SetScale(float scale_x, float scale_y);
   void SetScaleX(float scale_x);
   void SetScaleY(float scale_y);
 
   // Transformable override;
-  glm::mat4 Transformation() const override;
+  glm::mat4 transformation() const override;
 
   // Movable-copyable class.
   Transformable() = default;
-  Transformable(Transformable&&) = default;
+  Transformable(Transformable&&) noexcept = default;
   Transformable(const Transformable&) = default;
   Transformable& operator=(Transformable&&) = default;
   Transformable& operator=(const Transformable&) = default;
@@ -112,8 +112,8 @@ class Transformable3D : public TransformableBase {
  public:
   virtual ~Transformable3D() = default;
 
-  void SetTransformation(const glm::mat4);
-  glm::mat4 Transformation() const override;
+  void SetTransformation(const glm::mat4& mat);
+  glm::mat4 transformation() const override;
 
   // Movable-copyable class.
   Transformable3D() = default;

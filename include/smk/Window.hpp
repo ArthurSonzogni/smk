@@ -56,9 +56,9 @@ class Window : public RenderTarget {
   bool ShouldClose();
 
   // Move-only ressource.
-  Window(Window&&);
+  Window(Window&&) noexcept;
   Window(const Window&) = delete;
-  void operator=(Window&&);
+  void operator=(Window&&) noexcept;
   void operator=(const Window&) = delete;
 
  private:
@@ -71,7 +71,7 @@ class Window : public RenderTarget {
   void UpdateDimensions();
 
   std::unique_ptr<InputImpl> input_;
-  int id_;
+  int id_ = 0;
 
   std::string module_canvas_selector_;
 };

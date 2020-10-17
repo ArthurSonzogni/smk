@@ -17,19 +17,20 @@ namespace smk {
 /// An off-screen drawable area. You can also draw it later in a smk::Sprite.
 class Framebuffer : public RenderTarget {
  public:
-  Framebuffer(int width, int height);
+  explicit Framebuffer(int width, int height);
   ~Framebuffer();
 
   // Move only ressource.
-  Framebuffer(Framebuffer&&);
+  Framebuffer(Framebuffer&&) noexcept;
   Framebuffer(const Framebuffer&) = delete;
-  void operator=(Framebuffer&&);
+  void operator=(Framebuffer&&) noexcept;
   void operator=(const Framebuffer&) = delete;
 
-  smk::Texture color_texture;
+  smk::Texture& color_texture();
 
  private:
   GLuint render_buffer_ = 0;
+  smk::Texture color_texture_;
 };
 
 }  // namespace smk

@@ -45,12 +45,12 @@ Sound::~Sound() {
 
 /// @brief Start playing the sound.
 void Sound::Play() {
-  if (!buffer_ || !buffer_->buffer)
+  if (!buffer_ || !buffer_->buffer())
     return;
   if (is_playing_)
     Stop();
   EnsureSourceIsCreated();
-  alSourcei(source_, AL_BUFFER, buffer_->buffer);
+  alSourcei(source_, AL_BUFFER, buffer_->buffer());
   alSourcePlay(source_);
   is_playing_ = true;
 }
@@ -80,11 +80,11 @@ bool Sound::IsPlaying() {
   return (state == AL_PLAYING);
 }
 
-Sound::Sound(Sound&& o) {
+Sound::Sound(Sound&& o) noexcept {
   operator=(std::move(o));
 }
 
-void Sound::operator=(Sound&& o) {
+void Sound::operator=(Sound&& o) noexcept {
   std::swap(buffer_, o.buffer_);
   std::swap(source_, o.source_);
   std::swap(is_playing_, o.is_playing_);

@@ -43,13 +43,13 @@ Text::Text(Font& font, const std::wstring& text) : Text(font) {
 }
 
 /// Update the text to be drawn.
-void Text::SetString(const std::wstring& s) {
-  string_ = s;
+void Text::SetString(const std::wstring& wide_string) {
+  string_ = wide_string;
 }
 
 /// Update the text to be drawn.
-void Text::SetString(const std::string& s) {
-  string_ = to_wstring(s);
+void Text::SetString(const std::string& string) {
+  string_ = to_wstring(string);
 }
 
 /// Update the Font to be used.
@@ -60,7 +60,7 @@ void Text::SetFont(Font& font) {
 /// Draw the Text to the screen.
 void Text::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
-  glm::mat4 transformation = state.view * Transformation();
+  glm::mat4 transformation = state.view * this->transformation();
   float advance_x = 0.f;
   float advance_y = font_->baseline_position();
 
@@ -80,7 +80,7 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
       continue;
     }
 
-    auto character = font_->GetCharacter(it);
+    auto character = font_->FetchGlyph(it);
     if (!character)
       continue;
 
@@ -116,7 +116,7 @@ glm::vec2 Text::ComputeDimensions() const {
       dimension.y += font_->line_height();
       continue;
     }
-    auto character = font_->GetCharacter(it);
+    auto character = font_->FetchGlyph(it);
     if (!character)
       continue;
     advance_x += character->advance;

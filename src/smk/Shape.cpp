@@ -22,9 +22,12 @@ Transformable Shape::FromVertexArray(VertexArray vertex_array) {
 /// @param a The first end.
 /// @param b Second end.
 /// @param thickness This line thickness.
-Transformable Shape::Line(glm::vec2 a, glm::vec2 b, float thickness) {
+Transformable Shape::Line(const glm::vec2& a,
+                          const glm::vec2& b,
+                          float thickness) {
   glm::vec2 dt =
       glm::normalize(glm::vec2(b.y - a.y, -b.x + a.x)) * thickness * 0.5f;
+
   return FromVertexArray(VertexArray({
       {a + dt, {0.f, 0.f}},
       {b + dt, {1.f, 0.f}},
@@ -38,6 +41,7 @@ Transformable Shape::Line(glm::vec2 a, glm::vec2 b, float thickness) {
 /// @brief Return the square [0,1]x[0,1]
 Transformable Shape::Square() {
   static VertexArray vertex_array;
+
   if (!vertex_array.size()) {
     vertex_array = VertexArray({
         {{0.f, 0.f}, {0.f, 0.f}},
@@ -49,7 +53,7 @@ Transformable Shape::Square() {
     });
   }
 
-  return FromVertexArray(VertexArray(vertex_array));
+  return FromVertexArray(vertex_array);
 }
 
 /// @brief Return a circle.
@@ -193,7 +197,7 @@ std::vector<glm::vec2> Shape::Bezier(const std::vector<glm::vec2>& points,
     std::vector<glm::vec2> data = points;
     float x = float(index) / subdivision;
     while (data.size() >= 2) {
-      for (size_t i = 0; i < points.size() - 1; ++i)
+      for (size_t i = 0; i < data.size() - 1; ++i)
         data[i] = glm::mix(data[i], data[i + 1], x);
       data.resize(data.size() - 1);
     }
@@ -283,13 +287,12 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
     glm::vec2& C = points_left[i];
     glm::vec2& D = points_right[i];
 
-    v.push_back(smk::Vertex{A, {0.0, 0.0}});
-    v.push_back(smk::Vertex{B, {0.0, 0.0}});
-    v.push_back(smk::Vertex{D, {0.0, 0.0}});
-
-    v.push_back(smk::Vertex{A, {0.0, 0.0}});
-    v.push_back(smk::Vertex{D, {0.0, 0.0}});
-    v.push_back(smk::Vertex{C, {0.0, 0.0}});
+    v.push_back({A, {0.0, 0.0}});
+    v.push_back({B, {0.0, 0.0}});
+    v.push_back({D, {0.0, 0.0}});
+    v.push_back({A, {0.0, 0.0}});
+    v.push_back({D, {0.0, 0.0}});
+    v.push_back({C, {0.0, 0.0}});
   }
 
   return smk::Shape::FromVertexArray(smk::VertexArray(std::move(v)));

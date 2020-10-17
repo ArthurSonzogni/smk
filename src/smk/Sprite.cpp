@@ -27,14 +27,14 @@ Sprite::Sprite(const Texture& texture, const Rectangle rectangle) {
 
 /// @brief A sprite for drawing the content of a Framebuffer.
 /// @param framebuffer The framebuffer to be used.
-Sprite::Sprite(const Framebuffer& framebuffer) {
-  Transformable::SetTexture(framebuffer.color_texture);
+Sprite::Sprite(Framebuffer& framebuffer) {
+  Transformable::SetTexture(framebuffer.color_texture());
   float l = 0.f;
   float r = 1.f;
   float t = 0.f;
   float b = 1.f;
-  float www = framebuffer.color_texture.width();
-  float hhh = framebuffer.color_texture.height();
+  float www = framebuffer.color_texture().width();
+  float hhh = framebuffer.color_texture().height();
   SetVertexArray(VertexArray(std::vector<Vertex>({
       {{0.f, 0.f}, {l, b}},
       {{0.f, hhh}, {l, t}},

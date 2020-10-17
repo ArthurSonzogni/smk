@@ -49,7 +49,7 @@ class Input {
   /// @brief Whether a mouse button is down or not.
   /// @return true whenever a mouse button is hold.
   /// @param key The mouse button.
-  virtual bool IsMouseHold(int key) = 0;
+  virtual bool IsMouseHeld(int key) = 0;
   /// @brief Whether a mouse button is pressed or not.
   /// @return true whenever a mouse button is pressed.
   /// @param key The mouse button.
@@ -60,20 +60,21 @@ class Input {
   virtual bool IsMouseReleased(int key) = 0;
   /// @brief The mouse position.
   /// @return the mouse position.
-  virtual glm::vec2 mouse() = 0;
+  virtual glm::vec2 mouse() const = 0;
 
   // Touch.
   using FingerID = int;
+
   /// @brief The touch states.
   /// @return the touches states.
-  virtual std::map<FingerID, Touch>& touches() = 0;
+  virtual const std::map<FingerID, Touch>& touches() const = 0;
 
   // Cursor --------------------------------------------------------------------
   // A cursor is either the mouse or a touch. This is choosen smartly.
 
   /// @brief Whether the cursor is down or not.
   /// @return true whenever the cursor is down.
-  virtual bool IsCursorHold() = 0;
+  virtual bool IsCursorHeld() = 0;
   /// @brief Whether the cursor is pressed or not
   /// @return true whenever the cursor is pressed.
   virtual bool IsCursorPressed() = 0;
@@ -82,13 +83,13 @@ class Input {
   virtual bool IsCursorReleased() = 0;
   /// @brief The cursor position.
   /// @return the cursor position.
-  virtual glm::vec2 cursor() = 0;
+  virtual glm::vec2 cursor() const = 0;
 
   // Scroll -------------------------------------------------------------------
 
   /// @brief The mouse/touchpad scrolling offset since the last frame.
   /// @return the scrolling offset.
-  virtual glm::vec2 ScrollOffset() = 0;
+  virtual glm::vec2 scroll_offset() const = 0;
 
   // Character listener --------------------------------------------------------
   //
@@ -111,7 +112,7 @@ class Input {
   /// ~~~
   class CharacterListenerInterface {
    public:
-    virtual bool Receive(wchar_t*) = 0;
+    virtual bool Receive(wchar_t* in) = 0;
     virtual ~CharacterListenerInterface() = default;
   };
   using CharacterListener = std::unique_ptr<CharacterListenerInterface>;
