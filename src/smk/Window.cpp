@@ -70,7 +70,6 @@ void MainLoop() {
 }
 
 EM_JS(void, MakeCanvasSelectable, (int window_id), {
-    console.log(Module);
   if (!Module)
     return;
 
@@ -183,9 +182,10 @@ Window::Window(int width, int height, const std::string& title) {
   InitRenderTarget();
 
 #ifndef __EMSCRIPTEN__
-  if (GLEW_KHR_parallel_shader_compile)
+  if (GLEW_KHR_parallel_shader_compile) {
     glMaxShaderCompilerThreadsKHR(4);
     KHR_PARALLEL_SHADER = true;
+  }
 #else
   KHR_PARALLEL_SHADER = emscripten_webgl_enable_extension(
       emscripten_webgl_get_current_context(), "KHR_parallel_shader_compile");

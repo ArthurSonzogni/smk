@@ -1,7 +1,3 @@
-// Copyright 2019 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include <cmath>
 #include <smk/Audio.hpp>
 #include <smk/Color.hpp>
@@ -50,3 +46,7 @@ int main() {
 
   return EXIT_SUCCESS;
 }
+
+// Copyright 2019 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

@@ -1,7 +1,3 @@
-// Copyright 2019 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include <smk/Color.hpp>
 #include <smk/Sprite.hpp>
 #include <smk/Texture.hpp>
@@ -23,3 +19,7 @@ int main() {
 
   return EXIT_SUCCESS;
 }
+
+// Copyright 2019 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
