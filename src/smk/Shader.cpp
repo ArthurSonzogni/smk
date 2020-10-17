@@ -193,7 +193,6 @@ bool ShaderProgram::LinkStatus() {
   char* log = new char[logsize];
   glGetProgramInfoLog(handle_, logsize, &logsize, log);
 
-    std::cerr << __func__ << " " << __LINE__ << std::endl;
   std::cout << log << std::endl;
   return false;
 }
