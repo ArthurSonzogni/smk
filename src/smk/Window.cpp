@@ -107,9 +107,9 @@ void GLFWCharCallback(GLFWwindow* glfw_window, unsigned int codepoint) {
 
 }  // namespace
 
-glm::vec2 smk::Window::ToScreenSpace(const glm::vec2& world) {
+glm::vec2 smk::Window::MapPixelToCoords(const glm::vec2& point) {
   glm::vec2 factor = glm::vec2(initialSize_.x/width_, initialSize_.y/height_);
-  return glm::vec2(world.x*factor.x, world.y*factor.y);
+  return glm::vec2(point.x*factor.x, point.y*factor.y);
 }
 
 /// @brief A null window.
