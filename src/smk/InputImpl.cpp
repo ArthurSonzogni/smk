@@ -118,7 +118,7 @@ glm::vec2 InputImpl::mouse() const {
   return mouse_;
 }
 
-const std::map<Input::FingerID, Touch>& InputImpl::touches() const {
+std::map<Input::FingerID, Touch>& InputImpl::touches() {
   return touches_;
 }
 

@@ -34,7 +34,7 @@ class InputImpl : public Input {
   bool IsMousePressed(int key) override;
   bool IsMouseReleased(int key) override;
   glm::vec2 mouse() const override;
-  const std::map<FingerID, Touch>& touches() const override;
+  std::map<FingerID, Touch>& touches() override;
   bool IsMouseHeld(int key) override;
   bool IsCursorHeld() override;
   bool IsCursorPressed() override;

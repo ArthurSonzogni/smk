@@ -67,7 +67,7 @@ class Input {
 
   /// @brief The touch states.
   /// @return the touches states.
-  virtual const std::map<FingerID, Touch>& touches() const = 0;
+  virtual std::map<FingerID, Touch>& touches() = 0;
 
   // Cursor --------------------------------------------------------------------
   // A cursor is either the mouse or a touch. This is choosen smartly.
