@@ -41,6 +41,7 @@ class VertexArray {
 
  private:
   void Allocate(int element_size, void* data);
+  void Release();
 
   GLuint vbo_ = 0;
   GLuint vao_ = 0;

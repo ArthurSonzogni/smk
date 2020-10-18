@@ -19,7 +19,7 @@ struct RenderState;
 
 /// A texture where things can be / a smk::Drawable can be drawn on.
 ///
-/// Implementated by:
+/// Implemented by:
 ///  * Window
 ///  * Framebuffer.
 class RenderTarget {
@@ -39,13 +39,13 @@ class RenderTarget {
   const View& view() const;
 
   // 2. Set a shader to render elements.
-  void SetShaderProgram(ShaderProgram* shader_program);
-  ShaderProgram* shader_program_2d() const;
-  ShaderProgram* shader_program_3d() const;
+  void SetShaderProgram(ShaderProgram& shader_program);
+  ShaderProgram& shader_program_2d();
+  ShaderProgram& shader_program_3d();
 
   // 3. Draw some stuff.
   virtual void Draw(const Drawable& drawable);
-  virtual void Draw(const RenderState& state);
+  virtual void Draw(RenderState& state);
 
   // Surface dimensions:
   glm::vec2 dimensions() const;
@@ -69,14 +69,14 @@ class RenderTarget {
   // Shaders:
   Shader vertex_shader_2d_;
   Shader fragment_shader_2d_;
-  std::unique_ptr<ShaderProgram> shader_program_2d_;
+  ShaderProgram shader_program_2d_;
 
   Shader vertex_shader_3d_;
   Shader fragment_shader_3d_;
-  std::unique_ptr<ShaderProgram> shader_program_3d_;
+  ShaderProgram shader_program_3d_;
 
   // Current shader program.
-  ShaderProgram* shader_program_ = nullptr;
+  ShaderProgram shader_program_;
 
   GLuint frame_buffer_ = 0;
 };

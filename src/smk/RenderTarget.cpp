@@ -132,26 +132,27 @@ const View& RenderTarget::view() const {
 /// shader_program.AddShader(fragment_shader_2d_);
 /// shader_program.Link();
 ///
-/// window.SetShaderProgram(&shader_program);
+/// window.SetShaderProgram(shader_program);
 /// ~~~
-void RenderTarget::SetShaderProgram(ShaderProgram* shader_program) {
+/// {
+void RenderTarget::SetShaderProgram(ShaderProgram& shader_program) {
   shader_program_ = shader_program;
-  shader_program_->Use();
-  shader_program_->SetUniform("texture_0", 0);
-  shader_program_->SetUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  shader_program_->SetUniform("projection", glm::mat4(1.0));
-  shader_program_->SetUniform("view", glm::mat4(1.0));
+  shader_program_.Use();
+  shader_program_.SetUniform("texture_0", 0);
+  shader_program_.SetUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+  shader_program_.SetUniform("projection", glm::mat4(1.0));
+  shader_program_.SetUniform("view", glm::mat4(1.0));
 }
 
 /// @brief Return the default predefined 2D shader program. It is bound by
 /// default.
-ShaderProgram* RenderTarget::shader_program_2d() const {
-  return shader_program_2d_.get();
+ShaderProgram& RenderTarget::shader_program_2d() {
+  return shader_program_2d_;
 };
 
 /// @brief Return the default predefined 3D shader program.
-ShaderProgram* RenderTarget::shader_program_3d() const {
-  return shader_program_3d_.get();
+ShaderProgram& RenderTarget::shader_program_3d() {
+  return shader_program_3d_;
 };
 
 /// @brief Draw on the surface
@@ -168,7 +169,7 @@ void RenderTarget::Draw(const Drawable& drawable) {
 
 /// @brief Draw on the surface
 /// @param state: The RenderState to be usd for drawing.
-void RenderTarget::Draw(const RenderState& state) {
+void RenderTarget::Draw(RenderState& state) {
   // Vertex Array
   if (cached_render_state_.vertex_array != state.vertex_array) {
     cached_render_state_.vertex_array = state.vertex_array;
@@ -178,18 +179,18 @@ void RenderTarget::Draw(const RenderState& state) {
   // Shader
   if (cached_render_state_.shader_program != state.shader_program) {
     cached_render_state_.shader_program = state.shader_program;
-    cached_render_state_.shader_program->Use();
+    cached_render_state_.shader_program.Use();
   }
 
   // Color
   if (cached_render_state_.color != state.color) {
     cached_render_state_.color = state.color;
-    cached_render_state_.shader_program->SetUniform("color", state.color);
+    cached_render_state_.shader_program.SetUniform("color", state.color);
   }
 
   // View (not cached)
-  state.shader_program->SetUniform("projection", projection_matrix_);
-  state.shader_program->SetUniform("view", state.view);
+  state.shader_program.SetUniform("projection", projection_matrix_);
+  state.shader_program.SetUniform("view", state.view);
 
   // Texture
   auto& texture = state.texture.id() ? state.texture : WhiteTexture();
@@ -263,10 +264,9 @@ void RenderTarget::InitRenderTarget() {
   )",
                                            GL_FRAGMENT_SHADER);
 
-  shader_program_2d_ = std::make_unique<ShaderProgram>();
-  shader_program_2d_->AddShader(vertex_shader_2d_);
-  shader_program_2d_->AddShader(fragment_shader_2d_);
-  shader_program_2d_->Link();
+  shader_program_2d_.AddShader(vertex_shader_2d_);
+  shader_program_2d_.AddShader(fragment_shader_2d_);
+  shader_program_2d_.Link();
 
   vertex_shader_3d_ = Shader::FromString(R"(
     layout(location = 0) in vec3 space_position;
@@ -326,20 +326,19 @@ void RenderTarget::InitRenderTarget() {
   )",
                                            GL_FRAGMENT_SHADER);
 
-  shader_program_3d_ = std::make_unique<ShaderProgram>();
-  shader_program_3d_->AddShader(vertex_shader_3d_);
-  shader_program_3d_->AddShader(fragment_shader_3d_);
-  shader_program_3d_->Link();
+  shader_program_3d_.AddShader(vertex_shader_3d_);
+  shader_program_3d_.AddShader(fragment_shader_3d_);
+  shader_program_3d_.Link();
 
-  shader_program_3d_->Use();
-  shader_program_3d_->SetUniform("light_position",
+  shader_program_3d_.Use();
+  shader_program_3d_.SetUniform("light_position",
                                  glm::vec4(0.f, 5.f, 0.f, 1.f));
-  shader_program_3d_->SetUniform("ambient", 0.3f);
-  shader_program_3d_->SetUniform("diffuse", 0.5f);
-  shader_program_3d_->SetUniform("specular", 0.5f);
-  shader_program_3d_->SetUniform("specular_power", 4.0f);
+  shader_program_3d_.SetUniform("ambient", 0.3f);
+  shader_program_3d_.SetUniform("diffuse", 0.5f);
+  shader_program_3d_.SetUniform("specular", 0.5f);
+  shader_program_3d_.SetUniform("specular_power", 4.0f);
 
-  SetShaderProgram(shader_program_2d_.get());
+  SetShaderProgram(shader_program_2d_);
 }
 
 }  // namespace smk

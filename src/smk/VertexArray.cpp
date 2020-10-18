@@ -20,27 +20,7 @@ void VertexArray::Allocate(int element_size, void* data) {
 }
 
 VertexArray::~VertexArray() {
-  GLuint vbo = vbo_;
-  GLuint vao = vao_;
-  int* ref_count = ref_count_;
-
-  if (!vbo)
-    return;
-
-  vbo_ = 0;
-  vao_ = 0;
-  ref_count_ = nullptr;
-
-  if (ref_count) {
-    --(*ref_count);
-    if (*ref_count)
-      return;
-    delete ref_count;
-    ref_count = nullptr;
-  }
-
-  glDeleteBuffers(1, &vbo);
-  glDeleteVertexArrays(1, &vao);
+  Release();
 }
 
 void VertexArray::Bind() const {
@@ -112,6 +92,34 @@ bool VertexArray::operator==(const smk::VertexArray& other) const {
 
 bool VertexArray::operator!=(const smk::VertexArray& other) const {
   return vbo_ != other.vbo_;
+}
+
+void VertexArray::Release() {
+  // Nothing to do for the null VertexArray.
+  if (!vbo_)
+    return;
+
+  // Transfert state to local.
+  GLuint vbo = 0;
+  GLuint vao = 0;
+  int* ref_count = nullptr;
+  std::swap(vbo, vbo_);
+  std::swap(vao, vao_);
+  std::swap(ref_count, ref_count_);
+
+  // Early return without releasing the resource if it is still hold by copy of
+  // this class.
+  if (ref_count) {
+    --(*ref_count);
+    if (*ref_count)
+      return;
+    delete ref_count;
+    ref_count = nullptr;
+  }
+
+  // Release the OpenGL objects.
+  glDeleteBuffers(1, &vbo);
+  glDeleteVertexArrays(1, &vao);
 }
 
 }  // namespace smk.

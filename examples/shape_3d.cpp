@@ -17,8 +17,8 @@ int main() {
   // Open a new window.
   auto window = smk::Window(640, 480, "test");
   window.SetShaderProgram(window.shader_program_3d());
-  window.shader_program_3d()->SetUniform("light_position",
-                                         glm::vec4(0.f, 5.f, 0.f, 1.f));
+  window.shader_program_3d().SetUniform("light_position",
+                                        glm::vec4(0.f, 5.f, 0.f, 1.f));
 
   auto cube = smk::Shape::Cube();
   auto sphere = smk::Shape::IcoSphere(6);

@@ -127,40 +127,95 @@ bool Shader::CompileStatus() {
 }
 
 Shader::~Shader() {
-  if (!id_)
-    return;
-  glDeleteShader(id_);
-  id_ = 0;
+  Release();
 }
 
-Shader::Shader(Shader&& other) {
+Shader::Shader(const Shader& other) noexcept {
+  this->operator=(other);
+}
+
+Shader::Shader(Shader&& other) noexcept {
   this->operator=(std::move(other));
 }
 
-void Shader::operator=(Shader&& other) {
-  std::swap(id_, other.id_);
+Shader& Shader::operator=(const Shader& other) noexcept {
+  Release();
+  if (!other.id_)
+    return *this;
+
+  if (!other.ref_count_)
+    other.ref_count_ = new int(1);
+
+  id_ = other.id_;
+  ref_count_ = other.ref_count_;
+
+  (*ref_count_)++;
+  return *this;
 }
+
+Shader& Shader::operator=(Shader&& other) noexcept {
+  std::swap(id_, other.id_);
+  std::swap(ref_count_, other.ref_count_);
+  return *this;
+}
+
+void Shader::Release() {
+  // Nothing to do for the null Shader.
+  if (!id_)
+    return;
+
+  // Transfert state to local:
+  GLuint id = 0;
+  int* ref_count = nullptr;
+  std::swap(id_, id);
+  std::swap(ref_count_, ref_count);
+
+  // Early return without releasing the resource if it is still hold by copy of
+  // this class.
+  if (ref_count) {
+    --(*ref_count);
+    if (*ref_count)
+      return;
+    delete ref_count;
+    ref_count = nullptr;
+  }
+
+  // Release the OpenGL objects.
+  glDeleteShader(id);
+}
+
+struct ShaderProgram::Impl {
+  std::map<std::string, GLint> uniforms;
+  GLuint id = 0;
+
+  ~Impl() {
+    if (!id)
+      return;
+    glDeleteProgram(id);
+    id = 0;
+  }
+};
 
 /// @brief The constructor. The ShaderProgram is initially invalid. You need to
 /// call @ref AddShader and @ref Link before being able to use it.
-ShaderProgram::ShaderProgram() = default;
+ShaderProgram::ShaderProgram() : impl_(new Impl()) {}
 
 /// @brief Add a Shader to the program list. This must called multiple time for
 /// each shader components before calling @ref Link.
 /// @param shader The Shader to be added to the program list.
 void ShaderProgram::AddShader(const Shader& shader) {
-  if (!id_) {
-    id_ = glCreateProgram();
-    if (!id_)
+  if (!impl_->id) {
+    impl_->id = glCreateProgram();
+    if (!impl_->id)
       std::cerr << "[Error] Impossible to create a new Shader" << std::endl;
   }
 
-  glAttachShader(id_, shader.id());
+  glAttachShader(id(), shader.id());
 }
 
 /// @brief Add a Shader to the program list.
 void ShaderProgram::Link() {
-  glLinkProgram(id_);
+  glLinkProgram(id());
 }
 
 // Linking shader is an asynchronous process. Using the shader can causes the
@@ -171,8 +226,8 @@ bool ShaderProgram::IsReady() {
   if (g_khr_parallel_shader) {
     GLint completion_status;
     std::cerr << GL_COMPLETION_STATUS_KHR << std::endl;
-    std::cerr << id_ << std::endl;
-    glGetProgramiv(id_, GL_COMPLETION_STATUS_KHR, &completion_status);
+    std::cerr << id() << std::endl;
+    glGetProgramiv(id(), GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
 
@@ -181,17 +236,17 @@ bool ShaderProgram::IsReady() {
 
 bool ShaderProgram::LinkStatus() {
   GLint result;
-  glGetProgramiv(id_, GL_LINK_STATUS, &result);
+  glGetProgramiv(id(), GL_LINK_STATUS, &result);
   if (result == GL_TRUE)
     return true;
 
   std::cout << "[Error] linkage error" << std::endl;
 
   GLsizei logsize = 0;
-  glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &logsize);
+  glGetProgramiv(id(), GL_INFO_LOG_LENGTH, &logsize);
 
   char* log = new char[logsize];
-  glGetProgramInfoLog(id_, logsize, &logsize, log);
+  glGetProgramInfoLog(id(), logsize, &logsize, log);
 
   std::cout << log << std::endl;
   return false;
@@ -201,17 +256,17 @@ bool ShaderProgram::LinkStatus() {
 /// @param name The uniform name in the Shader.
 /// @return The GPU uniform ID. Return 0 and display an error if not found.
 GLint ShaderProgram::Uniform(const std::string& name) {
-  auto it = uniforms_.find(name);
-  if (it == uniforms_.end()) {
-    // uniforms_ that is not referenced
-    GLint r = glGetUniformLocation(id_, name.c_str());
+  auto it = impl_->uniforms.find(name);
+  if (it == impl_->uniforms.end()) {
+    // impl_->uniforms that is not referenced
+    GLint r = glGetUniformLocation(id(), name.c_str());
 
     if (r == GL_INVALID_OPERATION || r < 0) {
       std::cerr << "[Error] Uniform " << name << " doesn't exist in program"
                 << std::endl;
     }
     // add it anyways
-    uniforms_[name] = r;
+    impl_->uniforms[name] = r;
 
     return r;
   } else
@@ -226,7 +281,7 @@ GLint ShaderProgram::operator[](const std::string& name) {
 /// @param name The attribute name in the Shader.
 /// @return The GPU attribute ID. Return 0 and display an error if not found.
 GLint ShaderProgram::Attribute(const std::string& name) {
-  GLint attrib = glGetAttribLocation(id_, name.c_str());
+  GLint attrib = glGetAttribLocation(id(), name.c_str());
   if (attrib == GL_INVALID_OPERATION || attrib < 0)
     std::cerr << "[Error] Attribute " << name << " doesn't exist in program"
               << std::endl;
@@ -346,17 +401,11 @@ void ShaderProgram::SetUniform(const std::string& name, int val) {
   glUniform1i(Uniform(name), val);
 }
 
-ShaderProgram::~ShaderProgram() {
-  if (!id_)
-    return;
-  glDeleteProgram(id_);
-  id_ = 0;
-}
 
 /// @brief Bind the ShaderProgram. Future draw will use it. This unbind any
 /// previously bound ShaderProgram.
 void ShaderProgram::Use() const {
-  glUseProgram(id_);
+  glUseProgram(id());
 }
 
 /// @brief Unbind the ShaderProgram.
@@ -367,16 +416,22 @@ void ShaderProgram::Unuse() const {
 /// @brief The GPU id to the ShaderProgram.
 /// @return The GPU id to the ShaderProgram.
 GLuint ShaderProgram::id() const {
-  return id_;
+  return impl_->id;
 }
 
-ShaderProgram::ShaderProgram(ShaderProgram&& other) {
-  this->operator=(std::move(other));
+bool ShaderProgram::operator==(const ShaderProgram& rhs) const {
+  return impl_ == rhs.impl_;
 }
 
-void ShaderProgram::operator=(ShaderProgram&& other) {
-  std::swap(id_, other.id_);
-  std::swap(uniforms_, other.uniforms_);
+bool ShaderProgram::operator!=(const ShaderProgram& rhs) const {
+  return impl_ != rhs.impl_;
 }
+
+ShaderProgram::~ShaderProgram() = default;
+ShaderProgram::ShaderProgram(ShaderProgram&&) noexcept = default;
+ShaderProgram::ShaderProgram(const ShaderProgram&) = default;
+ShaderProgram& ShaderProgram::operator=(ShaderProgram&&) noexcept = default;
+ShaderProgram& ShaderProgram::operator=(const ShaderProgram&) = default;
+
 
 }  // namespace smk
