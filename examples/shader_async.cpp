@@ -92,7 +92,7 @@ int main() {
           exit(EXIT_FAILURE);
 
         // Use the ready shader:
-        window.SetShaderProgram(&program);
+        window.SetShaderProgram(program);
         state = State::Completed;
       case State::Completed:
         program.SetUniform("time", window.time());

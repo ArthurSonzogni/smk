@@ -15,7 +15,7 @@ namespace smk {
 
 /// Contain all the data needed to draw
 struct RenderState {
-  ShaderProgram* shader_program = nullptr;  ///< The shader used.
+  ShaderProgram shader_program;             ///< The shader used.
   Texture texture;                          ///< The texture 0 bound.
   VertexArray vertex_array;                 ///< The shape to to be drawn
   glm::mat4 view = glm::mat4(1.f);          ///< The "view" transformation.

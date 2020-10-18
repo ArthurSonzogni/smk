@@ -11,6 +11,7 @@
 #include <smk/OpenGL.hpp>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace smk {
 
@@ -20,7 +21,7 @@ class ShaderProgram;
 /// @brief A Shader is a little program that rest on the GPU. They are run on a
 /// specific section of the graphic pipeline.
 ///
-/// This is a move-only ressource.
+/// This class is movable and copyable (via internal ref-count).
 ///
 /// @see https://learnopengl.com/Getting-started/Shaders
 ///
@@ -58,7 +59,7 @@ class ShaderProgram;
 /// shader_program.AddShader(fragment_shader);
 /// shader_program.Link();
 ///
-/// window.SetShaderProgram(&shader_program);
+/// window.SetShaderProgram(shader_program);
 /// ~~~
 //
 /// @see ShaderProgram
@@ -67,6 +68,8 @@ class Shader {
   Shader();  // Invalid shader.
   static Shader FromFile(const std::string& filename, GLenum type);
   static Shader FromString(const std::string& content, GLenum type);
+
+  ~Shader();
 
   // Linking shader is an asynchronous process. Using the shader can causes the
   // CPU to wait until its completion. If you need to do some work before the
@@ -80,21 +83,23 @@ class Shader {
   // Provide opengl shader identifiant.
   GLuint id() const;
 
-  ~Shader();
-
-  // --- Move only resource ----------------------------------------------------
-  Shader(Shader&&);
-  Shader(const Shader&) = delete;
-  void operator=(Shader&&);
-  void operator=(const Shader&) = delete;
+  // --- Movable-Copyable (via ref-count) --------------------------------------
+  Shader(Shader&&) noexcept;
+  Shader(const Shader&) noexcept;
+  Shader& operator=(Shader&&) noexcept;
+  Shader& operator=(const Shader&) noexcept;
   // ---------------------------------------------------------------------------
 
  private:
   Shader(const std::vector<char>& content, GLenum type);
+  void Release();
+
   // opengl program identifier.
   GLuint id_ = 0;
 
-  friend class ShaderProgram;
+  // Used to support copy. Nullptr as long as this class is not copied.
+  // Otherwise an integer counting how many instances shares this resource.
+  mutable int* ref_count_ = nullptr;
 };
 
 /// @brief A shader program is a set of shader (for instance vertex shader +
@@ -152,18 +157,19 @@ class ShaderProgram {
 
   ~ShaderProgram();
 
-  // --- Move only resource ----------------------------------------------------
-  ShaderProgram(ShaderProgram&&);
-  ShaderProgram(const ShaderProgram&) = delete;
-  void operator=(ShaderProgram&&);
-  void operator=(const ShaderProgram&) = delete;
+  // --- Movable-Copyable (via ref-count) --------------------------------------
+  ShaderProgram(ShaderProgram&&) noexcept;
+  ShaderProgram(const ShaderProgram&);
+  ShaderProgram& operator=(ShaderProgram&&) noexcept;
+  ShaderProgram& operator=(const ShaderProgram&);
   // ---------------------------------------------------------------------------
+  
+  bool operator==(const ShaderProgram& rhs) const;
+  bool operator!=(const ShaderProgram& rhs) const;
 
  private:
-  std::map<std::string, GLint> uniforms_;
-
-  // opengl id
-  GLuint id_ = 0;
+  struct Impl;
+  std::shared_ptr<Impl> impl_;
 };
 
 }  // namespace smk

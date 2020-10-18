@@ -79,7 +79,7 @@ int main() {
     if (!program.LinkStatus())
       exit(EXIT_FAILURE);
 
-    window.SetShaderProgram(&program);
+    window.SetShaderProgram(program);
   };
 
   auto draw = [&] {
