@@ -17,7 +17,7 @@ namespace smk {
 SoundBuffer::SoundBuffer() {}
 
 /// @brief Load a sound resource into memory from a file.
-SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
+SoundBuffer::SoundBuffer(const std::string& filename) : SoundBuffer() {
   if (!Audio::Initialized()) {
     static bool once = true;
     if (once) {
@@ -53,8 +53,8 @@ SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
   }
   // clang-format on.
 
-  alGenBuffers(1, &buffer);
-  alBufferData(buffer, format, data.data(), data.size() * sizeof(ALshort), sample_rate);
+  alGenBuffers(1, &buffer_);
+  alBufferData(buffer_, format, data.data(), data.size() * sizeof(ALshort), sample_rate);
 
   if (alGetError() != AL_NO_ERROR) {
     std::cerr << "SoundBuffer: OpenAL error" << std::endl;
@@ -63,16 +63,21 @@ SoundBuffer::SoundBuffer(const std::string filename) : SoundBuffer() {
 }
 
 SoundBuffer::~SoundBuffer() {
-  if (buffer)
-    alDeleteBuffers(1, &buffer);
+  if (buffer_)
+    alDeleteBuffers(1, &buffer_);
 }
 
-SoundBuffer::SoundBuffer(SoundBuffer&& o) {
+SoundBuffer::SoundBuffer(SoundBuffer&& o) noexcept {
   this->operator=(std::move(o));
 }
 
-void SoundBuffer::operator=(SoundBuffer&& o) {
-  std::swap(buffer, o.buffer);
+void SoundBuffer::operator=(SoundBuffer&& o) noexcept {
+  std::swap(buffer_, o.buffer_);
+}
+
+unsigned int SoundBuffer::buffer() const
+{
+  return buffer_;
 }
 
 }  // namespace smk

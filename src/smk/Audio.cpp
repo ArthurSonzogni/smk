@@ -13,22 +13,24 @@
 namespace smk {
 
 namespace {
-int ref_count = 0;
-ALCdevice* audioDevice = nullptr;
-ALCcontext* audioContext = nullptr;
+int g_ref_count = 0;
+ALCdevice* g_audio_device = nullptr;
+ALCcontext* g_audio_context = nullptr;
 
-void GetDevices(std::vector<std::string>& Devices) {
+void GetDevices(std::vector<std::string>& devices) {
   // Vidage de la liste
-  Devices.clear();
+  // Clear the list
+  devices.clear();
 
   // Récupération des devices disponibles
-  const ALCchar* DeviceList = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+  // Find available devices
+  const ALCchar* device_list = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
 
-  if (DeviceList) {
+  if (device_list) {
     // Extraction des devices contenus dans la chaîne renvoyée
-    while (std::strlen(DeviceList) > 0) {
-      Devices.push_back(DeviceList);
-      DeviceList += std::strlen(DeviceList) + 1;
+    while (std::strlen(device_list) > 0) {
+      devices.push_back(device_list);
+      device_list += std::strlen(device_list) + 1;
     }
   }
 }
@@ -36,17 +38,21 @@ void GetDevices(std::vector<std::string>& Devices) {
 }  // namespace
 
 Audio::Audio() {
-  if (ref_count++)
+  if (g_ref_count++)
     return;
   std::vector<std::string> devices;
   GetDevices(devices);
   std::cout << "Audio devices found " << devices.size() << ":" << std::endl;
-  for (auto& it : devices)
+
+  for (auto& it : devices) {
     std::cout << "* " << it << std::endl;
+  }
+
   std::cout << std::endl;
 
-  audioDevice = alcOpenDevice(devices[0].c_str());
-  if (!audioDevice) {
+  g_audio_device = alcOpenDevice(devices[0].c_str());
+
+  if (!g_audio_device) {
     std::cerr << "Failed to get an OpenAL device. Please check you have some "
                  "backend configured while building your application. For "
                  "instance PulseAudio with libpulse-dev"
@@ -54,39 +60,39 @@ Audio::Audio() {
     return;
   }
 
-  audioContext = alcCreateContext(audioDevice, nullptr);
-  if (!audioContext) {
+  g_audio_context = alcCreateContext(g_audio_device, nullptr);
+  if (!g_audio_context) {
     std::cerr << "Failed to get an OpenAL context" << std::endl;
     return;
   }
 
-  if (!alcMakeContextCurrent(audioContext)) {
+  if (!alcMakeContextCurrent(g_audio_context)) {
     std::cerr << "Failed to make the OpenAL context active" << std::endl;
     return;
   }
 }
 
 Audio::~Audio() {
-  if (--ref_count)
+  if (--g_ref_count)
     return;
   // Destroy the context
   alcMakeContextCurrent(nullptr);
-  if (audioContext) {
-    alcDestroyContext(audioContext);
-    audioContext = nullptr;
+  if (g_audio_context) {
+    alcDestroyContext(g_audio_context);
+    g_audio_context = nullptr;
   }
 
   // Destroy the device
-  if (audioDevice) {
-    alcCloseDevice(audioDevice);
-    audioContext = nullptr;
+  if (g_audio_device) {
+    alcCloseDevice(g_audio_device);
+    g_audio_device = nullptr;
   }
 }
 
-// static
 /// @return true if there is at least one Audio class instanciated.
+// static
 bool Audio::Initialized() {
-  return ref_count;
+  return g_ref_count;
 }
 
 }  // namespace smk

@@ -10,7 +10,7 @@
 #include "StbImage.hpp"
 
 namespace smk {
-extern bool invalidate_texture;
+extern bool g_invalidate_textures;
 
 int next_power_of_2(int v) {
   return v;
@@ -31,7 +31,7 @@ Texture::Texture(const std::string& filename) : Texture(filename, Option()) {}
 /// @brief Load a texture from a file.
 /// @param filename The file name of the image to be loaded.
 /// @param option Additionnal option (texture wrap, min filter, mag filter, ...)
-Texture::Texture(const std::string& filename, Option option) {
+Texture::Texture(const std::string& filename, const Option& option) {
   FILE* file = fopen(filename.c_str(), "rb");
   if (!file) {
     std::cerr << "File " << filename << " not found" << std::endl;
@@ -70,14 +70,20 @@ Texture::Texture(const uint8_t* data, int width, int height)
 /// @param width the image's with.
 /// @param height the image's height.
 /// @param option Additionnal option (texture wrap, min filter, mag filter, ...)
-Texture::Texture(const uint8_t* data, int width, int height, Option option)
+Texture::Texture(const uint8_t* data,
+                 int width,
+                 int height,
+                 const Option& option)
     : Texture() {
   width_ = width;
   height_ = height;
   Load(data, width_, height_, option);
 }
 
-void Texture::Load(const uint8_t* data, int width, int height, Option option) {
+void Texture::Load(const uint8_t* data,
+                   int width,
+                   int height,
+                   const Option& option) {
   glGenTextures(1, &id_);
   glBindTexture(GL_TEXTURE_2D, id_);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
@@ -88,7 +94,7 @@ void Texture::Load(const uint8_t* data, int width, int height, Option option) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, option.wrap_s);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, option.wrap_t);
   glBindTexture(GL_TEXTURE_2D, GL_NONE);
-  invalidate_texture = true;
+  g_invalidate_textures = true;
 }
 
 /// @brief Import an already loaded texture. Useful
@@ -120,7 +126,7 @@ Texture::~Texture() {
   glDeleteTextures(1, &id_);
 }
 
-Texture::Texture(Texture&& other) {
+Texture::Texture(Texture&& other) noexcept {
   operator=(std::move(other));
 }
 
@@ -128,7 +134,7 @@ Texture::Texture(const Texture& other) {
   operator=(other);
 }
 
-void Texture::operator=(Texture&& other) {
+void Texture::operator=(Texture&& other) noexcept {
   this->~Texture();
   std::swap(id_, other.id_);
   std::swap(width_, other.width_);

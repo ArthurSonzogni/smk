@@ -25,10 +25,10 @@ struct RenderState;
 class RenderTarget {
  public:
   RenderTarget();
-  RenderTarget(RenderTarget&&);
-  RenderTarget(const RenderTarget&) = delete;
-  void operator=(RenderTarget&&);
-  void operator=(const RenderTarget& other) = delete;
+  RenderTarget(RenderTarget&& other) noexcept;
+  RenderTarget(const RenderTarget& rhs) = delete;
+  void operator=(RenderTarget&& other) noexcept;
+  void operator=(const RenderTarget& rhs) = delete;
 
   // 0. Clear the framebuffer
   void Clear(const glm::vec4& color);
@@ -36,25 +36,25 @@ class RenderTarget {
   // 1. Set the view
   void SetView(const View& view);
   void SetView(const glm::mat4& mat);
-  const View& GetView() const;
+  const View& view() const;
 
   // 2. Set a shader to render elements.
   void SetShaderProgram(ShaderProgram* shader_program);
-  ShaderProgram* shader_program_2d();
-  ShaderProgram* shader_program_3d();
+  ShaderProgram* shader_program_2d() const;
+  ShaderProgram* shader_program_3d() const;
 
   // 3. Draw some stuff.
-  virtual void Draw(const Drawable&);
-  virtual void Draw(const RenderState&);
+  virtual void Draw(const Drawable& drawable);
+  virtual void Draw(const RenderState& state);
 
   // Surface dimensions:
-  glm::vec2 dimension() const;
+  glm::vec2 dimensions() const;
   int width() const;
   int height() const;
 
   // Bind the OpenGL RenderFrame. This function is useless, because it is called
   // automatically for you. Use this only when you use direct OpenGL call.
-  static void Bind(RenderTarget*);
+  static void Bind(RenderTarget* target);
 
  protected:
   void InitRenderTarget();
@@ -63,7 +63,7 @@ class RenderTarget {
   int height_ = 0;
 
   // View:
-  glm::mat4 projection_matrix_;
+  glm::mat4 projection_matrix_ = glm::mat4(1);
   smk::View view_;
 
   // Shaders:
@@ -76,7 +76,7 @@ class RenderTarget {
   std::unique_ptr<ShaderProgram> shader_program_3d_;
 
   // Current shader program.
-  ShaderProgram* shader_program_;
+  ShaderProgram* shader_program_ = nullptr;
 
   GLuint frame_buffer_ = 0;
 };

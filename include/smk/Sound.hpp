@@ -43,15 +43,15 @@ class Sound {
   void SetVolume(float volume);
 
   // -- Move-only resource ---
-  Sound(Sound&&);
+  Sound(Sound&&) noexcept;
   Sound(const Sound&) = delete;
-  void operator=(Sound&&);
+  void operator=(Sound&&) noexcept;
   void operator=(const Sound&) = delete;
 
  private:
   const SoundBuffer* buffer_ = nullptr;
   unsigned int source_ = 0;
-  int is_playing_ = false;
+  bool is_playing_ = false;
 
   void EnsureSourceIsCreated();
 };

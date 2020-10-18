@@ -11,8 +11,8 @@ int main() {
     window.Clear(smk::Color::Black);
 
     smk::View view;
-    view.SetCenter(window.dimension() * 0.5f);
-    view.SetSize(window.dimension());
+    view.SetCenter(window.dimensions() * 0.5f);
+    view.SetSize(window.dimensions());
     window.SetView(view);
 
     float radius = std::min(window.width(), window.height()) * 0.5 *
@@ -21,7 +21,7 @@ int main() {
     auto rounded_rectangle = smk::Shape::RoundedRectangle(
         window.width() - margin, window.height() - margin, radius);
     rounded_rectangle.SetColor(smk::Color::Red);
-    rounded_rectangle.Move(window.dimension() * 0.5f);
+    rounded_rectangle.Move(window.dimensions() * 0.5f);
     window.Draw(rounded_rectangle);
 
     window.Display();

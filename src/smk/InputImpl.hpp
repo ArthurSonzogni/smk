@@ -33,14 +33,14 @@ class InputImpl : public Input {
   bool IsKeyHold(int key) override;
   bool IsMousePressed(int key) override;
   bool IsMouseReleased(int key) override;
-  glm::vec2 mouse() override;
-  std::map<FingerID, Touch>& touches() override;
-  bool IsMouseHold(int key) override;
-  bool IsCursorHold() override;
+  glm::vec2 mouse() const override;
+  const std::map<FingerID, Touch>& touches() const override;
+  bool IsMouseHeld(int key) override;
+  bool IsCursorHeld() override;
   bool IsCursorPressed() override;
   bool IsCursorReleased() override;
-  glm::vec2 cursor() override;
-  glm::vec2 ScrollOffset() override;
+  glm::vec2 cursor() const override;
+  glm::vec2 scroll_offset() const override;
   CharacterListener MakeCharacterListener() override;
 
  private:
@@ -49,20 +49,20 @@ class InputImpl : public Input {
 
   // Mouse.
   std::map<int, std::pair<int, int>> mouse_state_;
-  glm::vec2 mouse_;
+  glm::vec2 mouse_ = {0.f, 0.f};
 
   // Touch.
   std::map<FingerID, Touch> touches_;
 
   // Cursor
-  glm::vec2 cursor_;
+  glm::vec2 cursor_ = {0, 0};
   bool cursor_press_ = false;
   bool cursor_press_previous_ = false;
   bool touching_ = true;
 
   // Scroll
-  glm::vec2 scroll_ = glm::vec2(0.f, 0.f);
-  glm::vec2 scroll_old_ = glm::vec2(0.f, 0.f);
+  glm::vec2 scroll_ = {0.f, 0.f};
+  glm::vec2 scroll_old_ = {0.f, 0.f};
 
   // CharacterListener
   std::unordered_set<CharacterListenerImpl*> character_listeners_;

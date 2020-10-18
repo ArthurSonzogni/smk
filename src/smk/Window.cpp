@@ -24,11 +24,11 @@
 
 namespace smk {
 
-bool KHR_PARALLEL_SHADER = false;
+bool g_khr_parallel_shader = false;
 
 namespace {
 
-int id = 0;
+int g_next_id = 0;
 std::map<int, Window*> window_by_id;
 std::map<GLFWwindow*, Window*> window_by_glfw_window;
 
@@ -38,6 +38,7 @@ void GLFWScrollCallback(GLFWwindow* glfw_window,
   Window* window = window_by_glfw_window[glfw_window];
   if (!window)
     return;
+
   static_cast<InputImpl*>(&(window->input()))
       ->OnScrollEvent({xoffset, yoffset});
 }
@@ -55,8 +56,8 @@ void GLFWErrorCallback(int error, const char* description) {
 EM_BOOL OnTouchEvent(int eventType,
                      const EmscriptenTouchEvent* keyEvent,
                      void* userData) {
-  int id = (int)(userData);
-  Window* window = window_by_id[id];
+  int g_next_id = (int)(userData);
+  Window* window = window_by_id[g_next_id];
   if (!window)
     return false;
   static_cast<InputImpl*>(&(window->input()))
@@ -84,7 +85,7 @@ EM_JS(void, MakeCanvasSelectable, (int window_id), {
 #if !defined NDEBUG && !defined __EMSCRIPTEN__ && __linux__
 void OpenGLDebugMessageCallback(GLenum /*source*/,
                                 GLenum type,
-                                GLuint /*id*/,
+                                GLuint /*g_next_id*/,
                                 GLenum /*severity*/,
                                 GLsizei length,
                                 const GLchar* message,
@@ -108,7 +109,7 @@ void GLFWCharCallback(GLFWwindow* glfw_window, unsigned int codepoint) {
 
 /// @brief A null window.
 Window::Window() {
-  id_ = ++id;
+  id_ = ++g_next_id;
   window_by_id[id_] = this;
 }
 
@@ -118,7 +119,7 @@ Window::Window() {
 /// @param title The window's title.
 Window::Window(int width, int height, const std::string& title) {
   input_ = std::make_unique<InputImpl>();
-  id_ = ++id;
+  id_ = ++g_next_id;
   window_by_id[id_] = this;
   width_ = width;
   height_ = height;
@@ -184,10 +185,10 @@ Window::Window(int width, int height, const std::string& title) {
 #ifndef __EMSCRIPTEN__
   if (GLEW_KHR_parallel_shader_compile) {
     glMaxShaderCompilerThreadsKHR(4);
-    KHR_PARALLEL_SHADER = true;
+    g_khr_parallel_shader = true;
   }
 #else
-  KHR_PARALLEL_SHADER = emscripten_webgl_enable_extension(
+  g_khr_parallel_shader = emscripten_webgl_enable_extension(
       emscripten_webgl_get_current_context(), "KHR_parallel_shader_compile");
 
   MakeCanvasSelectable(id_);
@@ -207,11 +208,11 @@ Window::Window(int width, int height, const std::string& title) {
   glfwSetCharCallback(window_, GLFWCharCallback);
 }
 
-Window::Window(Window&& window) {
+Window::Window(Window&& window) noexcept {
   operator=(std::move(window));
 }
 
-void Window::operator=(Window&& other) {
+void Window::operator=(Window&& other) noexcept {
   RenderTarget::operator=(std::move(other));
   std::swap(window_, other.window_);
   std::swap(time_, other.time_);

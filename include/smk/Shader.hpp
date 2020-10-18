@@ -77,8 +77,8 @@ class Shader {
   // Wait until the Shader to be ready. Return true if it suceeded.
   bool CompileStatus();
 
-  // provide opengl shader identifiant.
-  GLuint GetHandle() const;
+  // Provide opengl shader identifiant.
+  GLuint id() const;
 
   ~Shader();
 
@@ -90,9 +90,9 @@ class Shader {
   // ---------------------------------------------------------------------------
 
  private:
-  Shader(std::vector<char> content, GLenum type);
+  Shader(const std::vector<char>& content, GLenum type);
   // opengl program identifier.
-  GLuint handle_ = 0;
+  GLuint id_ = 0;
 
   friend class ShaderProgram;
 };
@@ -126,7 +126,7 @@ class ShaderProgram {
   void Unuse() const;
 
   // provide the opengl identifiant
-  GLuint GetHandle() const;
+  GLuint id() const;
 
   // clang-format off
   // provide attributes informations.
@@ -163,7 +163,7 @@ class ShaderProgram {
   std::map<std::string, GLint> uniforms_;
 
   // opengl id
-  GLuint handle_ = 0;
+  GLuint id_ = 0;
 };
 
 }  // namespace smk

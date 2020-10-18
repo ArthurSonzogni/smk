@@ -13,12 +13,12 @@ namespace smk {
 /// @example touch.cpp
 
 struct TouchDataPoint {
-  glm::vec2 position;
-  float time;
+  glm::vec2 position = {0, 0};
+  float time = 0.f;
 };
 
 struct Touch {
-  int finger_id;
+  int finger_id = 0;
   std::vector<TouchDataPoint> data_points;
 
   glm::vec2 position() const;

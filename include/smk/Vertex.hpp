@@ -11,17 +11,17 @@ namespace smk {
 
 /// The vertex structure suitable for a 2D shader.
 struct Vertex2D {
-  glm::vec2 space_position;
-  glm::vec2 texture_position;
+  glm::vec2 space_position = {0.f, 0.f};
+  glm::vec2 texture_position = {0.f, 0.f};
 
   static void Bind();
 };
 
 /// The vertex structure suitable for a 2D shader.
 struct Vertex3D {
-  glm::vec3 space_position;
-  glm::vec3 normal;
-  glm::vec2 texture_position;
+  glm::vec3 space_position = {0.f, 0.f, 0.f};
+  glm::vec3 normal = {0.f, 0.f, 0.f};
+  glm::vec2 texture_position = {0.f, 0.f};
 
   static void Bind();
 };

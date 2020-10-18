@@ -46,9 +46,9 @@ struct Texture {
 
   Texture();  // empty texture.
   Texture(const std::string& filename);
-  Texture(const std::string& filename, Option option);
+  Texture(const std::string& filename, const Option& option);
   Texture(const uint8_t* data, int width, int height);
-  Texture(const uint8_t* data, int width, int height, Option option);
+  Texture(const uint8_t* data, int width, int height, const Option& option);
   Texture(GLuint id, int width, int height);
   ~Texture();
 
@@ -61,19 +61,19 @@ struct Texture {
   operator bool() const { return id_ != 0; }
 
   // --- Copyable Movable resource ---------------------------------------------
-  Texture(Texture&&);
+  Texture(Texture&&) noexcept;
   Texture(const Texture&);
-  void operator=(Texture&&);
+  void operator=(Texture&&) noexcept;
   Texture& operator=(const Texture&);
   //----------------------------------------------------------------------------
   bool operator==(const Texture& other);
   bool operator!=(const Texture& other);
 
  private:
-  void Load(const uint8_t* data, int width, int height, Option option);
+  void Load(const uint8_t* data, int width, int height, const Option& option);
   GLuint id_ = 0;
-  int width_ = -1;
-  int height_ = -1;
+  int width_ = 0;
+  int height_ = 0;
 
   // Used to support copy. Nullptr as long as this class is not copied.
   // Otherwise an integer counting how many instances shares this resource.

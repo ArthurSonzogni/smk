@@ -33,20 +33,21 @@ class Sound;
 class SoundBuffer {
  public:
   SoundBuffer();  // Empty sound buffer
-  SoundBuffer(const std::string filename);
+  SoundBuffer(const std::string& filename);
 
   ~SoundBuffer();
 
-  void Play();
-
   // --- Move only resource ----------------------------------------------------
-  SoundBuffer(SoundBuffer&&);
+  SoundBuffer(SoundBuffer&&) noexcept;
   SoundBuffer(const SoundBuffer&) = delete;
-  void operator=(SoundBuffer&&);
+  void operator=(SoundBuffer&&) noexcept;
   void operator=(const SoundBuffer&) = delete;
   // ---------------------------------------------------------------------------
 
-  unsigned int buffer = 0;
+  unsigned int buffer() const;
+
+ private:
+  unsigned int buffer_ = 0;
 };
 }  // namespace smk
 

@@ -23,24 +23,24 @@ class Font {
   float line_height() const { return line_height_; }
   float baseline_position() const { return baseline_position_; }
 
-  struct Character {
+  struct Glyph {
     smk::Texture texture;
-    glm::ivec2 bearing;  // Offset from baseline to left/top of glyph
-    float advance;       // Offset to advance to next glyph
+    glm::ivec2 bearing = {0, 0};  // Offset from baseline to left/top of glyph
+    float advance = 0;            // Offset to advance to next glyph
   };
-  Character* GetCharacter(wchar_t);
+  Glyph* FetchGlyph(wchar_t in);
 
   // --- Move only resource ----------------------------------------------------
   Font(Font&&) = default;
   Font(const Font&) = delete;
-  void operator=(Font&&);
+  void operator=(Font&&) noexcept;
   void operator=(const Font&) = delete;
   // ---------------------------------------------------------------------------
 
  private:
-  void LoadCharacters(const std::vector<wchar_t>& chars);
+  void LoadGlyphs(const std::vector<wchar_t>& chars);
 
-  std::map<wchar_t, std::unique_ptr<Character>> characters_;
+  std::map<wchar_t, std::unique_ptr<Glyph>> glyphs_;
   std::string filename_;
   float line_height_ = 0.f;
   float baseline_position_ = 0.f;

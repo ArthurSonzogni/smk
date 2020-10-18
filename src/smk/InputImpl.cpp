@@ -68,7 +68,10 @@ void InputImpl::OnTouchEvent(int eventType,
 
     if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART ||
         eventType == EMSCRIPTEN_EVENT_TOUCHMOVE) {
-      auto data = TouchDataPoint{glm::vec2(touch.targetX, touch.targetY), 0.f};
+      TouchDataPoint data = {
+          glm::vec2(touch.targetX, touch.targetY),
+          0.f,
+      };
       auto& internal_touch = touches_[touch.identifier];
       internal_touch.finger_id = touch.identifier;
       internal_touch.data_points.push_back(data);
@@ -111,32 +114,35 @@ bool InputImpl::IsMouseReleased(int key) {
   return ((p.first == GLFW_RELEASE) && (p.second == GLFW_PRESS));
 }
 
-glm::vec2 InputImpl::mouse() {
+glm::vec2 InputImpl::mouse() const {
   return mouse_;
 }
 
-std::map<Input::FingerID, Touch>& InputImpl::touches() {
+const std::map<Input::FingerID, Touch>& InputImpl::touches() const {
   return touches_;
 }
 
-bool InputImpl::IsMouseHold(int key) {
+bool InputImpl::IsMouseHeld(int key) {
   auto p = mouse_state_[key];
   return (p.first == GLFW_PRESS);
 }
 
-bool InputImpl::IsCursorHold() {
+bool InputImpl::IsCursorHeld() {
   return cursor_press_ && cursor_press_previous_;
 }
+
 bool InputImpl::IsCursorPressed() {
   return cursor_press_ && !cursor_press_previous_;
 }
+
 bool InputImpl::IsCursorReleased() {
   return !cursor_press_ && cursor_press_previous_;
 }
-glm::vec2 InputImpl::cursor() {
+
+glm::vec2 InputImpl::cursor() const {
   return cursor_;
 }
-glm::vec2 InputImpl::ScrollOffset() {
+glm::vec2 InputImpl::scroll_offset() const {
   return scroll_old_;
 }
 

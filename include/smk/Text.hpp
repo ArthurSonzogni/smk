@@ -42,17 +42,17 @@ class Text : public Transformable {
   Text(Font& font, const std::wstring& text);
   virtual ~Text() = default;
 
-  void SetString(const std::wstring&);
-  void SetString(const std::string&);
+  void SetString(const std::wstring& wide_string);
+  void SetString(const std::string& string);
   void SetFont(Font& font);
 
-  virtual void Draw(RenderTarget& target, RenderState state) const override;
+  void Draw(RenderTarget& target, RenderState state) const override;
 
   glm::vec2 ComputeDimensions() const;
 
   Text(Text&&) = default;
   Text(const Text&) = default;
-  Text& operator=(Text&&) = default;
+  Text& operator=(Text&&) noexcept = default;
   Text& operator=(const Text&) = default;
 
  public:

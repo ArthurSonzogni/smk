@@ -26,7 +26,7 @@ void Transformable::Rotate(float rotation) {
 /// @brief Set the position of the object to be drawn.
 /// @see Transformable::Move.
 /// @param position the position (x,y) of the object.
-void Transformable::SetPosition(glm::vec2 position) {
+void Transformable::SetPosition(const glm::vec2& position) {
   position_ = position;
 }
 
@@ -41,7 +41,7 @@ void Transformable::SetPosition(float x, float y) {
 /// Increase the position of the object being drawn.
 /// @see smk::SetPosition
 /// @param move The increment of position (x,y)
-void Transformable::Move(glm::vec2 move) {
+void Transformable::Move(const glm::vec2& move) {
   position_ += move;
 }
 
@@ -57,7 +57,7 @@ void Transformable::Move(float x, float y) {
 /// center of the object will be drawn exactly on (0,0) on the screen (plus its
 /// potential translation if any)
 /// @param center The center position (x,y) in the object.
-void Transformable::SetCenter(glm::vec2 center) {
+void Transformable::SetCenter(const glm::vec2& center) {
   center_ = center;
 }
 
@@ -78,7 +78,7 @@ void Transformable::SetScale(float scale) {
 
 /// @brief Increase or decrease the size of the object being drawn.
 /// @param scale The ratio of magnification.
-void Transformable::SetScale(glm::vec2 scale) {
+void Transformable::SetScale(const glm::vec2& scale) {
   scale_ = scale;
 }
 
@@ -106,7 +106,7 @@ void Transformable::SetScaleY(float scale_y) {
 /// @return the transformation applied to the object. This is the result of
 ///         applying the translation, rotation, center and scaling to the the
 ///         object.
-glm::mat4 Transformable::Transformation() const {
+glm::mat4 Transformable::transformation() const {
   glm::mat4 ret = glm::mat4(1.0);
   ret = glm::translate(ret, {position_.x, position_.y, 0.0});
   if (rotation_ != 0.f)
@@ -145,7 +145,7 @@ void TransformableBase::SetVertexArray(VertexArray vertex_array) {
 void TransformableBase::Draw(RenderTarget& target, RenderState state) const {
   state.color *= color();
   state.texture = texture();
-  state.view *= Transformation();
+  state.view *= transformation();
   state.vertex_array = vertex_array();
   state.blend_mode = blend_mode();
   target.Draw(state);
@@ -155,11 +155,11 @@ void TransformableBase::Draw(RenderTarget& target, RenderState state) const {
 /// 4x4 matrix.
 /// @see https://learnopengl.com/Getting-started/Transformations
 /// @param transformation The 4x4 matrix defining the transformation.
-void Transformable3D::SetTransformation(const glm::mat4 transformation) {
+void Transformable3D::SetTransformation(const glm::mat4& transformation) {
   transformation_ = transformation;
 }
 
-glm::mat4 Transformable3D::Transformation() const {
+glm::mat4 Transformable3D::transformation() const {
   return transformation_;
 }
 

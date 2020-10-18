@@ -14,16 +14,16 @@ glm::vec4 RGBA(float red, float green, float blue, float alpha);
 glm::vec4 RGB(float red, float green, float blue);
 
 // Predefined colors.
-extern glm::vec4 White;
-extern glm::vec4 Black;
-extern glm::vec4 Grey;
-extern glm::vec4 Red;
-extern glm::vec4 Green;
-extern glm::vec4 Blue;
-extern glm::vec4 Yellow;
-extern glm::vec4 Magenta;
-extern glm::vec4 Cyan;
-extern glm::vec4 Transparent;
+extern const glm::vec4 White;
+extern const glm::vec4 Black;
+extern const glm::vec4 Grey;
+extern const glm::vec4 Red;
+extern const glm::vec4 Green;
+extern const glm::vec4 Blue;
+extern const glm::vec4 Yellow;
+extern const glm::vec4 Magenta;
+extern const glm::vec4 Cyan;
+extern const glm::vec4 Transparent;
 
 }  // namespace Color
 }  // namespace smk

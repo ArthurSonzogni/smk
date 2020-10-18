@@ -14,9 +14,9 @@ namespace smk {
 class View {
  public:
   void SetCenter(float x, float y);
-  void SetCenter(glm::vec2 center);
+  void SetCenter(const glm::vec2& center);
   void SetSize(float width, float height);
-  void SetSize(glm::vec2 size);
+  void SetSize(const glm::vec2& size);
 
   float Left() const { return x_ - width_ / 2; };     /// <
   float Right() const { return x_ + width_ / 2; };    /// <
@@ -24,10 +24,10 @@ class View {
   float Bottom() const { return y_ + height_ / 2; };  /// <
 
  public:
-  float x_ = 0;
-  float y_ = 0;
-  float width_ = 0;
-  float height_ = 0;
+  float x_ = 0.f;
+  float y_ = 0.f;
+  float width_ = 0.f;
+  float height_ = 0.f;
 };
 
 }  // namespace smk

@@ -17,7 +17,7 @@ const BlendMode BlendMode::Add = {
 };
 
 /// @brief destination -= source.
-const BlendMode BlendMode::Substract = {
+const BlendMode BlendMode::Subtract = {
     GL_FUNC_REVERSE_SUBTRACT,
     GL_FUNC_REVERSE_SUBTRACT,
     GL_ONE,
@@ -27,7 +27,7 @@ const BlendMode BlendMode::Substract = {
 };
 
 /// @brief destination = source * source.a + destination * (1 - souce.a)
-const BlendMode BlendMode::Alpha{
+const BlendMode BlendMode::Alpha = {
     GL_FUNC_ADD,  GL_FUNC_ADD,
     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
     GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,

@@ -29,22 +29,22 @@ class VertexArray {
   void UnBind() const;
 
   // --- Movable-Copyable resource ---------------------------------------------
-  VertexArray(VertexArray&&);
+  VertexArray(VertexArray&&) noexcept;
   VertexArray(const VertexArray&);
-  VertexArray& operator=(VertexArray&&);
+  VertexArray& operator=(VertexArray&&) noexcept;
   VertexArray& operator=(const VertexArray&);
   // ---------------------------------------------------------------------------
   bool operator==(const smk::VertexArray&) const;
   bool operator!=(const smk::VertexArray&) const;
 
-  int size() const;
+  size_t size() const;
 
  private:
   void Allocate(int element_size, void* data);
 
   GLuint vbo_ = 0;
   GLuint vao_ = 0;
-  int size_ = 0;
+  size_t size_ = 0u;
 
   // Used to support copy. Nullptr as long as this class is not copied.
   // Otherwise an integer counting how many instances shares this resource.

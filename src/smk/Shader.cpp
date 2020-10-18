@@ -14,11 +14,11 @@
 
 namespace smk {
 
-extern bool KHR_PARALLEL_SHADER;
+extern bool g_khr_parallel_shader;
 
 using namespace glm;
 
-const std::string shader_header =
+const std::string kShaderHeader =
 #ifdef __EMSCRIPTEN__
     "#version 300 es\n"
     "precision mediump float;\n"
@@ -59,7 +59,7 @@ Shader Shader::FromFile(const std::string& filename, GLenum type) {
 /// @see Shader::FromFile
 Shader Shader::FromString(const std::string& content, GLenum type) {
   std::vector<char> buffer;
-  for (const auto& c : shader_header)
+  for (const auto& c : kShaderHeader)
     buffer.push_back(c);
   for (const auto& c : content)
     buffer.push_back(c);
@@ -67,27 +67,27 @@ Shader Shader::FromString(const std::string& content, GLenum type) {
   return Shader(std::move(buffer), type);
 }
 
-/// @brief The GPU shader handle.
+/// @brief The GPU shader id.
 /// @return The OpenGL shader id. If the Shader is invalid, returns zero.
-GLuint Shader::GetHandle() const {
-  return handle_;
+GLuint Shader::id() const {
+  return id_;
 }
 
 Shader::Shader() = default;
-Shader::Shader(std::vector<char> content, GLenum type) {
+Shader::Shader(const std::vector<char>& content, GLenum type) {
   // creation
-  handle_ = glCreateShader(type);
-  if (handle_ == 0) {
+  id_ = glCreateShader(type);
+  if (id_ == 0) {
     std::cerr << "[Error] Impossible to create a new Shader" << std::endl;
     throw std::runtime_error("[Error] Impossible to create a new Shader");
   }
 
   // code source assignation
   const char* shaderText(&content[0]);
-  glShaderSource(handle_, 1, (const GLchar**)&shaderText, NULL);
+  glShaderSource(id_, 1, (const GLchar**)&shaderText, NULL);
 
   // compilation
-  glCompileShader(handle_);
+  glCompileShader(id_);
 }
 
 /// @brief Check the status of a Shader.
@@ -96,9 +96,9 @@ Shader::Shader(std::vector<char> content, GLenum type) {
 /// completion, you can use this function and use the Shader only after it
 /// becomes ready.
 bool Shader::IsReady() {
-  if (KHR_PARALLEL_SHADER) {
+  if (g_khr_parallel_shader) {
     GLint completion_status;
-    glGetShaderiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
+    glGetShaderiv(id_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
 
@@ -110,15 +110,15 @@ bool Shader::IsReady() {
 /// @return True if it suceeded, false otherwise.
 bool Shader::CompileStatus() {
   GLint compile_status;
-  glGetShaderiv(handle_, GL_COMPILE_STATUS, &compile_status);
+  glGetShaderiv(id_, GL_COMPILE_STATUS, &compile_status);
   if (compile_status == GL_TRUE)
     return true;
 
   GLsizei logsize = 0;
-  glGetShaderiv(handle_, GL_INFO_LOG_LENGTH, &logsize);
+  glGetShaderiv(id_, GL_INFO_LOG_LENGTH, &logsize);
 
   char* log = new char[logsize + 1];
-  glGetShaderInfoLog(handle_, logsize, &logsize, log);
+  glGetShaderInfoLog(id_, logsize, &logsize, log);
 
   std::cout << "[Error] compilation error: " << std::endl;
   std::cout << log << std::endl;
@@ -127,10 +127,10 @@ bool Shader::CompileStatus() {
 }
 
 Shader::~Shader() {
-  if (!handle_)
+  if (!id_)
     return;
-  glDeleteShader(handle_);
-  handle_ = 0;
+  glDeleteShader(id_);
+  id_ = 0;
 }
 
 Shader::Shader(Shader&& other) {
@@ -138,7 +138,7 @@ Shader::Shader(Shader&& other) {
 }
 
 void Shader::operator=(Shader&& other) {
-  std::swap(handle_, other.handle_);
+  std::swap(id_, other.id_);
 }
 
 /// @brief The constructor. The ShaderProgram is initially invalid. You need to
@@ -149,18 +149,18 @@ ShaderProgram::ShaderProgram() = default;
 /// each shader components before calling @ref Link.
 /// @param shader The Shader to be added to the program list.
 void ShaderProgram::AddShader(const Shader& shader) {
-  if (!handle_) {
-    handle_ = glCreateProgram();
-    if (!handle_)
+  if (!id_) {
+    id_ = glCreateProgram();
+    if (!id_)
       std::cerr << "[Error] Impossible to create a new Shader" << std::endl;
   }
 
-  glAttachShader(handle_, shader.GetHandle());
+  glAttachShader(id_, shader.id());
 }
 
 /// @brief Add a Shader to the program list.
 void ShaderProgram::Link() {
-  glLinkProgram(handle_);
+  glLinkProgram(id_);
 }
 
 // Linking shader is an asynchronous process. Using the shader can causes the
@@ -168,11 +168,11 @@ void ShaderProgram::Link() {
 // completion, you can use this function and use the Shader only after it
 // becomes ready.
 bool ShaderProgram::IsReady() {
-  if (KHR_PARALLEL_SHADER) {
+  if (g_khr_parallel_shader) {
     GLint completion_status;
     std::cerr << GL_COMPLETION_STATUS_KHR << std::endl;
-    std::cerr << handle_ << std::endl;
-    glGetProgramiv(handle_, GL_COMPLETION_STATUS_KHR, &completion_status);
+    std::cerr << id_ << std::endl;
+    glGetProgramiv(id_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
 
@@ -181,17 +181,17 @@ bool ShaderProgram::IsReady() {
 
 bool ShaderProgram::LinkStatus() {
   GLint result;
-  glGetProgramiv(handle_, GL_LINK_STATUS, &result);
+  glGetProgramiv(id_, GL_LINK_STATUS, &result);
   if (result == GL_TRUE)
     return true;
 
   std::cout << "[Error] linkage error" << std::endl;
 
   GLsizei logsize = 0;
-  glGetProgramiv(handle_, GL_INFO_LOG_LENGTH, &logsize);
+  glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &logsize);
 
   char* log = new char[logsize];
-  glGetProgramInfoLog(handle_, logsize, &logsize, log);
+  glGetProgramInfoLog(id_, logsize, &logsize, log);
 
   std::cout << log << std::endl;
   return false;
@@ -204,7 +204,7 @@ GLint ShaderProgram::Uniform(const std::string& name) {
   auto it = uniforms_.find(name);
   if (it == uniforms_.end()) {
     // uniforms_ that is not referenced
-    GLint r = glGetUniformLocation(handle_, name.c_str());
+    GLint r = glGetUniformLocation(id_, name.c_str());
 
     if (r == GL_INVALID_OPERATION || r < 0) {
       std::cerr << "[Error] Uniform " << name << " doesn't exist in program"
@@ -218,11 +218,15 @@ GLint ShaderProgram::Uniform(const std::string& name) {
     return it->second;
 }
 
-/// @brief Return the GPU attribute handle.
+GLint ShaderProgram::operator[](const std::string& name) {
+  return Uniform(name);
+}
+
+/// @brief Return the GPU attribute id.
 /// @param name The attribute name in the Shader.
 /// @return The GPU attribute ID. Return 0 and display an error if not found.
 GLint ShaderProgram::Attribute(const std::string& name) {
-  GLint attrib = glGetAttribLocation(handle_, name.c_str());
+  GLint attrib = glGetAttribLocation(id_, name.c_str());
   if (attrib == GL_INVALID_OPERATION || attrib < 0)
     std::cerr << "[Error] Attribute " << name << " doesn't exist in program"
               << std::endl;
@@ -343,16 +347,16 @@ void ShaderProgram::SetUniform(const std::string& name, int val) {
 }
 
 ShaderProgram::~ShaderProgram() {
-  if (!handle_)
+  if (!id_)
     return;
-  glDeleteProgram(handle_);
-  handle_ = 0;
+  glDeleteProgram(id_);
+  id_ = 0;
 }
 
 /// @brief Bind the ShaderProgram. Future draw will use it. This unbind any
 /// previously bound ShaderProgram.
 void ShaderProgram::Use() const {
-  glUseProgram(handle_);
+  glUseProgram(id_);
 }
 
 /// @brief Unbind the ShaderProgram.
@@ -360,10 +364,10 @@ void ShaderProgram::Unuse() const {
   glUseProgram(0);
 }
 
-/// @brief The GPU handle to the ShaderProgram.
-/// @return The GPU handle to the ShaderProgram.
-GLuint ShaderProgram::GetHandle() const {
-  return handle_;
+/// @brief The GPU id to the ShaderProgram.
+/// @return The GPU id to the ShaderProgram.
+GLuint ShaderProgram::id() const {
+  return id_;
 }
 
 ShaderProgram::ShaderProgram(ShaderProgram&& other) {
@@ -371,7 +375,7 @@ ShaderProgram::ShaderProgram(ShaderProgram&& other) {
 }
 
 void ShaderProgram::operator=(ShaderProgram&& other) {
-  std::swap(handle_, other.handle_);
+  std::swap(id_, other.id_);
   std::swap(uniforms_, other.uniforms_);
 }
 
