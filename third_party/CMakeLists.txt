@@ -11,7 +11,8 @@ FetchContent_Declare(freetype2
 FetchContent_Declare(libnyquist
   #GIT_REPOSITORY https://github.com/ArthurSonzogni/libnyquist
   GIT_REPOSITORY https://github.com/ddiakopoulos/libnyquist
-  )
+  GIT_TAG b05d6931ae5ffd1fa8b4e68807441b94cdcbc123
+)
 
 FetchContent_Declare(glm
   GIT_REPOSITORY https://github.com/g-truc/glm
@@ -48,6 +49,7 @@ FetchContent_GetProperties(libnyquist)
 if(NOT libnyquist_POPULATED)
   FetchContent_Populate(libnyquist)
   set(LIBNYQUIST_PULSE TRUE)
+  set(BUILD_LIBOPUS TRUE)
   add_subdirectory(${libnyquist_SOURCE_DIR} ${libnyquist_BINARY_DIR} EXCLUDE_FROM_ALL)
   set_property(TARGET libopus PROPERTY CXX_STANDARD 17)
   target_compile_options(libnyquist PRIVATE "-w")
