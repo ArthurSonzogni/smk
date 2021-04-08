@@ -9,30 +9,45 @@
 
 namespace smk {
 
-/// @brief Construct a Framebuffer of a give dimensions.
+/// @brief Construct a Framebuffer of a given dimensions.
 /// @param width The width of the drawing surface.
 /// @param height The width of the drawing surface.
 Framebuffer::Framebuffer(int width, int height) {
-  width_ = width;
-  height_ = height;
-  GLuint id;
+  Texture::Option option;
+  option.internal_format = GL_RGB;
+  option.format = GL_RGB;
+  option.type = GL_UNSIGNED_BYTE;
+  option.generate_mipmap = false;
+  option.min_filter = GL_LINEAR;
+  option.mag_filter = GL_LINEAR;
+  color_textures_.push_back(smk::Texture(nullptr, width, height, option));
+
+  Init();
+}
+
+/// @brief Construct a Framebuffer from a list of color textures. Those textures
+/// must be constructed with not mipmap. See Texture::Option::generate_mipma^
+// /and Texture::Option::min_filter.
+/// @param width The width of the drawing surface.
+/// @param height The width of the drawing surface.
+Framebuffer::Framebuffer(std::vector<Texture> color_textures)
+    : color_textures_(std::move(color_textures)) {
+  Init();
+}
+
+void Framebuffer::Init() {
+  width_ = color_texture().width();
+  height_ = color_texture().height();
 
   // The frame buffer.
   glGenFramebuffers(1, &frame_buffer_);
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
 
-  // The color buffer.
-  glGenTextures(1, &id);
-  glBindTexture(GL_TEXTURE_2D, id);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB,
-               GL_UNSIGNED_BYTE, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  // Attach the texture to the framebuffer.
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                         id, 0);
+  // Attach the textures to the framebuffer.
+  for (size_t i = 0; i < color_textures_.size(); ++i) {
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                           GL_TEXTURE_2D, color_textures_[i].id(), 0);
+  }
 
   // The render buffer.
   glGenRenderbuffers(1, &render_buffer_);
@@ -52,8 +67,6 @@ Framebuffer::Framebuffer(int width, int height) {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   InitRenderTarget();
-
-  color_texture_ = smk::Texture(id, width_, height_);
 }
 
 Framebuffer::~Framebuffer() {
@@ -74,12 +87,12 @@ Framebuffer::Framebuffer(Framebuffer&& other) noexcept {
 
 void Framebuffer::operator=(Framebuffer&& other) noexcept {
   RenderTarget::operator=(std::move(other));
-  std::swap(color_texture_, other.color_texture_);
+  std::swap(color_textures_, other.color_textures_);
   std::swap(render_buffer_, other.render_buffer_);
 }
 
 smk::Texture& Framebuffer::color_texture() {
-  return color_texture_;
+  return color_textures_[0];
 }
 
 }  // namespace smk

@@ -86,9 +86,10 @@ void Texture::Load(const uint8_t* data,
                    const Option& option) {
   glGenTextures(1, &id_);
   glBindTexture(GL_TEXTURE_2D, id_);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-               GL_UNSIGNED_BYTE, data);
-  glGenerateMipmap(GL_TEXTURE_2D);
+  glTexImage2D(GL_TEXTURE_2D, 0, option.internal_format, width, height, 0,
+               option.format, option.type, data);
+  if (option.generate_mipmap)
+    glGenerateMipmap(GL_TEXTURE_2D);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, option.min_filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, option.mag_filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, option.wrap_s);
