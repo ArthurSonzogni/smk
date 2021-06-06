@@ -42,6 +42,10 @@ struct Texture {
     GLenum mag_filter = GL_LINEAR;
     GLenum wrap_s = GL_CLAMP_TO_EDGE;
     GLenum wrap_t = GL_CLAMP_TO_EDGE;
+    GLenum internal_format = GL_RGBA;
+    GLenum format = GL_RGBA;
+    GLenum type = GL_UNSIGNED_BYTE;
+    bool generate_mipmap = true;
   };
 
   Texture();  // empty texture.

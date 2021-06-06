@@ -18,6 +18,7 @@ namespace smk {
 class Framebuffer : public RenderTarget {
  public:
   explicit Framebuffer(int width, int height);
+  Framebuffer(std::vector<Texture> color_textures);
   ~Framebuffer();
 
   // Move only ressource.
@@ -29,8 +30,9 @@ class Framebuffer : public RenderTarget {
   smk::Texture& color_texture();
 
  private:
+  void Init();
   GLuint render_buffer_ = 0;
-  smk::Texture color_texture_;
+  std::vector<smk::Texture> color_textures_;
 };
 
 }  // namespace smk
