@@ -1,0 +1,4 @@
+This repository follows the chromium coding style:
+https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md
+
+clang-format is used 
