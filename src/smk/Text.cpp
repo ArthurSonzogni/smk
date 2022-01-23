@@ -107,12 +107,10 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
 glm::vec2 Text::ComputeDimensions() const {
   glm::vec2 dimension(0.f, 0.f);
   float advance_x = 0.f;
-  float advance_y = font_->line_height();
   dimension.y += font_->line_height();
   for (const auto& it : string_) {
     if (it == U'\n') {
       advance_x = 0.f;
-      advance_y += font_->line_height();
       dimension.y += font_->line_height();
       continue;
     }
