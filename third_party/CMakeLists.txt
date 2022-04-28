@@ -13,33 +13,37 @@ FetchContent_Declare(freetype2
 )
 
 FetchContent_Declare(libnyquist
-  #GIT_REPOSITORY https://github.com/ArthurSonzogni/libnyquist
   GIT_REPOSITORY https://github.com/ddiakopoulos/libnyquist
-  GIT_TAG b05d6931ae5ffd1fa8b4e68807441b94cdcbc123
+  GIT_TAG e8c2985903d55b53ad3c1b86438de90f76c8628c
+  GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
 
 FetchContent_Declare(glm
   GIT_REPOSITORY https://github.com/g-truc/glm
-  GIT_TAG fce2abd01ce21063bd25ba67c9318be83bf48813
+  GIT_TAG bf71a834948186f4097caa076cd2663c69a10e1e # 0.9.9.8
+  GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
 
 FetchContent_Declare(glew
   GIT_REPOSITORY https://github.com/Perlmint/glew-cmake
+  GIT_TAG f456deace7b408655109aaeff71421ef2d3858c6 # 2.2.0
+  GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
 
 FetchContent_Declare(glfw
   GIT_REPOSITORY https://github.com/glfw/glfw
-  GIT_TAG 3.3
+  GIT_TAG 45ce5ddd197d5c58f50fdd3296a5131c894e5527 # 3.3.7
   GIT_PROGRESS TRUE
   GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(openal
   GIT_REPOSITORY https://github.com/kcat/openal-soft
-  GIT_TAG e123fa0ec349337ba4db00ebb2bbec1b7bee4cfa
+  GIT_TAG c1c63a27de66cd44ef756b190a73bfa8bc6dbbab # 1.22.0
+  GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE
 )
 
@@ -57,7 +61,9 @@ FetchContent_GetProperties(libnyquist)
 if(NOT libnyquist_POPULATED)
   FetchContent_Populate(libnyquist)
   set(LIBNYQUIST_PULSE TRUE)
+  set(LIBNYQUIST_BUILD_EXAMPLE OFF)
   set(BUILD_LIBOPUS TRUE)
+  set(BUILD_LIBWAVPACK TRUE)
   add_subdirectory(${libnyquist_SOURCE_DIR} ${libnyquist_BINARY_DIR} EXCLUDE_FROM_ALL)
   set_property(TARGET libopus PROPERTY CXX_STANDARD 17)
   target_compile_options(libnyquist PRIVATE "-w")
