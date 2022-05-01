@@ -9,7 +9,6 @@ FetchContent_Declare(freetype2
   GIT_REPOSITORY https://github.com/aseprite/freetype2.git
   GIT_TAG VER-2-10-0
   GIT_PROGRESS TRUE
-  GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(libnyquist
@@ -37,7 +36,6 @@ FetchContent_Declare(glfw
   GIT_REPOSITORY https://github.com/glfw/glfw
   GIT_TAG 45ce5ddd197d5c58f50fdd3296a5131c894e5527 # 3.3.7
   GIT_PROGRESS TRUE
-  GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(openal
