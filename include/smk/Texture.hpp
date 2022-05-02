@@ -74,6 +74,7 @@ struct Texture {
   bool operator!=(const Texture& other);
 
  private:
+  void Release();
   void Load(const uint8_t* data, int width, int height, const Option& option);
   GLuint id_ = 0;
   int width_ = 0;

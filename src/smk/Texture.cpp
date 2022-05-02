@@ -108,6 +108,10 @@ Texture::Texture(GLuint id, int width, int height)
 /// @brief The null texture.
 Texture::Texture() = default;
 Texture::~Texture() {
+  Release();
+}
+
+void Texture::Release() {
   int* ref_count = ref_count_;
   id_ = 0;
   width_ = -1;
@@ -136,7 +140,7 @@ Texture::Texture(const Texture& other) {
 }
 
 void Texture::operator=(Texture&& other) noexcept {
-  this->~Texture();
+  Release();
   std::swap(id_, other.id_);
   std::swap(width_, other.width_);
   std::swap(height_, other.height_);
@@ -144,7 +148,7 @@ void Texture::operator=(Texture&& other) noexcept {
 }
 
 Texture& Texture::operator=(const Texture& other) {
-  this->~Texture();
+  Release();
   id_ = other.id_;
   width_ = other.width_;
   height_ = other.height_;
