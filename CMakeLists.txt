@@ -1,21 +1,11 @@
 cmake_minimum_required (VERSION 3.11)
 
-# Configure dependencies for build static libraries only. 
-set(BUILD_SHARED_LIBS OFF)
-
-execute_process(
-  COMMAND git rev-list --count HEAD
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  OUTPUT_VARIABLE smk_git_version
-  OUTPUT_STRIP_TRAILING_WHITESPACE
+project(smk
+  LANGUAGES CXX
+  VERSION 0.2
 )
 
 add_subdirectory(third_party)
-
-project(smk
-  LANGUAGES CXX
-  VERSION 0.2.${smk_git_version}
-)
 
 add_library(smk STATIC
   include/smk/Audio.hpp
