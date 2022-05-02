@@ -40,7 +40,7 @@ VertexArray::VertexArray(VertexArray&& other) noexcept {
 }
 
 VertexArray& VertexArray::operator=(const VertexArray& other) {
-  this->~VertexArray();
+  this->Release();
   if (!other.vbo_)
     return *this;
 
