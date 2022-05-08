@@ -75,10 +75,10 @@ class Shader {
   // CPU to wait until its completion. If you need to do some work before the
   // completion, you can use this function and use the Shader only after it
   // becomes ready.
-  bool IsReady();
+  bool IsReady() const;
 
   // Wait until the Shader to be ready. Return true if it suceeded.
-  bool CompileStatus();
+  bool CompileStatus() const;
 
   // Provide opengl shader identifiant.
   GLuint id() const;
@@ -115,16 +115,16 @@ class ShaderProgram {
  public:
   ShaderProgram();
   void AddShader(const Shader& shader);
-  void Link();
+  void Link() const;
 
   // Linking shader is an asynchronous process. Using the shader can causes the
   // CPU to wait until its completion. If you need to do some work before the
   // completion, you can use this function and use the Shader only after it
   // becomes ready.
-  bool IsReady();
+  bool IsReady() const;
 
   // Wait until the ShaderProgram to be ready. Return true if it suceeded.
-  bool LinkStatus();
+  bool LinkStatus() const;
 
   // bind the program
   void Use() const;
@@ -133,14 +133,28 @@ class ShaderProgram {
   // provide the opengl identifiant
   GLuint id() const;
 
-  // clang-format off
   // provide attributes informations.
-  GLint Attribute(const std::string& name);
-  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLboolean normalize, GLenum type);
-  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLboolean normalize);
-  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset, GLenum type); 
-  void SetAttribute(const std::string& name, GLint size, GLsizei stride, GLuint offset);
-  // clang-format on
+  GLint Attribute(const std::string& name) const;
+  void SetAttribute(const std::string& name,
+                    GLint size,
+                    GLsizei stride,
+                    GLuint offset,
+                    GLboolean normalize,
+                    GLenum type) const;
+  void SetAttribute(const std::string& name,
+                    GLint size,
+                    GLsizei stride,
+                    GLuint offset,
+                    GLboolean normalize) const;
+  void SetAttribute(const std::string& name,
+                    GLint size,
+                    GLsizei stride,
+                    GLuint offset,
+                    GLenum type) const;
+  void SetAttribute(const std::string& name,
+                    GLint size,
+                    GLsizei stride,
+                    GLuint offset) const;
 
   // provide uniform location
   GLint Uniform(const std::string& name);

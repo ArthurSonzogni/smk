@@ -38,8 +38,8 @@ class Window : public RenderTarget {
   float time() const;
   Input& input();
 
-  void ExecuteMainLoop(std::function<void(void)> loop);
-  void ExecuteMainLoopUntil(std::function<bool(void)> loop);
+  void ExecuteMainLoop(const std::function<void(void)>& loop);
+  void ExecuteMainLoopUntil(const std::function<bool(void)>& loop);
 
   // Pool new events. This update the |input()| element.
   void PoolEvents();
@@ -58,8 +58,8 @@ class Window : public RenderTarget {
   // Move-only ressource.
   Window(Window&&) noexcept;
   Window(const Window&) = delete;
-  void operator=(Window&&) noexcept;
-  void operator=(const Window&) = delete;
+  Window& operator=(Window&&) noexcept;
+  Window& operator=(const Window&) = delete;
 
  private:
   GLFWwindow* window_ = nullptr;

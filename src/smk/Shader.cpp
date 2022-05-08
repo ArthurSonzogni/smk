@@ -14,7 +14,7 @@
 
 namespace smk {
 
-extern bool g_khr_parallel_shader;
+extern bool g_khr_parallel_shader; // NOLINT
 
 using namespace glm;
 
@@ -59,12 +59,14 @@ Shader Shader::FromFile(const std::string& filename, GLenum type) {
 /// @see Shader::FromFile
 Shader Shader::FromString(const std::string& content, GLenum type) {
   std::vector<char> buffer;
-  for (const auto& c : kShaderHeader)
+  for (const auto& c : kShaderHeader) {
     buffer.push_back(c);
-  for (const auto& c : content)
+  }
+  for (const auto& c : content) {
     buffer.push_back(c);
+  }
   buffer.push_back('\0');
-  return Shader(std::move(buffer), type);
+  return Shader(buffer, type);
 }
 
 /// @brief The GPU shader id.
@@ -84,7 +86,7 @@ Shader::Shader(const std::vector<char>& content, GLenum type) {
 
   // code source assignation
   const char* shaderText(&content[0]);
-  glShaderSource(id_, 1, (const GLchar**)&shaderText, NULL);
+  glShaderSource(id_, 1, (const GLchar**)&shaderText, nullptr);
 
   // compilation
   glCompileShader(id_);
@@ -95,9 +97,9 @@ Shader::Shader(const std::vector<char>& content, GLenum type) {
 /// CPU to wait until its completion. If you need to do some work before the
 /// completion, you can use this function and use the Shader only after it
 /// becomes ready.
-bool Shader::IsReady() {
+bool Shader::IsReady() const {
   if (g_khr_parallel_shader) {
-    GLint completion_status;
+    GLint completion_status = {};
     glGetShaderiv(id_, GL_COMPLETION_STATUS_KHR, &completion_status);
     return completion_status == GL_TRUE;
   }
@@ -108,20 +110,21 @@ bool Shader::IsReady() {
 
 /// @brief Wait until the Shader to be ready.
 /// @return True if it suceeded, false otherwise.
-bool Shader::CompileStatus() {
-  GLint compile_status;
+bool Shader::CompileStatus() const {
+  GLint compile_status = {};
   glGetShaderiv(id_, GL_COMPILE_STATUS, &compile_status);
-  if (compile_status == GL_TRUE)
+  if (compile_status == GL_TRUE) {
     return true;
+  }
 
   GLsizei logsize = 0;
   glGetShaderiv(id_, GL_INFO_LOG_LENGTH, &logsize);
 
-  char* log = new char[logsize + 1];
-  glGetShaderInfoLog(id_, logsize, &logsize, log);
+  std::vector<char> log(logsize + 1);
+  glGetShaderInfoLog(id_, logsize, &logsize, log.data());
 
   std::cout << "[Error] compilation error: " << std::endl;
-  std::cout << log << std::endl;
+  std::cout << log.data() << std::endl;
 
   return false;
 }
@@ -139,12 +142,17 @@ Shader::Shader(Shader&& other) noexcept {
 }
 
 Shader& Shader::operator=(const Shader& other) noexcept {
-  Release();
-  if (!other.id_)
+  if (this == &other) {
     return *this;
+  }
+  Release();
+  if (!other.id_) {
+    return *this;
+  }
 
-  if (!other.ref_count_)
-    other.ref_count_ = new int(1);
+  if (!other.ref_count_) {
+    other.ref_count_ = new int(1); // NOLINT
+  }
 
   id_ = other.id_;
   ref_count_ = other.ref_count_;
@@ -161,8 +169,9 @@ Shader& Shader::operator=(Shader&& other) noexcept {
 
 void Shader::Release() {
   // Nothing to do for the null Shader.
-  if (!id_)
+  if (!id_) {
     return;
+  }
 
   // Transfert state to local:
   GLuint id = 0;
@@ -174,9 +183,10 @@ void Shader::Release() {
   // this class.
   if (ref_count) {
     --(*ref_count);
-    if (*ref_count)
+    if (*ref_count) {
       return;
-    delete ref_count;
+    }
+    delete ref_count; // NOLINT
     ref_count = nullptr;
   }
 
@@ -185,20 +195,28 @@ void Shader::Release() {
 }
 
 struct ShaderProgram::Impl {
-  std::map<std::string, GLint> uniforms;
-  GLuint id = 0;
-
+  Impl() = default;
   ~Impl() {
-    if (!id)
+    if (!id) {
       return;
+    }
     glDeleteProgram(id);
     id = 0;
   }
+
+  Impl(const Impl&) = delete;
+  Impl(Impl&&) = delete;
+  Impl& operator=(const Impl&) = delete;
+  Impl& operator=(Impl&&) = delete;
+
+  std::map<std::string, GLint> uniforms;
+  GLuint id = 0;
 };
 
 /// @brief The constructor. The ShaderProgram is initially invalid. You need to
 /// call @ref AddShader and @ref Link before being able to use it.
-ShaderProgram::ShaderProgram() : impl_(new Impl()) {}
+// NOLINTNEXTLINE
+ShaderProgram::ShaderProgram() : impl_(std::make_shared<Impl>()) {}
 
 /// @brief Add a Shader to the program list. This must called multiple time for
 /// each shader components before calling @ref Link.
@@ -206,15 +224,16 @@ ShaderProgram::ShaderProgram() : impl_(new Impl()) {}
 void ShaderProgram::AddShader(const Shader& shader) {
   if (!impl_->id) {
     impl_->id = glCreateProgram();
-    if (!impl_->id)
+    if (!impl_->id) {
       std::cerr << "[Error] Impossible to create a new Shader" << std::endl;
+    }
   }
 
   glAttachShader(id(), shader.id());
 }
 
 /// @brief Add a Shader to the program list.
-void ShaderProgram::Link() {
+void ShaderProgram::Link() const {
   glLinkProgram(id());
 }
 
@@ -222,9 +241,9 @@ void ShaderProgram::Link() {
 // CPU to wait until its completion. If you need to do some work before the
 // completion, you can use this function and use the Shader only after it
 // becomes ready.
-bool ShaderProgram::IsReady() {
+bool ShaderProgram::IsReady() const {
   if (g_khr_parallel_shader) {
-    GLint completion_status;
+    GLint completion_status = {};
     std::cerr << GL_COMPLETION_STATUS_KHR << std::endl;
     std::cerr << id() << std::endl;
     glGetProgramiv(id(), GL_COMPLETION_STATUS_KHR, &completion_status);
@@ -234,21 +253,22 @@ bool ShaderProgram::IsReady() {
   return true;
 }
 
-bool ShaderProgram::LinkStatus() {
-  GLint result;
+bool ShaderProgram::LinkStatus() const {
+  GLint result = {};
   glGetProgramiv(id(), GL_LINK_STATUS, &result);
-  if (result == GL_TRUE)
+  if (result == GL_TRUE) {
     return true;
+  }
 
   std::cout << "[Error] linkage error" << std::endl;
 
   GLsizei logsize = 0;
   glGetProgramiv(id(), GL_INFO_LOG_LENGTH, &logsize);
 
-  char* log = new char[logsize];
-  glGetProgramInfoLog(id(), logsize, &logsize, log);
+  std::vector<char> log(logsize);
+  glGetProgramInfoLog(id(), logsize, &logsize, log.data());
 
-  std::cout << log << std::endl;
+  std::cout << log.data() << std::endl;
   return false;
 }
 
@@ -269,8 +289,9 @@ GLint ShaderProgram::Uniform(const std::string& name) {
     impl_->uniforms[name] = r;
 
     return r;
-  } else
+  } else {
     return it->second;
+  }
 }
 
 GLint ShaderProgram::operator[](const std::string& name) {
@@ -280,11 +301,12 @@ GLint ShaderProgram::operator[](const std::string& name) {
 /// @brief Return the GPU attribute id.
 /// @param name The attribute name in the Shader.
 /// @return The GPU attribute ID. Return 0 and display an error if not found.
-GLint ShaderProgram::Attribute(const std::string& name) {
+GLint ShaderProgram::Attribute(const std::string& name) const {
   GLint attrib = glGetAttribLocation(id(), name.c_str());
-  if (attrib == GL_INVALID_OPERATION || attrib < 0)
+  if (attrib == GL_INVALID_OPERATION || attrib < 0) {
     std::cerr << "[Error] Attribute " << name << " doesn't exist in program"
               << std::endl;
+  }
 
   return attrib;
 }
@@ -311,11 +333,11 @@ void ShaderProgram::SetAttribute(const std::string& name,
                                  GLsizei stride,
                                  GLuint offset,
                                  GLboolean normalize,
-                                 GLenum type) {
+                                 GLenum type) const {
   GLint loc = Attribute(name);
   glEnableVertexAttribArray(loc);
   glVertexAttribPointer(loc, size, type, normalize, stride,
-                        reinterpret_cast<void*>(offset));
+                        reinterpret_cast<void*>(offset)); // NOLINT
 }
 
 /// @brief Set an OpenGL attribute properties, assuming data are float.
@@ -324,7 +346,7 @@ void ShaderProgram::SetAttribute(const std::string& name,
                                  GLint size,
                                  GLsizei stride,
                                  GLuint offset,
-                                 GLboolean normalize) {
+                                 GLboolean normalize) const {
   SetAttribute(name, size, stride, offset, normalize, GL_FLOAT);
 }
 
@@ -334,7 +356,7 @@ void ShaderProgram::SetAttribute(const std::string& name,
                                  GLint size,
                                  GLsizei stride,
                                  GLuint offset,
-                                 GLenum type) {
+                                 GLenum type) const {
   SetAttribute(name, size, stride, offset, false, type);
 }
 
@@ -343,14 +365,14 @@ void ShaderProgram::SetAttribute(const std::string& name,
 void ShaderProgram::SetAttribute(const std::string& name,
                                  GLint size,
                                  GLsizei stride,
-                                 GLuint offset) {
+                                 GLuint offset) const {
   SetAttribute(name, size, stride, offset, false, GL_FLOAT);
 }
 
 /// @brief Assign shader vec3 uniform
 /// @param x First vec3 component.
 /// @param y Second vec3 component.
-/// @param y Third vec3 component
+/// @param z Third vec3 component
 /// @overload
 void ShaderProgram::SetUniform(const std::string& name,
                                float x,
@@ -409,6 +431,7 @@ void ShaderProgram::Use() const {
 }
 
 /// @brief Unbind the ShaderProgram.
+// NOLINTNEXTLINE
 void ShaderProgram::Unuse() const {
   glUseProgram(0);
 }

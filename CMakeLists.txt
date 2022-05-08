@@ -5,7 +5,21 @@ project(smk
   VERSION 0.2
 )
 
+option(SMK_BUILD_DOCS "Set to ON to build docs" ON)
+option(SMK_BUILD_EXAMPLES "Set to ON to build examples" ON)
+#option(SMK_BUILD_TESTS "Set to ON to build tests" OFF)
+#option(SMK_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
+#option(SMK_ENABLE_INSTALL "Generate the install target" ON)
+option(SMK_CLANG_TIDY "Execute clang-tidy" OFF)
+#option(SMK_ENABLE_COVERAGE "Execute code coverage" OFF)
+
 add_subdirectory(third_party)
+
+add_library(stbimage STATIC
+  src/smk/StbImage.cpp
+  src/smk/StbImage.hpp
+)
+target_include_directories(stbimage PUBLIC src/smk)
 
 add_library(smk STATIC
   include/smk/Audio.hpp
@@ -46,8 +60,6 @@ add_library(smk STATIC
   src/smk/Sound.cpp
   src/smk/SoundBuffer.cpp
   src/smk/Sprite.cpp
-  src/smk/StbImage.cpp
-  src/smk/StbImage.hpp
   src/smk/Text.cpp
   src/smk/Texture.cpp
   src/smk/Touch.cpp
@@ -95,6 +107,24 @@ endif()
 target_link_libraries(smk PUBLIC glm)
 target_link_libraries(smk PRIVATE freetype)
 target_link_libraries(smk PRIVATE libnyquist)
+target_link_libraries(smk PRIVATE stbimage)
 
-add_subdirectory(examples)
-add_subdirectory(doc)
+if(SMK_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
+
+if(SMK_BUILD_DOCS)
+  add_subdirectory(doc)
+endif()
+
+if (SMK_CLANG_TIDY)
+  find_program( CLANG_TIDY_EXE NAMES "clang-tidy" DOC "Path to clang-tidy executable" )
+  if(NOT CLANG_TIDY_EXE)
+    message(STATUS "clang-tidy not found.")
+  else()
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    set_target_properties(smk
+      PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-warnings-as-errors=*"
+    )
+  endif()
+endif()

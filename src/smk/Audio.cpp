@@ -13,33 +13,29 @@
 namespace smk {
 
 namespace {
-int g_ref_count = 0;
-ALCdevice* g_audio_device = nullptr;
-ALCcontext* g_audio_context = nullptr;
+int g_ref_count = 0;                    // NOLINT
+ALCdevice* g_audio_device = nullptr;    // NOLINT
+ALCcontext* g_audio_context = nullptr;  // NOLINT
 
 void GetDevices(std::vector<std::string>& devices) {
-  // Vidage de la liste
-  // Clear the list
   devices.clear();
+  const ALCchar* device_list = alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
+  if (!device_list) {
+    return;
+  }
 
-  // Récupération des devices disponibles
-  // Find available devices
-  const ALCchar* device_list = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
-
-  if (device_list) {
-    // Extraction des devices contenus dans la chaîne renvoyée
-    while (std::strlen(device_list) > 0) {
-      devices.push_back(device_list);
-      device_list += std::strlen(device_list) + 1;
-    }
+  while (std::strlen(device_list) > 0) {
+    devices.emplace_back(device_list);
+    device_list += std::strlen(device_list) + 1; // NOLINT
   }
 }
 
 }  // namespace
 
 Audio::Audio() {
-  if (g_ref_count++)
+  if (g_ref_count++) {
     return;
+  }
   std::vector<std::string> devices;
   GetDevices(devices);
   std::cout << "Audio devices found " << devices.size() << ":" << std::endl;
@@ -73,8 +69,9 @@ Audio::Audio() {
 }
 
 Audio::~Audio() {
-  if (--g_ref_count)
+  if (--g_ref_count) {
     return;
+  }
   // Destroy the context
   alcMakeContextCurrent(nullptr);
   if (g_audio_context) {

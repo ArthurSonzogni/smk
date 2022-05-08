@@ -20,7 +20,7 @@ Framebuffer::Framebuffer(int width, int height) {
   option.generate_mipmap = false;
   option.min_filter = GL_LINEAR;
   option.mag_filter = GL_LINEAR;
-  color_textures_.push_back(smk::Texture(nullptr, width, height, option));
+  color_textures_.emplace_back(nullptr, width, height, option);
 
   Init();
 }
@@ -85,10 +85,11 @@ Framebuffer::Framebuffer(Framebuffer&& other) noexcept {
   this->operator=(std::move(other));
 }
 
-void Framebuffer::operator=(Framebuffer&& other) noexcept {
+Framebuffer& Framebuffer::operator=(Framebuffer&& other) noexcept {
   RenderTarget::operator=(std::move(other));
-  std::swap(color_textures_, other.color_textures_);
-  std::swap(render_buffer_, other.render_buffer_);
+  std::swap(color_textures_, other.color_textures_);  // NOLINT
+  std::swap(render_buffer_, other.render_buffer_);    // NOLINT
+  return *this;
 }
 
 smk::Texture& Framebuffer::color_texture() {

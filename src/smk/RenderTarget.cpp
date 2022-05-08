@@ -8,26 +8,27 @@
 #include <smk/Texture.hpp>
 
 namespace smk {
-bool g_invalidate_textures = false;
+bool g_invalidate_textures = false;  // NOLINT
 namespace {
+
+RenderTarget* render_target = nullptr;  // NOLINT
+RenderState cached_render_state_;       // NOLINT
 
 const Texture& WhiteTexture() {
   static const smk::Texture white_texture = [] {
-    static const uint8_t data[4] = {255, 255, 255, 255};
-    return smk::Texture(data, 1, 1);
+    static const uint8_t data[4] = {255, 255, 255, 255};  // NOLINT
+    return smk::Texture(data, 1, 1);                      // NOLINT
   }();
 
   return white_texture;
 }
 
-RenderTarget* render_target = nullptr;
-RenderState cached_render_state_;
-
 }  // namespace
 
 void RenderTarget::Bind(RenderTarget* target) {
-  if (render_target == target)
+  if (render_target == target) {
     return;
+  }
   render_target = target;
   glBindFramebuffer(GL_FRAMEBUFFER, render_target->frame_buffer_);
   glViewport(0, 0, render_target->width_, render_target->height_);
@@ -35,7 +36,7 @@ void RenderTarget::Bind(RenderTarget* target) {
 
 /// @brief Build an invalid RenderTarget.
 /// It can be replaced later by using the move operator.
-RenderTarget::RenderTarget() {}
+RenderTarget::RenderTarget() = default;
 
 /// @brief Constructor from temporary.
 RenderTarget::RenderTarget(RenderTarget&& other) noexcept {
@@ -43,7 +44,7 @@ RenderTarget::RenderTarget(RenderTarget&& other) noexcept {
 }
 
 /// @brief Move operator.
-void RenderTarget::operator=(RenderTarget&& other) noexcept {
+RenderTarget& RenderTarget::operator=(RenderTarget&& other) noexcept {
   std::swap(width_, other.width_);
   std::swap(height_, other.height_);
   std::swap(projection_matrix_, other.projection_matrix_);
@@ -56,13 +57,14 @@ void RenderTarget::operator=(RenderTarget&& other) noexcept {
   std::swap(shader_program_3d_, other.shader_program_3d_);
   std::swap(shader_program_, other.shader_program_);
   std::swap(frame_buffer_, other.frame_buffer_);
+  return *this;
 }
 
 /// @brief Clear the surface with a single color.
 /// @param color: An opaque color to fill the surface.
 void RenderTarget::Clear(const glm::vec4& color) {
   Bind(this);
-  glClearColor(color.r, color.g, color.b, color.a);
+  glClearColor(color.r, color.g, color.b, color.a);  // NOLINT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
@@ -72,14 +74,14 @@ void RenderTarget::Clear(const glm::vec4& color) {
 /// @param view: The view to use.
 void RenderTarget::SetView(const View& view) {
   view_ = view;
-  float z_x = +2.0 / view.width_;   // [0, width]  -> [-1,1]
-  float z_y = -2.0 / view.height_;  // [0, height] -> [-1,1]
+  float z_x = +2.F / view.width_;   // NOLINT [0, width]  -> [-1,1]
+  float z_y = -2.F / view.height_;  // NOLINT [0, height] -> [-1,1]
   float t_x = -view.x_ * z_x;
   float t_y = -view.y_ * z_y;
-  SetView(glm::mat4(z_x, 0.0, 0.0, 0.0,    //
-                    0.0, z_y, 0.0, 0.0,    //
-                    0.0, 0.0, 1.0, 0.0,    //
-                    t_x, t_y, 0.0, 1.0));  //
+  SetView(glm::mat4(z_x, 0.F, 0.F, 0.F,    //
+                    0.F, z_y, 0.F, 0.F,    //
+                    0.F, 0.F, 1.F, 0.F,    //
+                    t_x, t_y, 0.F, 1.F));  //
 }
 
 /// @brief Set the View to use.
@@ -111,7 +113,7 @@ const View& RenderTarget::view() const {
 ///
 ///   void main() {
 ///     f_texture_position = texture_position;
-///     gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
+///     gl_Position = projection * view * vec4(space_position, 0.F, 1.F);
 ///   }
 /// )", GL_VERTEX_SHADER);
 ///
@@ -122,7 +124,7 @@ const View& RenderTarget::view() const {
 ///   out vec4 out_color;
 ///
 ///   void main() {
-///     vec4 inverted_color = vec4(1.0) - color;
+///     vec4 inverted_color = vec4(1.F) - color;
 ///     out_color = texture(texture_0, f_texture_position) * inverted_color.
 ///   }
 /// )";
@@ -139,9 +141,9 @@ void RenderTarget::SetShaderProgram(ShaderProgram& shader_program) {
   shader_program_ = shader_program;
   shader_program_.Use();
   shader_program_.SetUniform("texture_0", 0);
-  shader_program_.SetUniform("color", glm::vec4(1.0, 1.0, 1.0, 1.0));
-  shader_program_.SetUniform("projection", glm::mat4(1.0));
-  shader_program_.SetUniform("view", glm::mat4(1.0));
+  shader_program_.SetUniform("color", glm::vec4(1.F, 1.F, 1.F, 1.F));
+  shader_program_.SetUniform("projection", glm::mat4(1.F));
+  shader_program_.SetUniform("view", glm::mat4(1.F));
 }
 
 /// @brief Return the default predefined 2D shader program. It is bound by
@@ -161,7 +163,7 @@ void RenderTarget::Draw(const Drawable& drawable) {
   Bind(this);
   RenderState state;
   state.shader_program = shader_program_;
-  state.view = glm::mat4(1.0);
+  state.view = glm::mat4(1.F);
   state.color = smk::Color::White;
   state.blend_mode = smk::BlendMode::Alpha;
   drawable.Draw(*this, state);
@@ -193,7 +195,7 @@ void RenderTarget::Draw(RenderState& state) {
   state.shader_program.SetUniform("view", state.view);
 
   // Texture
-  auto& texture = state.texture.id() ? state.texture : WhiteTexture();
+  const auto& texture = state.texture.id() ? state.texture : WhiteTexture();
   if (cached_render_state_.texture != texture || g_invalidate_textures) {
     cached_render_state_.texture = texture;
     texture.Bind();
@@ -209,7 +211,7 @@ void RenderTarget::Draw(RenderState& state) {
                         state.blend_mode.src_alpha, state.blend_mode.dst_alpha);
   }
 
-  glDrawArrays(GL_TRIANGLES, 0, state.vertex_array.size());
+  glDrawArrays(GL_TRIANGLES, 0, GLsizei(state.vertex_array.size()));
 }
 
 /// @brief the dimension (width, height) of the drawing area.
@@ -232,8 +234,8 @@ int RenderTarget::height() const {
 
 void RenderTarget::InitRenderTarget() {
   View default_view;
-  default_view.SetCenter(width_ / 2, height_ / 2);
-  default_view.SetSize(width_, height_);
+  default_view.SetCenter(float(width_) / 2.F, float(height_) / 2.F);  // NOLINT
+  default_view.SetSize(float(width_), float(height_));
   SetView(default_view);
 
   vertex_shader_2d_ = Shader::FromString(R"(
@@ -247,7 +249,7 @@ void RenderTarget::InitRenderTarget() {
 
     void main() {
       f_texture_position = texture_position;
-      gl_Position = projection * view * vec4(space_position, 0.0, 1.0);
+      gl_Position = projection * view * vec4(space_position, 0.F, 1.F);
     }
   )",
                                          GL_VERTEX_SHADER);
@@ -282,8 +284,8 @@ void RenderTarget::InitRenderTarget() {
 
     void main() {
       fTexture = texture_position;
-      fPosition = view * vec4(space_position,1.0);
-      fNormal = vec3(view * vec4(normal,0.0));
+      fPosition = view * vec4(space_position,1.F);
+      fNormal = vec3(view * vec4(normal,0.F));
 
       gl_Position = projection * fPosition;
     }
@@ -313,8 +315,8 @@ void RenderTarget::InitRenderTarget() {
       vec3 light_dir = normalize(light_position.xyz-fPosition.xyz);
       vec3 reflect_dir = -reflect(object_dir,normal_dir);
 
-      float diffuse_strength = max(0.0, dot(normal_dir, light_dir));
-      float specular_strength = pow(max(0.0, dot(reflect_dir, light_dir)),
+      float diffuse_strength = max(0.F, dot(normal_dir, light_dir));
+      float specular_strength = pow(max(0.F, dot(reflect_dir, light_dir)),
                                     specular_power);
 
       out_color = texture(texture_0, fTexture);
@@ -331,12 +333,16 @@ void RenderTarget::InitRenderTarget() {
   shader_program_3d_.Link();
 
   shader_program_3d_.Use();
-  shader_program_3d_.SetUniform("light_position",
-                                 glm::vec4(0.f, 5.f, 0.f, 1.f));
-  shader_program_3d_.SetUniform("ambient", 0.3f);
-  shader_program_3d_.SetUniform("diffuse", 0.5f);
-  shader_program_3d_.SetUniform("specular", 0.5f);
-  shader_program_3d_.SetUniform("specular_power", 4.0f);
+  constexpr auto default_light_position = glm::vec4(0.F, 5.F, 0.F, 1.F);
+  constexpr auto default_ambient = 0.3F;
+  constexpr auto default_diffuse = 0.5F;
+  constexpr auto default_specular = 0.5F;
+  constexpr auto default_specular_power = 4.F;
+  shader_program_3d_.SetUniform("light_position", default_light_position);
+  shader_program_3d_.SetUniform("ambient", default_ambient);
+  shader_program_3d_.SetUniform("diffuse", default_diffuse);
+  shader_program_3d_.SetUniform("specular", default_specular);
+  shader_program_3d_.SetUniform("specular_power", default_specular_power);
 
   SetShaderProgram(shader_program_2d_);
 }

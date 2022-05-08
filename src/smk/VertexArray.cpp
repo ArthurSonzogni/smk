@@ -15,7 +15,8 @@ void VertexArray::Allocate(int element_size, void* data) {
   glGenBuffers(1, &vbo_);
   glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 
-  glBufferData(GL_ARRAY_BUFFER, size_ * element_size, data, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(size_ * element_size), data,
+               GL_STATIC_DRAW);
   glEnableVertexAttribArray(0);
 }
 
@@ -27,6 +28,7 @@ void VertexArray::Bind() const {
   glBindVertexArray(vao_);
 }
 
+// NOLINTNEXTLINE
 void VertexArray::UnBind() const {
   glBindVertexArray(0);
 }
@@ -40,12 +42,17 @@ VertexArray::VertexArray(VertexArray&& other) noexcept {
 }
 
 VertexArray& VertexArray::operator=(const VertexArray& other) {
-  Release();
-  if (!other.vbo_)
+  if (&other == this) {
     return *this;
+  }
+  Release();
+  if (!other.vbo_) {
+    return *this;
+  }
 
-  if (!other.ref_count_)
-    other.ref_count_ = new int(1);
+  if (!other.ref_count_) {
+    other.ref_count_ = new int(1); // NOLINT
+  }
 
   vbo_ = other.vbo_;
   vao_ = other.vao_;
@@ -96,8 +103,9 @@ bool VertexArray::operator!=(const smk::VertexArray& other) const {
 
 void VertexArray::Release() {
   // Nothing to do for the null VertexArray.
-  if (!vbo_)
+  if (!vbo_) {
     return;
+  }
 
   // Transfert state to local.
   GLuint vbo = 0;
@@ -111,9 +119,10 @@ void VertexArray::Release() {
   // this class.
   if (ref_count) {
     --(*ref_count);
-    if (*ref_count)
+    if (*ref_count) {
       return;
-    delete ref_count;
+    }
+    delete ref_count; // NOLINT
     ref_count = nullptr;
   }
 

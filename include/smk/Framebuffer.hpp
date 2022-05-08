@@ -24,7 +24,7 @@ class Framebuffer : public RenderTarget {
   // Move only ressource.
   Framebuffer(Framebuffer&&) noexcept;
   Framebuffer(const Framebuffer&) = delete;
-  void operator=(Framebuffer&&) noexcept;
+  Framebuffer& operator=(Framebuffer&&) noexcept;
   void operator=(const Framebuffer&) = delete;
 
   smk::Texture& color_texture();

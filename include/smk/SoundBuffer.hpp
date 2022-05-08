@@ -40,8 +40,8 @@ class SoundBuffer {
   // --- Move only resource ----------------------------------------------------
   SoundBuffer(SoundBuffer&&) noexcept;
   SoundBuffer(const SoundBuffer&) = delete;
-  void operator=(SoundBuffer&&) noexcept;
-  void operator=(const SoundBuffer&) = delete;
+  SoundBuffer& operator=(SoundBuffer&&) noexcept;
+  SoundBuffer& operator=(const SoundBuffer&) = delete;
   // ---------------------------------------------------------------------------
 
   unsigned int buffer() const;

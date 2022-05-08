@@ -18,7 +18,7 @@ namespace smk {
 class Font {
  public:
   Font() = default;  // Empty font.
-  Font(const std::string& filename, float line_height);
+  Font(std::string filename, float line_height);
 
   float line_height() const { return line_height_; }
   float baseline_position() const { return baseline_position_; }
@@ -33,8 +33,8 @@ class Font {
   // --- Move only resource ----------------------------------------------------
   Font(Font&&) = default;
   Font(const Font&) = delete;
-  void operator=(Font&&) noexcept;
-  void operator=(const Font&) = delete;
+  Font& operator=(Font&&) noexcept;
+  Font& operator=(const Font&) = delete;
   // ---------------------------------------------------------------------------
 
  private:

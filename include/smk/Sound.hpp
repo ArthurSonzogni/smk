@@ -37,7 +37,7 @@ class Sound {
   void Play();
   void Stop();
   void SetLoop(bool looping);
-  bool IsPlaying();
+  bool IsPlaying() const;
 
   // The gain applied to the source. Default is 1.
   void SetVolume(float volume);
@@ -45,8 +45,8 @@ class Sound {
   // -- Move-only resource ---
   Sound(Sound&&) noexcept;
   Sound(const Sound&) = delete;
-  void operator=(Sound&&) noexcept;
-  void operator=(const Sound&) = delete;
+  Sound& operator=(Sound&&) noexcept;
+  Sound& operator=(const Sound&) = delete;
 
  private:
   const SoundBuffer* buffer_ = nullptr;

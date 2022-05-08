@@ -32,7 +32,7 @@ class Shape {
                                         float height,
                                         float radius);
   static Transformable3D Cube();
-  static Transformable3D IcoSphere(int interation);
+  static Transformable3D IcoSphere(int iteration);
   static Transformable3D Plane();
   static std::vector<glm::vec2> Bezier(const std::vector<glm::vec2>& point,
                                        size_t subdivision);
