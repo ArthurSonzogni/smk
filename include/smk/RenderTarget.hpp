@@ -27,8 +27,8 @@ class RenderTarget {
   RenderTarget();
   RenderTarget(RenderTarget&& other) noexcept;
   RenderTarget(const RenderTarget& rhs) = delete;
-  void operator=(RenderTarget&& other) noexcept;
-  void operator=(const RenderTarget& rhs) = delete;
+  RenderTarget& operator=(RenderTarget&& other) noexcept;
+  RenderTarget& operator=(const RenderTarget& rhs) = delete;
 
   // 0. Clear the framebuffer
   void Clear(const glm::vec4& color);

@@ -20,7 +20,7 @@ std::wstring to_wstring(const std::string& s) {
 }
 
 /// Construct a null Text. It can't be drawn.
-Text::Text() {}
+Text::Text() = default;
 
 /// @brief Constructor.
 /// @param font The Font to be used for drawing glyphs.
@@ -80,15 +80,16 @@ void Text::Draw(RenderTarget& target, RenderState state) const {
       continue;
     }
 
-    auto character = font_->FetchGlyph(it);
-    if (!character)
+    auto* character = font_->FetchGlyph(it);
+    if (!character) {
       continue;
+    }
 
     if (character->texture.id()) {
-      const float x = advance_x + character->bearing.x;
-      const float y = advance_y + character->bearing.y;
-      const float w = character->texture.width();
-      const float h = character->texture.height();
+      const float x = advance_x + float(character->bearing.x);
+      const float y = advance_y + float(character->bearing.y);
+      const auto w = float(character->texture.width());
+      const auto h = float(character->texture.height());
       state.texture = character->texture;
       state.view = transformation * glm::mat4(w, 0.f, 0.f, 0.f,    //
                                               0.f, h, 0.f, 0.f,    //
@@ -114,9 +115,10 @@ glm::vec2 Text::ComputeDimensions() const {
       dimension.y += font_->line_height();
       continue;
     }
-    auto character = font_->FetchGlyph(it);
-    if (!character)
+    auto* character = font_->FetchGlyph(it);
+    if (!character) {
       continue;
+    }
     advance_x += character->advance;
 
     dimension.x = std::max(dimension.x, advance_x);

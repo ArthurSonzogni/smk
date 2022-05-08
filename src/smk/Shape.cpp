@@ -25,16 +25,16 @@ Transformable Shape::FromVertexArray(VertexArray vertex_array) {
 Transformable Shape::Line(const glm::vec2& a,
                           const glm::vec2& b,
                           float thickness) {
-  glm::vec2 dt =
-      glm::normalize(glm::vec2(b.y - a.y, -b.x + a.x)) * thickness * 0.5f;
+  glm::vec2 dt = glm::normalize(glm::vec2(b.y - a.y, -b.x + a.x)) * thickness *
+                 0.5F;  // NOLINT
 
   return FromVertexArray(VertexArray({
-      {a + dt, {0.f, 0.f}},
-      {b + dt, {1.f, 0.f}},
-      {b - dt, {1.f, 1.f}},
-      {a + dt, {0.f, 0.f}},
-      {b - dt, {1.f, 1.f}},
-      {a - dt, {0.f, 1.f}},
+      {a + dt, {0.F, 0.F}},
+      {b + dt, {1.F, 0.F}},
+      {b - dt, {1.F, 1.F}},
+      {a + dt, {0.F, 0.F}},
+      {b - dt, {1.F, 1.F}},
+      {a - dt, {0.F, 1.F}},
   }));
 }
 
@@ -44,12 +44,12 @@ Transformable Shape::Square() {
 
   if (!vertex_array.size()) {
     vertex_array = VertexArray({
-        {{0.f, 0.f}, {0.f, 0.f}},
-        {{1.f, 0.f}, {1.f, 0.f}},
-        {{1.f, 1.f}, {1.f, 1.f}},
-        {{0.f, 0.f}, {0.f, 0.f}},
-        {{1.f, 1.f}, {1.f, 1.f}},
-        {{0.f, 1.f}, {0.f, 1.f}},
+        {{0.F, 0.F}, {0.F, 0.F}},
+        {{1.F, 0.F}, {1.F, 0.F}},
+        {{1.F, 1.F}, {1.F, 1.F}},
+        {{0.F, 0.F}, {0.F, 0.F}},
+        {{1.F, 1.F}, {1.F, 1.F}},
+        {{0.F, 1.F}, {0.F, 1.F}},
     });
   }
 
@@ -59,7 +59,7 @@ Transformable Shape::Square() {
 /// @brief Return a circle.
 /// @param radius The circle'radius.
 Transformable Shape::Circle(float radius) {
-  return Circle(radius, 16 + radius * 0.9);
+  return Circle(radius, 16 + radius * 0.9); // NOLINT
 }
 
 /// @brief Return a circle.
@@ -68,12 +68,12 @@ Transformable Shape::Circle(float radius) {
 Transformable Shape::Circle(float radius, int subdivisions) {
   std::vector<Vertex> v;
   glm::vec2 p1 = glm::vec2(1.0f, 0.0f);
-  glm::vec2 t1 = glm::vec2(0.5f, 0.5f) + 0.5f * p1;
-  glm::vec2 zero(0.f, 0.f);
+  glm::vec2 t1 = glm::vec2(0.5F, 0.5F) + 0.5F * p1; // NOLINT
+  glm::vec2 zero(0.F, 0.F);
   for (int i = 1; i <= subdivisions; ++i) {
-    float a = (2.0 * M_PI * i) / subdivisions;
-    glm::vec2 p2 = glm::vec2(cos(a), sin(a));
-    glm::vec2 t2 = glm::vec2(0.5, 0.5) + 0.5f * p2;
+    float a = float(2.F * M_PI * i) / float(subdivisions); // NOLINT
+    glm::vec2 p2 = glm::vec2(std::cos(a), std::sin(a));
+    glm::vec2 t2 = glm::vec2(0.5F, 0.5F) + 0.5F * p2; // NOLINT
 
     v.push_back({zero, zero});
     v.push_back({radius * p1, t1});
@@ -82,16 +82,16 @@ Transformable Shape::Circle(float radius, int subdivisions) {
     t1 = t2;
   }
 
-  return FromVertexArray(VertexArray(std::move(v)));
+  return FromVertexArray(VertexArray(v));
 }
 
 /// @brief Return a centered 1x1x1 3D cube
 Transformable3D Shape::Cube() {
-  constexpr float m = -0.5f;
-  constexpr float z = +0.f;
-  constexpr float p = +0.5f;
-  constexpr float l = 0.f;
-  constexpr float r = 1.f;
+  constexpr float m = -0.5F;
+  constexpr float z = +0.F;
+  constexpr float p = +0.5F;
+  constexpr float l = 0.F;
+  constexpr float r = 1.F;
   auto vertex_array = smk::VertexArray({
       {{m, m, p}, {z, z, p}, {l, l}}, {{p, m, p}, {z, z, p}, {r, l}},
       {{p, p, p}, {z, z, p}, {r, r}}, {{m, m, p}, {z, z, p}, {l, l}},
@@ -129,47 +129,47 @@ Transformable3D Shape::Cube() {
 ///   \f$ 8 \time 3^iteration\f$ triangles.
 Transformable3D Shape::IcoSphere(int iteration) {
   std::vector<glm::vec3> out = {
-      {+1.f, +0.f, +0.f}, {+0.f, +1.f, +0.f}, {+0.f, +0.f, +1.f},
-      {-1.f, +0.f, +0.f}, {+0.f, +0.f, -1.f}, {+0.f, -1.f, +0.f},
-      {+0.f, -1.f, +0.f}, {+1.f, +0.f, +0.f}, {+0.f, +0.f, +1.f},
-      {+0.f, +1.f, +0.f}, {+0.f, +0.f, -1.f}, {-1.f, +0.f, +0.f},
-      {-1.f, +0.f, +0.f}, {+0.f, -1.f, +0.f}, {+0.f, +0.f, +1.f},
-      {+1.f, +0.f, +0.f}, {+0.f, +0.f, -1.f}, {+0.f, +1.f, +0.f},
-      {+0.f, +1.f, +0.f}, {-1.f, +0.f, +0.f}, {+0.f, +0.f, +1.f},
-      {+0.f, -1.f, +0.f}, {+0.f, +0.f, -1.f}, {+1.f, +0.f, +0.f},
+      {+1.F, +0.F, +0.F}, {+0.F, +1.F, +0.F}, {+0.F, +0.F, +1.F},
+      {-1.F, +0.F, +0.F}, {+0.F, +0.F, -1.F}, {+0.F, -1.F, +0.F},
+      {+0.F, -1.F, +0.F}, {+1.F, +0.F, +0.F}, {+0.F, +0.F, +1.F},
+      {+0.F, +1.F, +0.F}, {+0.F, +0.F, -1.F}, {-1.F, +0.F, +0.F},
+      {-1.F, +0.F, +0.F}, {+0.F, -1.F, +0.F}, {+0.F, +0.F, +1.F},
+      {+1.F, +0.F, +0.F}, {+0.F, +0.F, -1.F}, {+0.F, +1.F, +0.F},
+      {+0.F, +1.F, +0.F}, {-1.F, +0.F, +0.F}, {+0.F, +0.F, +1.F},
+      {+0.F, -1.F, +0.F}, {+0.F, +0.F, -1.F}, {+1.F, +0.F, +0.F},
   };
 
-  std::vector<glm::vec3> in;
   for (int i = 0; i < iteration; ++i) {
-    in = std::move(out);
+    std::vector<glm::vec3> in;
+    std::swap(in, out);
     for (unsigned int j = 0; j < in.size();) {
       glm::vec3& a = in[j++];
       glm::vec3& b = in[j++];
       glm::vec3& c = in[j++];
       glm::vec3 d = glm::normalize(a + b + c);
       auto addition = {a, b, d, b, c, d, c, a, d};
-      out.insert(out.end(), addition.begin(), addition.end());
+      out.insert(out.end(), addition.begin(), addition.end());  // NOLINT
     }
   }
 
-  std::vector<Vertex3D> vertex_array;
+  std::vector<Vertex3D> vertex_array(out.size());
   for (auto& it : out) {
     vertex_array.push_back(
-        {it * 0.5f, it, {it.x * 0.5f + 0.5f, it.y * 0.5f + 0.5f}});
+        {it * 0.5F, it, {it.x * 0.5F + 0.5F, it.y * 0.5F + 0.5F}});  // NOLINT
   }
 
   Transformable3D transformable;
-  transformable.SetVertexArray(std::move(vertex_array));
+  transformable.SetVertexArray(vertex_array);
   return transformable;
 }
 
 /// @brief Return a centered 1x1 square in a 3D space.
 Transformable3D Shape::Plane() {
-  constexpr float m = -0.5f;
-  constexpr float z = +0.f;
-  constexpr float p = +0.5f;
-  constexpr float l = 0.f;
-  constexpr float r = 1.f;
+  constexpr float m = -0.5F;
+  constexpr float z = +0.F;
+  constexpr float p = +0.5F;
+  constexpr float l = 0.F;
+  constexpr float r = 1.F;
   auto vertex_array = smk::VertexArray({
       {{m, m, z}, {z, z, p}, {l, l}},
       {{p, m, z}, {z, z, p}, {r, l}},
@@ -195,10 +195,11 @@ std::vector<glm::vec2> Shape::Bezier(const std::vector<glm::vec2>& points,
   std::vector<glm::vec2> path;
   for (size_t index = 0; index < subdivision + 1; ++index) {
     std::vector<glm::vec2> data = points;
-    float x = float(index) / subdivision;
+    float x = float(index) / float(subdivision);
     while (data.size() >= 2) {
-      for (size_t i = 0; i < data.size() - 1; ++i)
+      for (size_t i = 0; i < data.size() - 1; ++i) {
         data[i] = glm::mix(data[i], data[i + 1], x);
+      }
       data.resize(data.size() - 1);
     }
     path.push_back(data[0]);
@@ -217,13 +218,13 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
   std::vector<glm::vec3> planes_left;
   std::vector<glm::vec3> planes_right;
 
-  thickness *= 0.5f;
+  thickness *= 0.5F; // NOLINT
   // Compute planes shifted by +/- |thickness| around lines:
   // points[i] -- points[i+1]
 
   for (size_t i = 1; i < points.size(); ++i) {
     glm::vec3 plane_left =
-        cross(vec3(points[i - 1], 1.f), vec3(points[i - 0], 1.f));
+        cross(vec3(points[i - 1], 1.F), vec3(points[i - 0], 1.F));
     glm::vec3 plane_right = plane_left;
     plane_left.z -= thickness * length(vec2(plane_left.x, plane_left.y));
     plane_right.z += thickness * length(vec2(plane_right.x, plane_right.y));
@@ -244,22 +245,25 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
     points_right.push_back(points[0] + normal * thickness);
   }
 
-  float epsilon = 0.01f;
-  int i = 0;
+  size_t i = 0;
   for (size_t j = 1; j < points.size() - 1; ++j) {
     glm::vec3 intersection_left = cross(planes_left[i], planes_left[j]);
     glm::vec3 intersection_right = cross(planes_right[i], planes_right[j]);
-    if (intersection_left.z * intersection_right.z < epsilon)
+    const float epsilon = 0.01F;
+    if (intersection_left.z * intersection_right.z < epsilon) {
       continue;
+    }
     intersection_left /= intersection_left.z;
     intersection_right /= intersection_right.z;
-    glm::vec2 left = glm::vec2(intersection_left);
-    glm::vec2 right = glm::vec2(intersection_right);
-    if (glm::distance(left, right) > 10.f * thickness) {
-      glm::vec2 middle = glm::vec2(left + right) * 0.5f;
-      glm::vec2 dir = glm::normalize(glm::vec2(right - left)) * 5.f * thickness;
-      left = glm::vec3(middle - dir, 1.f);
-      right = glm::vec3(middle + dir, 1.f);
+    auto left = glm::vec2(intersection_left);
+    auto right = glm::vec2(intersection_right);
+    // NOLINTNEXTLINE
+    if (glm::distance(left, right) > 10.F * thickness) {
+      auto middle = glm::vec2(left + right) * 0.5F; // NOLINT
+      // NOLINTNEXTLINE
+      auto dir = glm::normalize(glm::vec2(right - left)) * 5.F * thickness;
+      left = glm::vec3(middle - dir, 1.F);
+      right = glm::vec3(middle + dir, 1.F);
     }
     points_left.push_back(left);
     points_right.push_back(right);
@@ -295,7 +299,7 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
     v.push_back({C, {0.0, 0.0}});
   }
 
-  return smk::Shape::FromVertexArray(smk::VertexArray(std::move(v)));
+  return smk::Shape::FromVertexArray(smk::VertexArray(v));
 }
 
 /// @brief Return a rounded centered rectangle.
@@ -305,36 +309,38 @@ smk::Transformable Shape::Path(const std::vector<glm::vec2>& points,
 smk::Transformable Shape::RoundedRectangle(float width,
                                            float height,
                                            float radius) {
-  radius = std::max(radius, 0.f);
-  radius = std::min(radius, width * 0.5f);
-  radius = std::min(radius, height * 0.5f);
+  radius = std::max(radius, 0.F);
+  radius = std::min(radius, width * 0.5F); // NOLINT
+  radius = std::min(radius, height * 0.5F); // NOLINT
 
-  width = width * 0.5 - radius;
-  height = height * 0.5 - radius;
+  width = width * 0.5F - radius; // NOLINT
+  height = height * 0.5F - radius; // NOLINT
   std::vector<smk::Vertex> v;
-  smk::Vertex p0 = {{0.f, 0.f}, {0.f, 0.f}};
-  smk::Vertex p1 = {{width + radius, -height}, {0.f, 0.f}};
-  smk::Vertex p2 = {{width + radius, height}, {0.f, 0.f}};
+  smk::Vertex p0 = {{0.F, 0.F}, {0.F, 0.F}};
+  smk::Vertex p1 = {{width + radius, -height}, {0.F, 0.F}};
+  smk::Vertex p2 = {{width + radius, height}, {0.F, 0.F}};
 
   v.push_back(p0);
   v.push_back(p1);
   v.push_back(p2);
 
-  float angle_delta = 2.0 * M_PI / 40.f;  // 0.01f;//radius * 0.01f;
+  const float angle_delta = 2.0 * M_PI / 40.f;
 
   auto center = glm::vec2(width, radius);
-  for (float angle = 0.f; angle < 2.f * M_PI; angle += angle_delta) {
-    if (angle > 0.75 * 2.f * M_PI)
+  // NOLINTNEXTLINE
+  for (float angle = 0.F; angle < 2.F * M_PI; angle += angle_delta) {
+    if (angle > 0.75 * 2.F * M_PI) {  // NOLINT
       center = glm::vec2(width, -height);
-    else if (angle > 0.5 * 2.f * M_PI)
+    } else if (angle > 0.5 * 2.F * M_PI) {  // NOLINT
       center = glm::vec2(-width, -height);
-    else if (angle > 0.25 * 2.f * M_PI)
+    } else if (angle > 0.25 * 2.F * M_PI) {  // NOLINT
       center = glm::vec2(-width, +height);
-    else
+    } else {
       center = glm::vec2(+width, +height);
+    }
 
     p1 = p2;
-    p2 = {center + radius * glm::vec2(cos(angle), sin(angle)), {0.f, 0.f}};
+    p2 = {center + radius * glm::vec2(std::cos(angle), std::sin(angle)), {0.F, 0.F}};
 
     v.push_back(p0);
     v.push_back(p1);
@@ -342,12 +348,12 @@ smk::Transformable Shape::RoundedRectangle(float width,
   }
 
   p1 = p2;
-  p2 = {{width + radius, -height}, {0.f, 0.f}};
+  p2 = {{width + radius, -height}, {0.F, 0.F}};
   v.push_back(p0);
   v.push_back(p1);
   v.push_back(p2);
 
-  return smk::Shape::FromVertexArray(smk::VertexArray(std::move(v)));
+  return smk::Shape::FromVertexArray(smk::VertexArray(v));
 }
 
 }  // namespace smk

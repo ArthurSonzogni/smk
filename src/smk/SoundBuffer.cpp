@@ -14,7 +14,7 @@
 
 namespace smk {
 
-SoundBuffer::SoundBuffer() {}
+SoundBuffer::SoundBuffer() = default;
 
 /// @brief Load a sound resource into memory from a file.
 SoundBuffer::SoundBuffer(const std::string& filename) : SoundBuffer() {
@@ -34,27 +34,32 @@ SoundBuffer::SoundBuffer(const std::string& filename) : SoundBuffer() {
   nqr::NyquistIO loader;
   loader.Load(&fileData, filename);
 
-  ALsizei sample_rate = static_cast<ALsizei>(fileData.sampleRate);
+  auto sample_rate = static_cast<ALsizei>(fileData.sampleRate);
 
   std::vector<ALshort> data;
   for (auto& it : fileData.samples) {
     it = std::min(it, +1.f);
     it = std::max(it, -1.f);
-    data.push_back(it * ((1 << 15) - 1));
+    data.push_back(ALshort(it * float((1 << 15) - 1)));  // NOLINT
   }
 
-  // clang-format off
-  ALenum format;
+  ALenum format = {};
   switch (fileData.channelCount) {
-    case 1: format = AL_FORMAT_MONO16; break;
-    case 2: format = AL_FORMAT_STEREO16; break;
-    default: std::cerr << "SoundBuffer: Unsupported format file " + filename << std::endl;
+    case 1:
+      format = AL_FORMAT_MONO16;
+      break;
+    case 2:
+      format = AL_FORMAT_STEREO16;
+      break;
+    default:
+      std::cerr << "SoundBuffer: Unsupported format file " + filename
+                << std::endl;
       return;
   }
-  // clang-format on.
 
   alGenBuffers(1, &buffer_);
-  alBufferData(buffer_, format, data.data(), data.size() * sizeof(ALshort), sample_rate);
+  alBufferData(buffer_, format, data.data(),
+               ALsizei(data.size() * sizeof(ALshort)), sample_rate);
 
   if (alGetError() != AL_NO_ERROR) {
     std::cerr << "SoundBuffer: OpenAL error" << std::endl;
@@ -63,20 +68,21 @@ SoundBuffer::SoundBuffer(const std::string& filename) : SoundBuffer() {
 }
 
 SoundBuffer::~SoundBuffer() {
-  if (buffer_)
+  if (buffer_) {
     alDeleteBuffers(1, &buffer_);
+  }
 }
 
 SoundBuffer::SoundBuffer(SoundBuffer&& o) noexcept {
   this->operator=(std::move(o));
 }
 
-void SoundBuffer::operator=(SoundBuffer&& o) noexcept {
+SoundBuffer& SoundBuffer::operator=(SoundBuffer&& o) noexcept {
   std::swap(buffer_, o.buffer_);
+  return *this;
 }
 
-unsigned int SoundBuffer::buffer() const
-{
+unsigned int SoundBuffer::buffer() const {
   return buffer_;
 }
 

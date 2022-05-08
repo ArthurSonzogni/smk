@@ -109,11 +109,13 @@ void Transformable::SetScaleY(float scale_y) {
 glm::mat4 Transformable::transformation() const {
   glm::mat4 ret = glm::mat4(1.0);
   ret = glm::translate(ret, {position_.x, position_.y, 0.0});
-  if (rotation_ != 0.f)
+  if (rotation_ != 0.F) {
     ret =
-        glm::rotate(ret, -rotation_ * (2.f * 3.1415f / 360.f), {0.0, 0.0, 1.0});
+        // NOLINTNEXTLINE
+        glm::rotate(ret, -rotation_ * (2.F * 3.1415F / 360.F), {0.0, 0.0, 1.0});
+  }
   ret =
-      glm::translate(ret, {-center_.x * scale_.x, -center_.y * scale_.y, 0.f});
+      glm::translate(ret, {-center_.x * scale_.x, -center_.y * scale_.y, 0.F});
   ret = glm::scale(ret, {scale_.x, scale_.y, 1.0});
   return ret;
 }
@@ -155,8 +157,8 @@ void TransformableBase::Draw(RenderTarget& target, RenderState state) const {
 /// 4x4 matrix.
 /// @see https://learnopengl.com/Getting-started/Transformations
 /// @param transformation The 4x4 matrix defining the transformation.
-void Transformable3D::SetTransformation(const glm::mat4& transformation) {
-  transformation_ = transformation;
+void Transformable3D::SetTransformation(const glm::mat4& mat) {
+  transformation_ = mat;
 }
 
 glm::mat4 Transformable3D::transformation() const {

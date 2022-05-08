@@ -15,7 +15,7 @@ void Vibrate(int ms) {
   emscripten_vibrate(ms);
 }
 #else
-void Vibrate(int) {}
+void Vibrate(int /*unused*/) {}
 #endif
 
 }  // namespace smk

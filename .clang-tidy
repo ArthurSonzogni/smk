@@ -1,0 +1,29 @@
+---
+Checks: "*,
+        -abseil-*,
+        -altera-*,
+        -android-*,
+        -fuchsia-*,
+        -google-*,
+        -llvm*,
+        -cert-err58-cpp,
+        -cppcoreguidelines-non-private-member-variables-in-classes,
+        -hicpp-signed-bitwise,
+        -hicpp-uppercase-literal-suffix,
+        -hicpp-uppercase-literal-suffix,
+        -misc-no-recursion,
+        -misc-non-private-member-variables-in-classes,
+        -modernize-use-nodiscard,
+        -modernize-use-trailing-return-type,
+        -readability-avoid-const-params-in-decls,
+        -readability-else-after-return,
+        -readability-implicit-bool-conversion,
+        -readability-static-accessed-through-instance,
+        -readability-uppercase-literal-suffix,
+        -cppcoreguidelines-pro-type-union-access,
+        -bugprone-sizeof-expression,
+        -zircon-*,
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     none

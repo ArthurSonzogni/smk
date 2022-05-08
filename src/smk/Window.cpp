@@ -24,22 +24,23 @@
 
 namespace smk {
 
-bool g_khr_parallel_shader = false;
+bool g_khr_parallel_shader = false; // NOLINT
 
 namespace {
 
-int g_next_id = 0;
-std::map<int, Window*> window_by_id;
-std::map<GLFWwindow*, Window*> window_by_glfw_window;
+int g_next_id = 0;                                     // NOLINT
+std::map<int, Window*> window_by_id;                   // NOLINT
+std::map<GLFWwindow*, Window*> window_by_glfw_window;  // NOLINT
 
 void GLFWScrollCallback(GLFWwindow* glfw_window,
                         double xoffset,
                         double yoffset) {
   Window* window = window_by_glfw_window[glfw_window];
-  if (!window)
+  if (!window) {
     return;
+  }
 
-  static_cast<InputImpl*>(&(window->input()))
+  dynamic_cast<InputImpl*>(&(window->input()))
       ->OnScrollEvent({xoffset, yoffset});
 }
 
@@ -48,7 +49,7 @@ void GLFWErrorCallback(int error, const char* description) {
   std::cerr << "~~~" << std::endl;
   std::cerr << description << std::endl;
   std::cerr << "~~~" << std::endl;
-  fprintf(stderr, "Error: %s\n", description);
+  fprintf(stderr, "Error: %s\n", description); // NOLINT
 }
 
 #ifdef __EMSCRIPTEN__
@@ -58,8 +59,9 @@ EM_BOOL OnTouchEvent(int eventType,
                      void* userData) {
   int g_next_id = (int)(userData);
   Window* window = window_by_id[g_next_id];
-  if (!window)
+  if (!window) {
     return false;
+  }
   static_cast<InputImpl*>(&(window->input()))
       ->OnTouchEvent(eventType, keyEvent);
   return true;
@@ -71,11 +73,13 @@ void MainLoop() {
 }
 
 EM_JS(void, MakeCanvasSelectable, (int window_id), {
-  if (!Module)
+  if (!Module) {
     return;
+  }
 
-  if (!Module['canvas'])
+  if (!Module['canvas']) {
     return;
+  }
 
   Module['canvas'].setAttribute("smk", window_id);
 });
@@ -90,8 +94,9 @@ void OpenGLDebugMessageCallback(GLenum /*source*/,
                                 GLsizei length,
                                 const GLchar* message,
                                 const void* /*userParam*/) {
-  if (type == GL_DEBUG_TYPE_OTHER)
+  if (type == GL_DEBUG_TYPE_OTHER) {
     return;
+  }
   std::cerr << "SMK > OpenGL error: " << std::string(message, length)
             << std::endl;
 }
@@ -99,9 +104,10 @@ void OpenGLDebugMessageCallback(GLenum /*source*/,
 
 void GLFWCharCallback(GLFWwindow* glfw_window, unsigned int codepoint) {
   Window* window = window_by_glfw_window[glfw_window];
-  if (!window)
+  if (!window) {
     return;
-  static_cast<InputImpl*>(&(window->input()))
+  }
+  dynamic_cast<InputImpl*>(&(window->input()))
       ->OnCharacterTyped((wchar_t)codepoint);
 }
 
@@ -145,7 +151,7 @@ Window::Window(int width, int height, const std::string& title) {
   glfwWindowHint(GLFW_SAMPLES, 4);
 
   // create the window_
-  window_ = glfwCreateWindow(width_, height_, title.c_str(), NULL, NULL);
+  window_ = glfwCreateWindow(width_, height_, title.c_str(), nullptr, nullptr);
   if (!window_) {
     glfwTerminate();
     throw std::runtime_error("Couldn't create a window_");
@@ -160,8 +166,8 @@ Window::Window(int width, int height, const std::string& title) {
 
   if (err != GLEW_OK) {
     glfwTerminate();
-    throw std::runtime_error(std::string("Could initialize GLEW, error = ") +
-                             (const char*)glewGetErrorString(err));
+    std::string error = (const char*)glewGetErrorString(err);  // NOLINT
+    throw std::runtime_error("Could initialize GLEW, error = " + error);
   }
 #endif
 
@@ -212,16 +218,20 @@ Window::Window(Window&& window) noexcept {
   operator=(std::move(window));
 }
 
-void Window::operator=(Window&& other) noexcept {
-  RenderTarget::operator=(std::move(other));
+Window& Window::operator=(Window&& other) noexcept {
+  if (&other == this) {
+    return *this;
+  }
   std::swap(window_, other.window_);
   std::swap(time_, other.time_);
   std::swap(time_last_sleep_, other.time_last_sleep_);
   std::swap(input_, other.input_);
   std::swap(id_, other.id_);
   std::swap(module_canvas_selector_, other.module_canvas_selector_);
+  RenderTarget::operator=(std::move(other));
   window_by_id[id_] = this;
   window_by_glfw_window[window_] = this;
+  return *this;
 }
 
 /// @brief Handle all the new input events. This update the input() object.
@@ -238,7 +248,7 @@ void Window::Display() {
   // Detect window_ related changes
   UpdateDimensions();
 
-  time_ = glfwGetTime();
+  time_ = static_cast<float>(glfwGetTime());
 }
 
 Window::~Window() {
@@ -267,13 +277,14 @@ Input& Window::input() {
 /// when the user presses the 'escape' button or when the |loop| function
 /// returns 'false'.
 /// @param loop The function to be called for each new frame.
-void Window::ExecuteMainLoopUntil(std::function<bool(void)> loop) {
+void Window::ExecuteMainLoopUntil(const std::function<bool(void)>& loop) {
 #ifdef __EMSCRIPTEN__
   main_loop = [my_loop = loop] { (void)my_loop(); };
   emscripten_set_main_loop(&MainLoop, 0, 1);
 #else
-  while (loop())
-    LimitFrameRate(60.0f);
+  while (loop()) {
+    LimitFrameRate(60.F); // NOLINT
+  }
 #endif
 }
 
@@ -283,14 +294,14 @@ void Window::ExecuteMainLoopUntil(std::function<bool(void)> loop) {
 /// when the user presses the 'escape' button or when the |loop| function
 /// returns 'false'.
 /// @param loop The function to be called for each new frame.
-void Window::ExecuteMainLoop(std::function<void(void)> loop) {
+void Window::ExecuteMainLoop(const std::function<void(void)>& loop) {
 #ifdef __EMSCRIPTEN__
   main_loop = loop;
   emscripten_set_main_loop(&MainLoop, 0, 1);
 #else
   while (!input().IsKeyPressed(GLFW_KEY_ESCAPE) && !ShouldClose()) {
     loop();
-    LimitFrameRate(60.0f);
+    LimitFrameRate(60.F); // NOLINT
   };
 #endif
 }
@@ -314,15 +325,15 @@ void Window::UpdateDimensions() {
 /// If needed, insert pause in the execution to maintain a given framerate.
 /// @param fps the desired frame rate.
 void Window::LimitFrameRate(float fps) {
-  const float delta = glfwGetTime() - time_last_sleep_;
+  const float delta = static_cast<float>(glfwGetTime()) - time_last_sleep_;
   const float target = 1.f / fps;
   float sleep_duration = target - delta;
   sleep_duration = std::min(target, sleep_duration);
   if (sleep_duration > 0.f) {
     std::this_thread::sleep_for(
-        std::chrono::microseconds(int(sleep_duration * 1'000'000)));
+        std::chrono::microseconds(int(sleep_duration * 1'000'000)));  // NOLINT
   }
-  time_last_sleep_ = glfwGetTime();
+  time_last_sleep_ = static_cast<float>(glfwGetTime());
 }
 
 /// Returns true when the user wants to close the window.

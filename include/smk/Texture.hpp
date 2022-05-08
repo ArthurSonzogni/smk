@@ -38,13 +38,13 @@ namespace smk {
 struct Texture {
  public:
   struct Option {
-    GLenum min_filter = GL_LINEAR_MIPMAP_LINEAR;
-    GLenum mag_filter = GL_LINEAR;
-    GLenum wrap_s = GL_CLAMP_TO_EDGE;
-    GLenum wrap_t = GL_CLAMP_TO_EDGE;
-    GLenum internal_format = GL_RGBA;
-    GLenum format = GL_RGBA;
-    GLenum type = GL_UNSIGNED_BYTE;
+    GLint min_filter = GL_LINEAR_MIPMAP_LINEAR;
+    GLint mag_filter = GL_LINEAR;
+    GLint wrap_s = GL_CLAMP_TO_EDGE;
+    GLint wrap_t = GL_CLAMP_TO_EDGE;
+    GLint internal_format = GL_RGBA;
+    GLint format = GL_RGBA;
+    GLint type = GL_UNSIGNED_BYTE;
     bool generate_mipmap = true;
   };
 
@@ -67,11 +67,11 @@ struct Texture {
   // --- Copyable Movable resource ---------------------------------------------
   Texture(Texture&&) noexcept;
   Texture(const Texture&);
-  void operator=(Texture&&) noexcept;
+  Texture& operator=(Texture&&) noexcept;
   Texture& operator=(const Texture&);
   //----------------------------------------------------------------------------
-  bool operator==(const Texture& other);
-  bool operator!=(const Texture& other);
+  bool operator==(const Texture& other) const;
+  bool operator!=(const Texture& other) const;
 
  private:
   void Release();

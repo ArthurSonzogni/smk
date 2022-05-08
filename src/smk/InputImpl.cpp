@@ -20,30 +20,31 @@
 namespace smk {
 
 void InputImpl::Update(GLFWwindow* window) {
-  // Get window dimension.
-  int width, height;
+  int width = 0;
+  int height = 0;
   glfwGetWindowSize(window, &width, &height);
 
   // Update key
-  for (auto it = key_state_.begin(); it != key_state_.end(); ++it) {
-    it->second.second = it->second.first;
-    it->second.first = glfwGetKey(window, it->first);
+  for(auto& it : key_state_) {
+    it.second.second = it.second.first;
+    it.second.first = glfwGetKey(window, it.first);
   }
 
   // Update mouse
-  for (auto it = mouse_state_.begin(); it != mouse_state_.end(); ++it) {
-    it->second.second = it->second.first;
-    it->second.first = glfwGetMouseButton(window, it->first);
+  for (auto& it : mouse_state_) {
+    it.second.second = it.second.first;
+    it.second.first = glfwGetMouseButton(window, it.first);
   }
 
   // get mouse position
-  double mouse_x, mouse_y;
+  double mouse_x = 0.F;
+  double mouse_y = 0.F;
   glfwGetCursorPos(window, &mouse_x, &mouse_y);
   mouse_ = glm::vec2(mouse_x, mouse_y);
 
   // Update cursor.
   cursor_press_previous_ = cursor_press_;
-  if (touches_.size()) {
+  if (!touches_.empty()) {
     cursor_ = touches_.begin()->second.position();
     cursor_press_ = true;
     touching_ = true;
@@ -79,8 +80,9 @@ void InputImpl::OnTouchEvent(int eventType,
     }
 
     auto it = touches_.find(touch.identifier);
-    if (it != touches_.end())
+    if (it != touches_.end()) {
       touches_.erase(it);
+    }
   }
 }
 #endif
@@ -149,14 +151,20 @@ glm::vec2 InputImpl::scroll_offset() const {
 class InputImpl::CharacterListenerImpl
     : public Input::CharacterListenerInterface {
  public:
-  CharacterListenerImpl(InputImpl* input) : input_(input) {
+  explicit CharacterListenerImpl(InputImpl* input) : input_(input) {
     input_->BindCharacterListener(this);
   }
+  CharacterListenerImpl(CharacterListenerImpl&) = delete;
+  CharacterListenerImpl(CharacterListenerImpl&&) = delete;
+  CharacterListenerImpl& operator=(CharacterListenerImpl&) = delete;
+  CharacterListenerImpl& operator=(CharacterListenerImpl&&) = delete;
+
   ~CharacterListenerImpl() override { input_->UnBindCharacterListener(this); }
 
   bool Receive(wchar_t* c) override {
-    if (queue_.empty())
+    if (queue_.empty()) {
       return false;
+    }
 
     *c = queue_.front();
     queue_.pop();
@@ -178,8 +186,9 @@ void InputImpl::UnBindCharacterListener(
 }
 
 void InputImpl::OnCharacterTyped(wchar_t character) {
-  for (auto& it : character_listeners_)
+  for (const auto& it : character_listeners_) {
     it->queue_.push(character);
+  }
 }
 
 Input::CharacterListener InputImpl::MakeCharacterListener() {

@@ -7,19 +7,20 @@
 #include <smk/Texture.hpp>
 #include <vector>
 
+// NOLINTNEXTLINE
 #include "StbImage.hpp"
 
 namespace smk {
-extern bool g_invalidate_textures;
+extern bool g_invalidate_textures; // NOLINT
 
 int next_power_of_2(int v) {
   return v;
   v--;
-  v |= v >> 1;
-  v |= v >> 2;
-  v |= v >> 4;
-  v |= v >> 8;
-  v |= v >> 16;
+  v |= v >> 1;   // NOLINT
+  v |= v >> 2;   // NOLINT
+  v |= v >> 4;   // NOLINT
+  v |= v >> 8;   // NOLINT
+  v |= v >> 16;  // NOLINT
   v++;
   return v;
 }
@@ -32,15 +33,16 @@ Texture::Texture(const std::string& filename) : Texture(filename, Option()) {}
 /// @param filename The file name of the image to be loaded.
 /// @param option Additionnal option (texture wrap, min filter, mag filter, ...)
 Texture::Texture(const std::string& filename, const Option& option) {
-  FILE* file = fopen(filename.c_str(), "rb");
+  FILE* file = fopen(filename.c_str(), "rb"); // NOLINT
   if (!file) {
     std::cerr << "File " << filename << " not found" << std::endl;
+    fclose(file); // NOLINT
     return;
   }
 
   int comp = -1;
   unsigned char* data = stbi_load_from_file(file, &width_, &height_, &comp, 0);
-  fclose(file);
+  fclose(file); // NOLINT
 
   // Canonicalize the image to RGBA(8,8,8,8) and maybe on power_of_2 texture.
   int width_b = next_power_of_2(width_);
@@ -49,7 +51,9 @@ Texture::Texture(const std::string& filename, const Option& option) {
   for (int y = 0; y < height_; ++y) {
     for (int x = 0; x < width_; ++x) {
       for (int c = 0; c < 4; ++c) {
+        // NOLINTNEXTLINE
         transformed[c + 4 * (x + width_b * y)] =
+            // NOLINTNEXTLINE
             (c == 3 && comp != 4) ? 255 : data[c + comp * (x + width_ * y)];
       }
     }
@@ -88,8 +92,9 @@ void Texture::Load(const uint8_t* data,
   glBindTexture(GL_TEXTURE_2D, id_);
   glTexImage2D(GL_TEXTURE_2D, 0, option.internal_format, width, height, 0,
                option.format, option.type, data);
-  if (option.generate_mipmap)
+  if (option.generate_mipmap) {
     glGenerateMipmap(GL_TEXTURE_2D);
+  }
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, option.min_filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, option.mag_filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, option.wrap_s);
@@ -117,14 +122,16 @@ void Texture::Release() {
   width_ = -1;
   height_ = -1;
 
-  if (!id_)
+  if (!id_) {
     return;
+  }
 
   if (ref_count) {
     --(*ref_count);
-    if (*ref_count)
+    if (*ref_count) {
       return;
-    delete ref_count;
+    }
+    delete ref_count; // NOLINT
     ref_count = nullptr;
   }
 
@@ -139,41 +146,47 @@ Texture::Texture(const Texture& other) {
   operator=(other);
 }
 
-void Texture::operator=(Texture&& other) noexcept {
+Texture& Texture::operator=(Texture&& other) noexcept {
   Release();
   std::swap(id_, other.id_);
   std::swap(width_, other.width_);
   std::swap(height_, other.height_);
   std::swap(ref_count_, other.ref_count_);
+  return *this;
 }
 
 Texture& Texture::operator=(const Texture& other) {
+  if (&other == this) {
+    return *this;
+  }
   Release();
   id_ = other.id_;
   width_ = other.width_;
   height_ = other.height_;
 
-  if (!other.id_)
+  if (!other.id_) {
     return *this;
+  }
 
-  if (!other.ref_count_)
-    other.ref_count_ = new int(1);
+  if (!other.ref_count_) {
+    other.ref_count_ = new int(1); // NOLINT
+  }
 
   ref_count_ = other.ref_count_;
   (*ref_count_)++;
   return *this;
 }
 
-void Texture::Bind(GLuint activetexture) const {
-  glActiveTexture(activetexture);
+void Texture::Bind(GLuint active_texture) const { 
+  glActiveTexture(active_texture); 
   glBindTexture(GL_TEXTURE_2D, id_);
 }
 
-bool Texture::operator==(const Texture& other) {
+bool Texture::operator==(const Texture& other) const {
   return id_ == other.id_;
 }
 
-bool Texture::operator!=(const Texture& other) {
+bool Texture::operator!=(const Texture& other) const {
   return id_ != other.id_;
 }
 

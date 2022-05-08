@@ -29,19 +29,19 @@ Sprite::Sprite(const Texture& texture, const Rectangle rectangle) {
 /// @param framebuffer The framebuffer to be used.
 Sprite::Sprite(Framebuffer& framebuffer) {
   Transformable::SetTexture(framebuffer.color_texture());
-  float l = 0.f;
-  float r = 1.f;
-  float t = 0.f;
-  float b = 1.f;
-  float www = framebuffer.color_texture().width();
-  float hhh = framebuffer.color_texture().height();
+  float l = 0.F;
+  float r = 1.F;
+  float t = 0.F;
+  float b = 1.F;
+  auto www = float(framebuffer.color_texture().width());
+  auto hhh = float(framebuffer.color_texture().height());
   SetVertexArray(VertexArray(std::vector<Vertex>({
-      {{0.f, 0.f}, {l, b}},
-      {{0.f, hhh}, {l, t}},
+      {{0.F, 0.F}, {l, b}},
+      {{0.F, hhh}, {l, t}},
       {{www, hhh}, {r, t}},
-      {{0.f, 0.f}, {l, b}},
+      {{0.F, 0.F}, {l, b}},
       {{www, hhh}, {r, t}},
-      {{www, 0.f}, {r, b}},
+      {{www, 0.F}, {r, b}},
   })));
 }
 
@@ -49,27 +49,31 @@ Sprite::Sprite(Framebuffer& framebuffer) {
 /// @param texture The Texture to be displayed.
 void Sprite::SetTexture(const Texture& texture) {
   Transformable::SetTexture(texture);
-  SetTextureRectangle(
-      {0.f, 0.f, float(texture.width()), float(texture.height())});
+  SetTextureRectangle({
+      0.F,
+      0.F,
+      float(texture.width()),
+      float(texture.height()),
+  });
 }
 
 /// @brief Update the sprite texture area.
 /// @param texture The Texture to be displayed.
 /// @param rectangle A rectangle in the texture to be used.
 void Sprite::SetTextureRectangle(const Rectangle& rectangle) {
-  float l = (rectangle.left + 0.5) / texture().width();
-  float r = (rectangle.right - 0.5) / texture().width();
-  float t = (rectangle.top + 0.5) / texture().height();
-  float b = (rectangle.bottom - 0.5) / texture().height();
+  float l = (rectangle.left + 0.5F) / texture().width();     // NOLINT
+  float r = (rectangle.right - 0.5F) / texture().width();    // NOLINT
+  float t = (rectangle.top + 0.5F) / texture().height();     // NOLINT
+  float b = (rectangle.bottom - 0.5F) / texture().height();  // NOLINT
   float www = rectangle.width();
   float hhh = rectangle.height();
   SetVertexArray(VertexArray(std::vector<Vertex>({
-      {{0.f, 0.f}, {l, t}},
-      {{0.f, hhh}, {l, b}},
+      {{0.F, 0.F}, {l, t}},
+      {{0.F, hhh}, {l, b}},
       {{www, hhh}, {r, b}},
-      {{0.f, 0.f}, {l, t}},
+      {{0.F, 0.F}, {l, t}},
       {{www, hhh}, {r, b}},
-      {{www, 0.f}, {r, t}},
+      {{www, 0.F}, {r, t}},
   })));
 }
 
