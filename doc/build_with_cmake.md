@@ -35,6 +35,8 @@ int main() {
 ~~~cmake
 cmake_minimum_required (VERSION 3.11)
 
+include(FetchContent)
+
 FetchContent_Declare(smk GIT_REPOSITORY https://github.com/ArthurSonzogni/smk.git)
 FetchContent_GetProperties(smk)
 if(NOT smk_POPULATED)
