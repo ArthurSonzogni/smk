@@ -51,7 +51,8 @@ int main() {
     framebuffer_2.Draw(sprite);
 
     // Circle under user's mouse.
-    circle.SetPosition(window.input().cursor());
+    glm::vec2 mouse = window.MapPixelToCoords(window.input().cursor());
+    circle.SetPosition(mouse);
     framebuffer_2.Draw(circle);
 
     // -------------------------------------------------------------------------
