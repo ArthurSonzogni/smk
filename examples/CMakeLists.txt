@@ -7,6 +7,12 @@ if(EMSCRIPTEN)
     ${CMAKE_CURRENT_BINARY_DIR}/index.html
     COPYONLY
   )
+
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/run_webassembly.py
+    ${CMAKE_CURRENT_BINARY_DIR}/run_webassembly.py
+    COPYONLY
+  )
 endif()
 
 function(add_example target input)
@@ -21,9 +27,9 @@ function(add_example target input)
 
     # Release flags
     set_property(TARGET ${ns_target} APPEND_STRING PROPERTY LINK_FLAGS
-      " -s ALLOW_MEMORY_GROWTH=1"
-      " -s DEMANGLE_SUPPORT=1"
-      " -s DISABLE_EXCEPTION_CATCHING=2"
+      " -sALLOW_MEMORY_GROWTH"
+      " -sDEMANGLE_SUPPORT"
+      #" -sDISABLE_EXCEPTION_CATCHING=2"
       " -s EXPORT_NAME='main' -s MODULARIZE=1"
     )
     set_property(GLOBAL APPEND_STRING PROPERTY LINK_FLAGS

@@ -88,7 +88,7 @@ void Font::LoadGlyphs(const std::vector<wchar_t>& chars) {
     character->bearing =
         glm::ivec2(+face->glyph->bitmap_left, -face->glyph->bitmap_top);
     const float advance_scale = 1.F / 64.F;
-    character->advance = float(face->glyph->advance.x) / advance_scale;
+    character->advance = float(face->glyph->advance.x) * advance_scale;
 
     if (width * height != 0) {
       std::vector<uint8_t> buffer_rgba(width * height * 4);
