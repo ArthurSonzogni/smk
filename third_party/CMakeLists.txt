@@ -13,7 +13,8 @@ FetchContent_Declare(freetype2
 
 FetchContent_Declare(libnyquist
   GIT_REPOSITORY https://github.com/ddiakopoulos/libnyquist
-  GIT_TAG 59e4be41dc733b000c62da2224c2fb7006bf1338
+  GIT_TAG b05d6931ae5ffd1fa8b4e68807441b94cdcbc123
+  GIT_SHALLOW FALSE
   GIT_PROGRESS TRUE
 )
 

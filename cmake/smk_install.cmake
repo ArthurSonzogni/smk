@@ -1,5 +1,5 @@
 include(GNUInstallDirs)
-install(TARGETS smk stbimage libnyquist
+install(TARGETS smk stbimage libnyquist libwavpack
     EXPORT smk-export
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
